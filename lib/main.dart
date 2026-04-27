@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vault/features/auth/presentation/login.dart';
-import 'package:vault/features/auth/presentation/register.dart';
+import 'package:vault/features/auth/presentation/view/login_screen.dart';
 
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: RegisterPage()
+      home: LoginScreen(),
     );
   }
 }

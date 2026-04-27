@@ -1,15 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:vault/features/auth/presentation/widgets/confirm_button.dart';
-import 'package:vault/features/auth/presentation/widgets/auth_text_field.dart';
+import 'dart:developer';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
+import 'package:vault/features/auth/presentation/view/widgets/auth_text_field.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -47,13 +50,13 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.yellow,
+      backgroundColor: Colors.blueAccent,
       body: SafeArea(
         child: Center(
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Text("vault"),
+              const Text("vault"), // TODO: Trzeba jakieś logo stworzyć
 
               const SizedBox(height: 50),
               const Text(
@@ -91,21 +94,23 @@ class _RegisterPageState extends State<RegisterPage> {
                 text: "Zarejestruj się",
                 colorNotifier: buttonColorNotifier,
                 onTap: () {
-                  print("kliknieto zarejestruj sie");
+                  log("Register button pressed");
                 },
               ),
 
               const SizedBox(height: 10),
               InkWell(
                 onTap: () {
-                  print("Załóż nowe konto tapped");
+                  if (kDebugMode) {
+                    debugPrint("Create new account pressed");
+                  }
                 },
                 child: const Text(
                   "Zaloguj się",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Color.fromARGB(255, 14, 140, 243),
+                    color: Colors.black,
                   ),
                 ),
               ),

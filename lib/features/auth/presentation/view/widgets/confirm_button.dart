@@ -32,20 +32,22 @@ class ConfirmButton extends StatelessWidget {
               onTap: isLoading ? null : onTap,
               borderRadius: BorderRadius.circular(30),
               child: Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 40,
+                ),
                 child: Center(
                   child: isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
-                    text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
+                          text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
                 ),
               ),
             ),

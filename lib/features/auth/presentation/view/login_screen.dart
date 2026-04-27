@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:vault/features/auth/presentation/widgets/confirm_button.dart';
-import 'package:vault/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:provider/provider.dart';
+import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
+import 'package:vault/features/auth/presentation/view/widgets/auth_text_field.dart';
+import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  late final ValueNotifier<Color> buttonColorNotifier;
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    buttonColorNotifier = ValueNotifier<Color>(Colors.grey);
-    usernameController.addListener(_updateButtonColor);
-    passwordController.addListener(_updateButtonColor);
+    //_usernameController.addListener(_updateButtonColor);
+    //_passwordController.addListener(_updateButtonColor);
   }
 
+  /* NOTE: How to do it with viewmodel?
   void _updateButtonColor() {
-    if (usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty) {
-      buttonColorNotifier.value = const Color.fromRGBO(86, 201, 115, 1);
+    if (_usernameController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty) {
+      _buttonColorNotifier.value = Colors.green;
     } else {
-      buttonColorNotifier.value = Colors.grey;
+      _buttonColorNotifier.value = Colors.grey;
     }
   }
+*/
 
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    buttonColorNotifier.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    //_buttonColorNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("Login")),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.lightBlueAccent,
       body: SafeArea(
@@ -49,11 +52,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Text("vault"),
+              const Text("vault"), // TODO: Logo
 
               const SizedBox(height: 50),
               const Text(
-                "yo madafaka!",
+                "Witamy w kolonii",
                 style: TextStyle(
                   fontSize: 22,
                   color: Colors.black,
@@ -64,17 +67,23 @@ class _LoginPageState extends State<LoginPage> {
               //Username
               const SizedBox(height: 25),
               AuthTextField(
-                controller: usernameController,
+                controller: _usernameController,
                 obscureText: false,
                 hintText: "Nazwa Użytkownika",
+                onChanged: (value) {
+                  context.read<AuthViewModel>().updateLogin(value);
+                },
               ),
 
               //Password
               const SizedBox(height: 25),
               AuthTextField(
-                controller: passwordController,
+                controller: _passwordController,
                 obscureText: true,
                 hintText: "Hasło",
+                onChanged: (value) {
+                  context.read<AuthViewModel>().updatePassword(value);
+                },
               ),
 
               //Forgot Password
@@ -87,34 +96,28 @@ class _LoginPageState extends State<LoginPage> {
                     InkWell(
                       child: const Text("Nie pamiętasz hasła?"),
                       onTap: () {
-                        print("forgot password");
+                        debugPrint("forgot password");
                       },
                     ),
                   ],
                 ),
               ),
 
-              ConfirmButton(
-                text: "Zaloguj się",
-                colorNotifier: buttonColorNotifier,
-                onTap: () {
-                  if (usernameController.text.isNotEmpty &&
-                      passwordController.text.isNotEmpty) {
-                    print(
-                      "Logging in with username: ${usernameController.text}",
-                    );
-                  } else {
-                    print("Please fill in all fields.");
-                  }
-                },
+              InkWell(
+                onTap: () => context.read<AuthViewModel>().login(),
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 40,
+                  ),
+                  child: Text("Zaloguj się"),
+                ),
               ),
-
 
               const SizedBox(height: 25),
               InkWell(
-                onTap: () {
-                  print("Załóż nowe konto tapped");
-                },
+                onTap: () {},
                 child: const Text(
                   "Załóż nowe konto",
                   style: TextStyle(
