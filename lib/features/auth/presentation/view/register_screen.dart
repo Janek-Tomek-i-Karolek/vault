@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
 import 'package:vault/features/auth/presentation/view/widgets/auth_text_field.dart';
+import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,25 +18,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  late final ValueNotifier<Color> buttonColorNotifier;
 
   @override
   void initState() {
     super.initState();
-    buttonColorNotifier = ValueNotifier<Color>(Colors.grey);
-    emailController.addListener(_updateButtonColor);
-    usernameController.addListener(_updateButtonColor);
-    passwordController.addListener(_updateButtonColor);
-  }
-
-  void _updateButtonColor() {
-    if (usernameController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        emailController.text.isNotEmpty) {
-      buttonColorNotifier.value = const Color.fromRGBO(86, 201, 115, 1);
-    } else {
-      buttonColorNotifier.value = Colors.grey;
-    }
   }
 
   @override
@@ -42,7 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     emailController.dispose();
     usernameController.dispose();
     passwordController.dispose();
-    buttonColorNotifier.dispose();
     super.dispose();
   }
 
@@ -50,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Colors.lightBlueAccent,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -60,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 50),
               const Text(
-                "joł madafaka!",
+                "Witamy w kolonii",
                 style: TextStyle(
                   fontSize: 22,
                   color: Colors.black,
@@ -73,6 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: emailController,
                 obscureText: false,
                 hintText: "Adres E-mail",
+                onChanged: (value) =>
+                    context.read<AuthViewModel>().updateEmail(value),
               ),
 
               const SizedBox(height: 25),
@@ -80,6 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: usernameController,
                 obscureText: false,
                 hintText: "Nazwa Użytkownika",
+                onChanged: (value) =>
+                    context.read<AuthViewModel>().updateLogin(value),
               ),
 
               const SizedBox(height: 25),
@@ -87,30 +77,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: passwordController,
                 obscureText: true,
                 hintText: "Hasło",
+                onChanged: (value) =>
+                    context.read<AuthViewModel>().updatePassword(value),
               ),
 
               const SizedBox(height: 10),
-              ConfirmButton(
-                text: "Zarejestruj się",
-                colorNotifier: buttonColorNotifier,
-                onTap: () {
-                  log("Register button pressed");
+              Selector<AuthViewModel, Color>(
+                selector: (_, avm) => avm.buttonColor,
+                builder: (_, data, _) {
+                  return ConfirmButton(
+                    text: "Zarejestruj się",
+                    buttonColor: data,
+                    onTap: () => context.read<AuthViewModel>().register(),
+                  );
                 },
               ),
 
               const SizedBox(height: 10),
               InkWell(
-                onTap: () {
-                  if (kDebugMode) {
-                    debugPrint("Create new account pressed");
-                  }
-                },
+                onTap: () {},
                 child: const Text(
                   "Zaloguj się",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Colors.black,
+                    color: Color.fromARGB(255, 14, 140, 243),
                   ),
                 ),
               ),

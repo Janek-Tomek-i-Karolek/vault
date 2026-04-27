@@ -18,33 +18,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    //_usernameController.addListener(_updateButtonColor);
-    //_passwordController.addListener(_updateButtonColor);
   }
-
-  /* NOTE: How to do it with viewmodel?
-  void _updateButtonColor() {
-    if (_usernameController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty) {
-      _buttonColorNotifier.value = Colors.green;
-    } else {
-      _buttonColorNotifier.value = Colors.grey;
-    }
-  }
-*/
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
-    //_buttonColorNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.lightBlueAccent,
       body: SafeArea(
@@ -64,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              //Username
+              // Username
               const SizedBox(height: 25),
               AuthTextField(
                 controller: _usernameController,
@@ -75,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
 
-              //Password
+              // Password
               const SizedBox(height: 25),
               AuthTextField(
                 controller: _passwordController,
@@ -86,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
 
-              //Forgot Password
+              // Forgot Password
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -96,23 +81,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     InkWell(
                       child: const Text("Nie pamiętasz hasła?"),
                       onTap: () {
-                        debugPrint("forgot password");
+                        context.read<AuthViewModel>().forgotPassword();
                       },
                     ),
                   ],
                 ),
               ),
 
-              InkWell(
-                onTap: () => context.read<AuthViewModel>().login(),
-                borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 40,
-                  ),
-                  child: Text("Zaloguj się"),
-                ),
+              Selector<AuthViewModel, Color>(
+                selector: (_, avm) => avm.buttonColor,
+                builder: (_, data, _) {
+                  return ConfirmButton(
+                    text: "Zaloguj się",
+                    buttonColor: data,
+                    onTap: () => context.read<AuthViewModel>().login(),
+                  );
+                },
               ),
 
               const SizedBox(height: 25),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vault/features/auth/presentation/view/login_screen.dart';
+import 'package:vault/features/auth/presentation/view/register_screen.dart';
+import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,7 +34,10 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginScreen(),
+      home: ChangeNotifierProvider(
+        create: (context) => AuthViewModel(),
+        child: const RegisterScreen(),
+      ),
     );
   }
 }
