@@ -36,7 +36,7 @@ class MockAlbumRepository implements AlbumRepository {
         return Future.value(Result.error(assetsRes.error));
     }
 
-    var previews = List<AlbumPreview>.empty();
+    var previews = List<AlbumPreview>.empty(growable: true);
     for (int i = 0; i < 10; i++) {
       previews.add(
         AlbumPreview(

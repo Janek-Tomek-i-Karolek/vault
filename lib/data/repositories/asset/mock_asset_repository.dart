@@ -54,7 +54,7 @@ class MockAssetRepository implements AssetRepository {
         "https://upload.wikimedia.org/wikipedia/commons/1/17/Widok_pa%C5%82acu_w_Kopicach_od_g%C5%82%C3%B3wnego_wjazdu.jpg",
       ),
       "grodkow" => Uri.parse(
-        "https://upload.wikimedia.org/wikipedia/commons/1/17/Widok_pa%C5%82acu_w_Kopicach_od_g%C5%82%C3%B3wnego_wjazdu.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/7f/SM_Grodk%C3%B3w_ratusz_ID_609916.jpg",
       ),
       _ => Uri.parse(
         "https://upload.wikimedia.org/wikipedia/commons/6/62/Palac_milicz_bogox_panorama.jpg",

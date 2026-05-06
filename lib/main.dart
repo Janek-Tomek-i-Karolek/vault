@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/data/repositories/album/mock_album_repository.dart';
+import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
+import 'package:vault/features/albums/presentation/viemodel/albums_viewmodel.dart';
+import 'package:vault/features/albums/presentation/view/albums_screen.dart';
 import 'package:vault/features/auth/presentation/view/login_screen.dart';
 import 'package:vault/features/auth/presentation/view/register_screen.dart';
 import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
@@ -14,29 +18,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'vault',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: ChangeNotifierProvider(
-        create: (context) => AuthViewModel(),
-        child: const RegisterScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthViewModel(),
+          child: const RegisterScreen(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AlbumsViewModel(
+            albumRepository: MockAlbumRepository(),
+            assetRepository: MockAssetRepository(),
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'vault',
+        theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+        home: const AlbumsScreen(),
+        routes: {
+          "/login": (context) => LoginScreen(),
+          "/register": (context) => RegisterScreen(),
+          "/albums": (context) => AlbumsScreen(),
+        },
       ),
     );
   }
