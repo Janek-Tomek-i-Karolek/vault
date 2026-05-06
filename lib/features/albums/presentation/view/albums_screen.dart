@@ -37,19 +37,23 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
             )) {
               (true, _, _) => const CircularProgressIndicator(),
               (_, _, final Exception e) => Text('Error: $e'),
-              (_, final albumPreviews?, _) => GridView.count(
+              (_, final albumPreviews?, _) => GridView.builder(
                 padding: const EdgeInsets.all(20),
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.75,
-                children: [
-                  for (final preview in albumPreviews)
-                    AlbumPreviewTile(
-                      albumPreview: preview,
-                      thumbnailUriBuilder: viewModel.getThumbnailUri,
-                    ),
-                ],
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  mainAxisExtent: 220,
+                  maxCrossAxisExtent: 220,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  childAspectRatio: 0.7,
+                ),
+                itemCount: albumPreviews.length,
+                itemBuilder: (context, index) {
+                  final preview = albumPreviews[index];
+                  return AlbumPreviewTile(
+                    albumPreview: preview,
+                    thumbnailUriBuilder: viewModel.getThumbnailUri,
+                  );
+                },
               ),
               _ => const Text("Something went wrong!"),
             };
