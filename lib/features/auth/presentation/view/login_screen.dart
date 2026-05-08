@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -42,11 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 50),
               const Text(
                 "Witamy w kolonii",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
               // Username
@@ -54,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthTextField(
                 controller: _usernameController,
                 obscureText: false,
-                hintText: "Nazwa Użytkownika",
+                hintText: "Username",
                 onChanged: (value) {
                   context.read<AuthViewModel>().updateLogin(value);
                 },
@@ -65,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthTextField(
                 controller: _passwordController,
                 obscureText: true,
-                hintText: "Hasło",
+                hintText: "Password",
                 onChanged: (value) {
                   context.read<AuthViewModel>().updatePassword(value);
                 },
@@ -79,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      child: const Text("Nie pamiętasz hasła?"),
+                      child: const Text("Forgot password?"),
                       onTap: () {
                         context.read<AuthViewModel>().forgotPassword();
                       },
@@ -89,11 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               Selector<AuthViewModel, bool>(
-                selector: (_, avm) => avm.isFormValid,
+                selector: (_, avm) => avm.isLoginFormValid,
                 builder: (context, isValid, _) {
                   return ConfirmButton(
-                    text: "Zaloguj się",
-                    onTap: () => context.read<AuthViewModel>().login(),
+                    text: "Login",
+                    onTap: isValid
+                        ? () => context.read<AuthViewModel>().login()
+                        : null,
                   );
                 },
               ),
@@ -102,12 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: () {},
                 child: const Text(
-                  "Załóż nowe konto",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 14, 140, 243),
-                  ),
+                  "Create new account",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
             ],

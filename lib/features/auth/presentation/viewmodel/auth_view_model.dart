@@ -5,8 +5,10 @@ class AuthViewModel extends ChangeNotifier {
   String _login = "";
   String _password = "";
 
-  bool get isFormValid =>
+  bool get isRegisterFormValid =>
       _email.isNotEmpty && _login.isNotEmpty && _password.length >= 6;
+
+  bool get isLoginFormValid => _login.isNotEmpty && _password.length >= 6;
 
   Future<void> login() async {
     debugPrint("Login button pressed");

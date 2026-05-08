@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       home: ChangeNotifierProvider(
         create: (context) => AuthViewModel(),
-        child: const RegisterScreen(),
+        child: const LoginScreen(),
       ),
     );
   }

@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
@@ -36,7 +33,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -54,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: emailController,
                 obscureText: false,
-                hintText: "Adres E-mail",
+                hintText: "E-mail address",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateEmail(value),
               ),
@@ -63,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: usernameController,
                 obscureText: false,
-                hintText: "Nazwa Użytkownika",
+                hintText: "Username",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateLogin(value),
               ),
@@ -72,14 +68,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: passwordController,
                 obscureText: true,
-                hintText: "Hasło",
+                hintText: "Password",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updatePassword(value),
               ),
 
               const SizedBox(height: 10),
               Selector<AuthViewModel, bool>(
-                selector: (_, avm) => avm.isFormValid,
+                selector: (_, avm) => avm.isRegisterFormValid,
                 builder: (context, isValid, _) {
                   return ConfirmButton(
                     text: "Register",
@@ -94,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               InkWell(
                 onTap: () {},
                 child: Text(
-                  "Zaloguj się",
+                  "Already have an account?",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
