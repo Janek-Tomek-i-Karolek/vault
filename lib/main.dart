@@ -15,14 +15,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-	final TextTheme textTheme = Theme.of(context).textTheme;
+    final TextTheme textTheme = Theme.of(context).textTheme;
     final MaterialTheme materialTheme = MaterialTheme(textTheme);
 
     return MaterialApp(
       title: 'vault',
-	  theme: materialTheme.light(),
-	  darkTheme: materialTheme.dark(),
-	  themeMode: ThemeMode.system;
+      theme: materialTheme.light(),
+      darkTheme: materialTheme.dark(),
+      themeMode: ThemeMode.system,
       home: ChangeNotifierProvider(
         create: (context) => AuthViewModel(),
         child: const RegisterScreen(),

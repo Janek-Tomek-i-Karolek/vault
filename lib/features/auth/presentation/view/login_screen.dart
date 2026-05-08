@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -88,12 +88,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              Selector<AuthViewModel, Color>(
-                selector: (_, avm) => avm.buttonColor,
-                builder: (_, data, _) {
+              Selector<AuthViewModel, bool>(
+                selector: (_, avm) => avm.isFormValid,
+                builder: (context, isValid, _) {
                   return ConfirmButton(
                     text: "Zaloguj się",
-                    buttonColor: data,
                     onTap: () => context.read<AuthViewModel>().login(),
                   );
                 },

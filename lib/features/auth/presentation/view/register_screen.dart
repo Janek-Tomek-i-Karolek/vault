@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -47,11 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 50),
               const Text(
                 "Witamy w kolonii",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 25),
@@ -82,13 +78,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
 
               const SizedBox(height: 10),
-              Selector<AuthViewModel, Color>(
-                selector: (_, avm) => avm.buttonColor,
-                builder: (_, data, _) {
+              Selector<AuthViewModel, bool>(
+                selector: (_, avm) => avm.isFormValid,
+                builder: (context, isValid, _) {
                   return ConfirmButton(
-                    text: "Zarejestruj się",
-                    buttonColor: data,
-                    onTap: () => context.read<AuthViewModel>().register(),
+                    text: "Register",
+                    onTap: isValid
+                        ? () => context.read<AuthViewModel>().register()
+                        : null,
                   );
                 },
               ),
@@ -96,12 +93,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 10),
               InkWell(
                 onTap: () {},
-                child: const Text(
+                child: Text(
                   "Zaloguj się",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Color.fromARGB(255, 14, 140, 243),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
