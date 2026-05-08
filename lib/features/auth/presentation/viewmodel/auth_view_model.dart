@@ -4,9 +4,9 @@ class AuthViewModel extends ChangeNotifier {
   String _email = "";
   String _login = "";
   String _password = "";
-  Color _buttonColor = Colors.grey;
 
-  Color get buttonColor => _buttonColor;
+  bool get isFormValid =>
+      _email.isNotEmpty && _login.isNotEmpty && _password.length >= 6;
 
   Future<void> login() async {
     debugPrint("Login button pressed");
@@ -24,26 +24,16 @@ class AuthViewModel extends ChangeNotifier {
 
   void updateEmail(String value) {
     _email = value;
-    checkButton();
+    notifyListeners();
   }
 
   void updateLogin(String value) {
     _login = value;
-    checkButton();
+    notifyListeners();
   }
 
   void updatePassword(String value) {
     _password = value;
-    checkButton();
-  }
-
-  // TODO: Add some more advanced validation logic (regex and stuff)
-  void checkButton() {
-    if ((_email != "" || _login != "") && _password != "") {
-      _buttonColor = Colors.green;
-    } else {
-      _buttonColor = Colors.grey;
-    }
     notifyListeners();
   }
 }
