@@ -19,27 +19,12 @@ class AuthTextField extends StatefulWidget {
 }
 
 class _AuthTextFieldState extends State<AuthTextField> {
-  bool _passwordVisibility = false;
-  Color _iconColor = Colors.grey.shade400;
-  late FocusNode _focusNode;
+  late bool _obscureContent;
 
   @override
   void initState() {
     super.initState();
-    _passwordVisibility = widget.obscureText;
-    _focusNode = FocusNode();
-
-    _focusNode.addListener(() {
-      setState(() {
-        _iconColor = _focusNode.hasFocus ? Colors.black : Colors.grey.shade400;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
+    _obscureContent = widget.obscureText;
   }
 
   @override
@@ -47,54 +32,23 @@ class _AuthTextFieldState extends State<AuthTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: TextFormField(
-        focusNode: _focusNode,
-        onChanged: widget.onChanged,
         controller: widget.controller,
-        obscureText: _passwordVisibility,
+        onChanged: widget.onChanged,
+        obscureText: _obscureContent,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey, width: 1),
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black, width: 1),
-            borderRadius: BorderRadius.circular(25.0),
-          ),
           suffixIcon: widget.obscureText
-              ? Material(
-                  color: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+              ? IconButton(
+                  icon: Icon(
+                    _obscureContent
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                   ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(15),
-                    splashFactory: InkRipple.splashFactory,
-                    splashColor: Colors.grey.withValues(),
-                    radius: 15,
-                    onTap: () => setState(() {
-                      _passwordVisibility = !_passwordVisibility;
-                    }),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Icon(
-                        _passwordVisibility
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        color: _iconColor,
-                        size: 18,
-                      ),
-                    ),
-                  ),
+                  onPressed: () =>
+                      setState(() => _obscureContent = !_obscureContent),
                 )
               : null,
         ),
-        validator: (val) {
-          if (val == null || val.isEmpty) {
-            return 'Required';
-          }
-          return null;
-        },
       ),
     );
   }

@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
@@ -36,7 +33,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.lightBlueAccent,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -47,18 +43,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 50),
               const Text(
                 "Witamy w kolonii",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 25),
               AuthTextField(
                 controller: emailController,
                 obscureText: false,
-                hintText: "Adres E-mail",
+                hintText: "E-mail address",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateEmail(value),
               ),
@@ -67,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: usernameController,
                 obscureText: false,
-                hintText: "Nazwa Użytkownika",
+                hintText: "Username",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateLogin(value),
               ),
@@ -76,19 +68,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: passwordController,
                 obscureText: true,
-                hintText: "Hasło",
+                hintText: "Password",
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updatePassword(value),
               ),
 
               const SizedBox(height: 10),
-              Selector<AuthViewModel, Color>(
-                selector: (_, avm) => avm.buttonColor,
-                builder: (_, data, _) {
+              Selector<AuthViewModel, bool>(
+                selector: (_, avm) => avm.isRegisterFormValid,
+                builder: (context, isValid, _) {
                   return ConfirmButton(
-                    text: "Zarejestruj się",
-                    buttonColor: data,
-                    onTap: () => context.read<AuthViewModel>().register(),
+                    text: "Register",
+                    onTap: isValid
+                        ? () => context.read<AuthViewModel>().register()
+                        : null,
                   );
                 },
               ),
@@ -96,12 +89,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 10),
               InkWell(
                 onTap: () {},
-                child: const Text(
-                  "Zaloguj się",
+                child: Text(
+                  "Already have an account?",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Color.fromARGB(255, 14, 140, 243),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),

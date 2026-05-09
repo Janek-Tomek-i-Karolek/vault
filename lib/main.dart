@@ -7,6 +7,7 @@ import 'package:vault/features/albums/presentation/view/albums_screen.dart';
 import 'package:vault/features/auth/presentation/view/login_screen.dart';
 import 'package:vault/features/auth/presentation/view/register_screen.dart';
 import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
+import 'package:vault/theme/material_theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +19,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final MaterialTheme materialTheme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -33,7 +36,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'vault',
-        theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+        theme: materialTheme.light(),
+        darkTheme: materialTheme.dark(),
+        themeMode: ThemeMode.system,
         home: const AlbumsScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
