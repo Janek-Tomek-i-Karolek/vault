@@ -17,7 +17,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   void initState() {
     super.initState();
 
-    context.read<AlbumsViewModel>().fetchPreviews(); // Trigger fetch
+    context.read<AlbumsViewModel>().fetchPreviews();
   }
 
   @override
@@ -40,11 +40,9 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               (_, final albumPreviews?, _) => GridView.builder(
                 padding: const EdgeInsets.all(20),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisExtent: 220,
+                  mainAxisExtent: 190,
                   maxCrossAxisExtent: 220,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 1,
                 ),
                 itemCount: albumPreviews.length,
                 itemBuilder: (context, index) {
