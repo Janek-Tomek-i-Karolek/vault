@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vault/features/auth/presentation/view/widgets/confirm_button.dart';
-import 'package:vault/features/auth/presentation/view/widgets/auth_text_field.dart';
-import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
+import 'package:vault/ui/core/widgets/confirm_button.dart';
+import 'package:vault/ui/features/auth/view/widgets/auth_text_field.dart';
+import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
