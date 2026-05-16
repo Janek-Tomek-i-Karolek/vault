@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'exif_response_dto.g.dart';
+
+@JsonSerializable()
 class ExifResponseDTO {
   final String? city;
   final String? country;
@@ -46,4 +51,9 @@ class ExifResponseDTO {
     this.state,
     this.timeZone,
   });
+
+  factory ExifResponseDTO.fromJson(Map<String, dynamic> json) =>
+      _$ExifResponseDTOFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ExifResponseDTOToJson(this);
 }

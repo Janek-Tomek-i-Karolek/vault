@@ -1,7 +1,11 @@
-import 'package:vault/data/model/asset/ExifResponseDto.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:vault/data/model/asset/asset_type_enum.dart';
+import 'package:vault/data/model/asset/exif_response_dto.dart';
 import 'package:vault/data/model/user/user_response_dto.dart';
 
+part 'asset_response_dto.g.dart';
+
+@JsonSerializable()
 class AssetResponseDTO {
   final String id;
   final ExifResponseDTO? exifInfo;
@@ -42,4 +46,9 @@ class AssetResponseDTO {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  factory AssetResponseDTO.fromJson(Map<String, dynamic> json) =>
+      _$AssetResponseDTOFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AssetResponseDTOToJson(this);
 }
