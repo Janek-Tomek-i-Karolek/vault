@@ -8,10 +8,10 @@ part of 'album_response_dto.dart';
 
 AlbumResponseDTO _$AlbumResponseDTOFromJson(Map<String, dynamic> json) =>
     AlbumResponseDTO(
-      albumName: json['albumName'] as String,
+      albumName: json['albumName'] as String?,
       albumThumbnailAssetId: json['albumThumbnailAssetId'] as String?,
       albumUsers: (json['albumUsers'] as List<dynamic>)
-          .map((e) => AlbumResponseDTO.fromJson(e as Map<String, dynamic>))
+          .map((e) => AlbumUserResponseDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
       assets: (json['assets'] as List<dynamic>)
           .map((e) => AssetResponseDTO.fromJson(e as Map<String, dynamic>))

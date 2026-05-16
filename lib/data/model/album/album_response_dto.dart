@@ -10,9 +10,9 @@ part 'album_response_dto.g.dart';
 @JsonSerializable()
 class AlbumResponseDTO {
   final String id;
-  final String albumName;
+  final String? albumName;
   final String? albumThumbnailAssetId;
-  final List<AlbumResponseDTO> albumUsers;
+  final List<AlbumUserResponseDTO> albumUsers;
   final List<AssetResponseDTO> assets;
   final String description;
   final UserResponseDTO owner;
