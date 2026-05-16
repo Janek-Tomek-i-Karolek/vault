@@ -1,0 +1,1 @@
+enum AlbumUserRole { editor, viewer }
