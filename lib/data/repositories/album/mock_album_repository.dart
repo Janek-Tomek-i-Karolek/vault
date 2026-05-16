@@ -30,8 +30,6 @@ class MockAlbumRepository implements AlbumRepository {
   Future<Result<List<AlbumPreview>>> getAlbumPreviews() async {
     Result<List<Asset>> assetsRes = await MockAssetRepository().getAssets();
 
-    Result<List<Album>> sth = await DemoApiAlbumRepository().getAlbums();
-
     List<Asset> assets;
     switch (assetsRes) {
       case Ok<List<Asset>>():
