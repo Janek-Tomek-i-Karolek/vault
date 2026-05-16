@@ -43,11 +43,15 @@ class DemoApiAlbumRepository extends AlbumRepository {
     switch (albumsRes) {
       case Ok<List<AlbumResponseDTO>>():
         albums = albumsRes.value;
-        print(albums); // NOTE: debugging only
+        printAlbums(albums);
 
         return Result.ok([Album()]);
       case Error<List<AlbumResponseDTO>>():
         return Result.error(albumsRes.error);
     }
+  }
+
+  void printAlbums(List<AlbumResponseDTO> albums) {
+    for (var album in albums) print(album.toString());
   }
 }

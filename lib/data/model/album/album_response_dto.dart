@@ -38,4 +38,9 @@ class AlbumResponseDTO {
   factory AlbumResponseDTO.fromJson(Map<String, dynamic> json) =>
       _$AlbumResponseDTOFromJson(json);
   Map<String, dynamic> toJson() => _$AlbumResponseDTOToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
