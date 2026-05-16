@@ -1,3 +1,5 @@
+import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
+
 import '../../../domain/album/album.dart';
 import '../../../domain/album/album_preview.dart';
 import '../../../domain/asset/asset.dart';
@@ -27,6 +29,8 @@ class MockAlbumRepository implements AlbumRepository {
   @override
   Future<Result<List<AlbumPreview>>> getAlbumPreviews() async {
     Result<List<Asset>> assetsRes = await MockAssetRepository().getAssets();
+
+    Result<List<Album>> sth = await DemoApiAlbumRepository().getAlbums();
 
     List<Asset> assets;
     switch (assetsRes) {
