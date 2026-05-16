@@ -49,4 +49,10 @@ class MockAlbumRepository implements AlbumRepository {
 
     return Future.value(Result.ok(previews));
   }
+
+  @override
+  Future<Result<List<Album>>> getAlbums() {
+    // TODO: implement getAlbums
+    throw UnimplementedError();
+  }
 }
