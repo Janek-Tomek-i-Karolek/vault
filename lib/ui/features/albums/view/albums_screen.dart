@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
-import 'package:vault/features/albums/presentation/viemodel/albums_viewmodel.dart';
-import 'package:vault/features/albums/presentation/view/widgets/album_preview_tile.dart';
+import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
 class AlbumsScreen extends StatefulWidget {
   const AlbumsScreen({super.key});

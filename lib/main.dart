@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
-import 'package:vault/features/albums/presentation/viemodel/albums_viewmodel.dart';
-import 'package:vault/features/albums/presentation/view/albums_screen.dart';
-import 'package:vault/features/auth/presentation/view/login_screen.dart';
-import 'package:vault/features/auth/presentation/view/register_screen.dart';
-import 'package:vault/features/auth/presentation/viewmodel/auth_view_model.dart';
-import 'package:vault/theme/material_theme.dart';
+import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/albums_screen.dart';
+import 'package:vault/ui/features/auth/view/login_screen.dart';
+import 'package:vault/ui/features/auth/view/register_screen.dart';
+import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
+import 'package:vault/ui/core/theme/material_theme.dart';
+import 'package:vault/ui/features/user/view/profile_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: const AlbumsScreen(),
+        home: const ProfileScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
