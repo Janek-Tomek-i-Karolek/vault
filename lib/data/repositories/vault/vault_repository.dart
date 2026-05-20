@@ -7,8 +7,8 @@ abstract interface class VaultRepository {
   Future<Result<String>> getApiKey();
   Future<Result<void>> saveUrl(String url);
   Future<Result<String>> getUrl();
-  // Return the body of response
-  Future<Result<String>> testConnection();
+  Future<Result<bool>> testConnection();
+  Future<Result<void>> logout();
 }
 
 class ImmichVaultRepository implements VaultRepository {
@@ -22,6 +22,18 @@ class ImmichVaultRepository implements VaultRepository {
     } catch (e) {
       return Result.error(Exception("Failed to save api key: $e"));
     }
+  }
+
+  // For testing purposes
+  @override
+  Future<Result<void>> logout() async {
+    return switch (await saveUrl("")) {
+      Ok() => switch (await saveApiKey("")) {
+        Ok() => Result.ok(null),
+        Error() => Result.error(Exception("Error")),
+      },
+      Error() => Result.error(Exception("Error")),
+    };
   }
 
   @override
@@ -63,7 +75,7 @@ class ImmichVaultRepository implements VaultRepository {
   }
 
   @override
-  Future<Result<String>> testConnection() async {
+  Future<Result<bool>> testConnection() async {
     final Result<String> serverUrlResult = await getUrl();
     final Result<String> apiKeyResult = await getApiKey();
 
@@ -105,7 +117,7 @@ class ImmichVaultRepository implements VaultRepository {
         return Result.error(Exception("Failed to connect to Immich server"));
       }
 
-      return Result.ok(response.body);
+      return Result.ok(true);
     } catch (e) {
       return Result.error(Exception("Connection failed: $e"));
     }

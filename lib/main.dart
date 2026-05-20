@@ -12,6 +12,8 @@ import 'package:vault/ui/core/theme/material_theme.dart';
 import 'package:vault/ui/features/user/view/profile_screen.dart';
 import 'package:vault/ui/features/vault/view/connecton_screen.dart';
 import 'package:vault/ui/features/vault/viewmodel/vault_viewmodel.dart';
+import 'package:vault/utils/result.dart';
+import 'package:vault/utils/secure_storage.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,6 +29,10 @@ class MyApp extends StatelessWidget {
     final MaterialTheme materialTheme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthViewModel(),
+          child: const LoginScreen(),
+        ),
         ChangeNotifierProvider(
           create: (_) => AuthViewModel(),
           child: const RegisterScreen(),
@@ -48,11 +54,32 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: const ConnectonScreen(),
+        home: FutureBuilder(
+          future: (ImmichVaultRepository().testConnection()),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              switch (snapshot.requireData) {
+                case Ok():
+                  {
+                    return const AlbumsScreen();
+                  }
+                case Error():
+                  {
+                    const ConnectonScreen();
+                  }
+              }
+            } else {
+              return const ConnectonScreen();
+            }
+            return const ConnectonScreen();
+          },
+        ),
+
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) => AlbumsScreen(),
+          "/connect": (context) => ConnectonScreen(),
         },
       ),
     );

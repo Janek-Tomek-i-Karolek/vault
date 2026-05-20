@@ -15,11 +15,11 @@ class VaultViewModel extends ChangeNotifier {
 
   Future<void> connectToServer() async {
     debugPrint("connectToServer button pressed");
-    Result<String> testResult = await _vaultRepository.testConnection();
+    Result<bool> testResult = await _vaultRepository.testConnection();
     switch (testResult) {
       case Ok():
         {
-          debugPrint(testResult.value);
+          debugPrint("Connected");
         }
       case Error():
         {
