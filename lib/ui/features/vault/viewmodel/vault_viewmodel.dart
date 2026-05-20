@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/vault/vault_repository.dart';
+import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
 
 class VaultViewModel extends ChangeNotifier {
   String _serverUrl = "";
   String _apiKey = "";
+  ConnectionStatus status = ConnectionStatus.loading;
 
   final VaultRepository _vaultRepository;
 
   VaultViewModel({required VaultRepository vaultRepository})
-    : _vaultRepository = vaultRepository;
+    : _vaultRepository = vaultRepository {
+    _init();
+  }
+
+  Future<void> _init() async {
+    final result = await _vaultRepository.testConnection();
+    status = switch (result) {
+      Ok() => ConnectionStatus.connected,
+      Error() => ConnectionStatus.disconnected,
+    };
+    notifyListeners();
+  }
 
   bool get isConnectionFormValid => _serverUrl.isNotEmpty && _apiKey.isNotEmpty;
 

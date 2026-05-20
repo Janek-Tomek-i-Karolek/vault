@@ -12,6 +12,7 @@ import 'package:vault/ui/core/theme/material_theme.dart';
 import 'package:vault/ui/features/user/view/profile_screen.dart';
 import 'package:vault/ui/features/vault/view/connecton_screen.dart';
 import 'package:vault/ui/features/vault/viewmodel/vault_viewmodel.dart';
+import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
 import 'package:vault/utils/secure_storage.dart';
 
@@ -29,18 +30,10 @@ class MyApp extends StatelessWidget {
     final MaterialTheme materialTheme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthViewModel(),
-          child: const LoginScreen(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => AuthViewModel(),
-          child: const RegisterScreen(),
-        ),
+        //ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(
           create: (_) =>
               VaultViewModel(vaultRepository: ImmichVaultRepository()),
-          child: const ConnectonScreen(),
         ),
         ChangeNotifierProvider(
           create: (_) => AlbumsViewModel(
@@ -54,27 +47,16 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: FutureBuilder(
-          future: (ImmichVaultRepository().testConnection()),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              switch (snapshot.requireData) {
-                case Ok():
-                  {
-                    return const AlbumsScreen();
-                  }
-                case Error():
-                  {
-                    const ConnectonScreen();
-                  }
-              }
-            } else {
-              return const ConnectonScreen();
-            }
-            return const ConnectonScreen();
+        home: Selector<VaultViewModel, ConnectionStatus>(
+          selector: (_, viewModel) => viewModel.status,
+          builder: (_, status, _) {
+            return switch (status) {
+              ConnectionStatus.loading => const CircularProgressIndicator(),
+              ConnectionStatus.connected => const AlbumsScreen(),
+              ConnectionStatus.disconnected => const ConnectonScreen(),
+            };
           },
         ),
-
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
