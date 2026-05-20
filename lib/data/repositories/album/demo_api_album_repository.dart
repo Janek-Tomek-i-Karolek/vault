@@ -7,9 +7,12 @@ import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/services/api/demo_api_client.dart';
 import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/album/album_preview.dart';
+import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/utils/result.dart';
 
 class DemoApiAlbumRepository extends AlbumRepository {
+  static const String kAlbumId = "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0";
+
   @override
   Future<Result<void>> create(Album album) {
     // TODO: implement create
@@ -23,9 +26,32 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
-  Future<Result<Album>> getAlbum(String id) {
-    // TODO: implement getAlbum
-    throw UnimplementedError();
+  Future<Result<Album>> getAlbum(String id) async {
+    Result<AlbumResponseDTO> albumRes = await DemoApiClient().getAlbum(
+      kAlbumId,
+    );
+    switch (albumRes) {
+      case Ok<AlbumResponseDTO>():
+        final AlbumResponseDTO album = albumRes.value;
+        print(album);
+        return Result.ok(
+          Album(
+            name: album.albumName ?? "Not available",
+            assets: [
+              for (var asset in album.assets)
+                Asset(
+                  id: asset.id,
+                  mimeType: asset.originalMimeType ?? "",
+                  isVideo: asset.type == .VIDEO,
+                  width: asset.width,
+                  height: asset.height,
+                ),
+            ],
+          ),
+        );
+      case Error<AlbumResponseDTO>():
+        return Result.error(albumRes.error);
+    }
   }
 
   @override
@@ -45,13 +71,15 @@ class DemoApiAlbumRepository extends AlbumRepository {
         albums = albumsRes.value;
         printAlbums(albums);
 
-        return Result.ok([Album()]);
+        return Result.ok([Album(name: "some name", assets: [])]);
       case Error<List<AlbumResponseDTO>>():
         return Result.error(albumsRes.error);
     }
   }
 
-  void printAlbums(List<AlbumResponseDTO> albums) {
-    for (var album in albums) print(album.toString());
+  void printAlbums(List<AlbumResponseDTO> albums) async {
+    Result<AlbumResponseDTO> albumRes = await DemoApiClient().getAlbum(
+      kAlbumId,
+    );
   }
 }
