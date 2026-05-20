@@ -26,16 +26,12 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Connect to Vault"),
-        actions: [TextButton(onPressed: () {}, child: const Text("Save"))],
-      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              const Icon(Icons.account_circle, size: 80),
+              const Icon(Icons.logo_dev, size: 80),
               const SizedBox(height: 8),
 
               // Server URL
@@ -46,7 +42,7 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
                 },
                 decoration: const InputDecoration(
                   label: Text("Server URL"),
-                  prefixIcon: Icon(Icons.person_outline),
+                  prefixIcon: Icon(Icons.domain),
                 ),
               ),
 
@@ -60,7 +56,7 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
                 },
                 decoration: const InputDecoration(
                   label: Text("Api Key"),
-                  prefixIcon: Icon(Icons.mail_outline),
+                  prefixIcon: Icon(Icons.key),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
