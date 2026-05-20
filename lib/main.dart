@@ -4,6 +4,7 @@ import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/data/repositories/vault/vault_repository.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/album_screen.dart';
 import 'package:vault/ui/features/albums/view/albums_screen.dart';
 import 'package:vault/ui/features/auth/view/login_screen.dart';
 import 'package:vault/ui/features/auth/view/register_screen.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) => AlbumsScreen(),
+          "/album": (context) => AlbumScreen(),
         },
       ),
     );
