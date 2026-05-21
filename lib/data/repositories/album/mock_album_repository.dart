@@ -1,4 +1,4 @@
-import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
+import 'package:vault/domain/server/server_connection.dart';
 
 import '../../../domain/album/album.dart';
 import '../../../domain/album/album_preview.dart';
@@ -21,7 +21,7 @@ class MockAlbumRepository implements AlbumRepository {
   }
 
   @override
-  Future<Result<Album>> getAlbum(String id) {
+  Future<Result<Album>> getAlbum(ServerConnection serverConnection, String id) {
     // TODO: implement getAlbum
     throw UnimplementedError();
   }
@@ -53,7 +53,7 @@ class MockAlbumRepository implements AlbumRepository {
   }
 
   @override
-  Future<Result<List<Album>>> getAlbums() {
+  Future<Result<List<Album>>> getAlbums(ServerConnection serverConnection) {
     // TODO: implement getAlbums
     throw UnimplementedError();
   }

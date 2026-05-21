@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
+import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/album_screen.dart';
 import 'package:vault/ui/features/albums/view/albums_screen.dart';
 import 'package:vault/ui/features/auth/view/login_screen.dart';
 import 'package:vault/ui/features/auth/view/register_screen.dart';
@@ -41,6 +44,10 @@ class MyApp extends StatelessWidget {
             albumRepository: MockAlbumRepository(),
             assetRepository: MockAssetRepository(),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              AlbumViewModel(albumRepository: DemoApiAlbumRepository()),
         ),
       ],
       child: MaterialApp(

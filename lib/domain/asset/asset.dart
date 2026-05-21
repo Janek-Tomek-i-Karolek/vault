@@ -1,7 +1,17 @@
 class Asset {
   // nullable in case it's not stored yet
-  String? id;
+  String id;
+  String? serverUrl;
+  int? width;
+  int? height;
   String mimeType;
   bool isVideo;
-  Asset({this.id, required this.mimeType, required this.isVideo});
+  Asset({
+    this.width,
+    this.height,
+    required this.id,
+    this.serverUrl,
+    required this.mimeType,
+    required this.isVideo,
+  });
 }
