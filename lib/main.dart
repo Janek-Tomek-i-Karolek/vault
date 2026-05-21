@@ -12,8 +12,10 @@ import 'package:vault/ui/features/auth/view/login_screen.dart';
 import 'package:vault/ui/features/auth/view/register_screen.dart';
 import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
 import 'package:vault/ui/core/theme/material_theme.dart';
+import 'package:vault/ui/features/servers/view/server_list_screen.dart';
+import 'package:vault/ui/features/servers/viewmodel/servers_viewmodel.dart';
 import 'package:vault/ui/features/user/view/profile_screen.dart';
-import 'package:vault/ui/features/connection/view/connection_screen.dart';
+import 'package:vault/ui/features/connection/view/connection_dialog.dart';
 import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
 import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
@@ -26,7 +28,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -35,8 +36,13 @@ class MyApp extends StatelessWidget {
       providers: [
         //ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(
+          create: (_) => ServersViewModel(
+            connectionRepository: LocalConnectionRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
           create: (_) => ConnectionViewModel(
-            connectionRepository: ImmichConnectionRepository(),
+            connectionRepository: LocalConnectionRepository(),
           ),
         ),
         ChangeNotifierProvider(
@@ -55,21 +61,25 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: Selector<ConnectionViewModel, ConnectionStatus>(
-          selector: (_, viewModel) => viewModel.status,
-          builder: (_, status, _) {
-            return switch (status) {
-              ConnectionStatus.loading => const CircularProgressIndicator(),
-              ConnectionStatus.connected => const AlbumsScreen(),
-              ConnectionStatus.disconnected => const ConnectionScreen(),
-            };
-          },
-        ),
+        home: const ServerListScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) => AlbumsScreen(),
-          "/connect": (context) => ConnectionScreen(),
+          "/server-list-screen": (context) => ServerListScreen(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/add-server') {
+            return PageRouteBuilder(
+              opaque: false,
+              barrierDismissible: true,
+              barrierColor: Colors.black54,
+              pageBuilder: (context, _, __) {
+                return const ConnectionDialog();
+              },
+            );
+          }
+          return null;
         },
       ),
     );

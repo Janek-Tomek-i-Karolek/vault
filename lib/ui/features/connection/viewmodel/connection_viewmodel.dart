@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
+import 'package:vault/domain/album/server_connection.dart';
 import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
 
@@ -17,7 +18,9 @@ class ConnectionViewModel extends ChangeNotifier {
 
   // If a pair of credentials already exists and works - auto connect
   Future<void> _init() async {
-    final result = await _connectionRepository.testConnection();
+    final result = await _connectionRepository.testConnection(
+      connection: ServerConnection(serverUrl: _serverUrl, apiKey: _apiKey),
+    );
     status = switch (result) {
       Ok() => ConnectionStatus.connected,
       Error() => ConnectionStatus.disconnected,
@@ -42,25 +45,12 @@ class ConnectionViewModel extends ChangeNotifier {
     notifyListeners();
 
     final result = await _connectionRepository.connect(
-      url: _serverUrl,
+      serverUrl: _serverUrl,
       apiKey: _apiKey,
     );
     status = switch (result) {
       Ok() => ConnectionStatus.connected,
       Error() => ConnectionStatus.disconnected,
-    };
-
-    notifyListeners();
-  }
-
-  Future<void> disconnect() async {
-    status = ConnectionStatus.loading;
-    notifyListeners();
-
-    final result = await _connectionRepository.disconnect();
-    status = switch (result) {
-      Ok() => ConnectionStatus.disconnected,
-      Error() => ConnectionStatus.connected,
     };
 
     notifyListeners();
