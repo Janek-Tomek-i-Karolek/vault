@@ -56,7 +56,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
             return Padding(
               padding: const EdgeInsets.all(1.0),
               child: AssetTile(
-                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/original",
+                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail",
                 width: asset.width?.toDouble(),
                 height: asset.height?.toDouble(),
                 headers: {
