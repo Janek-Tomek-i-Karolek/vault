@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
+import 'package:vault/ui/core/widgets/confirm_button.dart';
+
+class ConnectionDialog extends StatefulWidget {
+  const ConnectionDialog({super.key});
+
+  @override
+  State<ConnectionDialog> createState() => _ConnectionDialogState();
+}
+
+class _ConnectionDialogState extends State<ConnectionDialog> {
+  late final TextEditingController _serverUrlController =
+      TextEditingController();
+  late final TextEditingController _apiKeyController = TextEditingController();
+
+  @override
+  void dispose() {
+    _serverUrlController.dispose();
+    _apiKeyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.logo_dev, size: 60),
+            const SizedBox(height: 16),
+
+            TextField(
+              controller: _serverUrlController,
+              onChanged: (value) =>
+                  context.read<ConnectionViewModel>().updateServerUrl(value),
+              decoration: const InputDecoration(
+                label: Text("Server URL"),
+                prefixIcon: Icon(Icons.domain),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            TextField(
+              controller: _apiKeyController,
+              onChanged: (value) =>
+                  context.read<ConnectionViewModel>().updateApiKey(value),
+              decoration: const InputDecoration(
+                label: Text("Api Key"),
+                prefixIcon: Icon(Icons.key),
+              ),
+              keyboardType: TextInputType.visiblePassword,
+            ),
+
+            const SizedBox(height: 24),
+
+            Selector<ConnectionViewModel, bool>(
+              selector: (_, cvm) => cvm.isConnectionFormValid,
+              builder: (_, isValid, _) {
+                return ConfirmButton(
+                  text: "Connect",
+                  onTap: isValid
+                      ? () async {
+                          await context.read<ConnectionViewModel>().connect();
+
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                        }
+                      : null,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

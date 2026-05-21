@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vault/ui/features/vault/viewmodel/vault_viewmodel.dart';
+import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
 
-class ConnectonScreen extends StatefulWidget {
-  const ConnectonScreen({super.key});
+class ConnectionScreen extends StatefulWidget {
+  const ConnectionScreen({super.key});
 
   @override
-  State<ConnectonScreen> createState() => _ConnectonScreenState();
+  State<ConnectionScreen> createState() => _ConnectionScreenState();
 }
 
-class _ConnectonScreenState extends State<ConnectonScreen> {
+class _ConnectionScreenState extends State<ConnectionScreen> {
   late final TextEditingController _serverUrlController =
       TextEditingController();
   late final TextEditingController _apiKeyController = TextEditingController();
@@ -38,7 +38,7 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
               TextField(
                 controller: _serverUrlController,
                 onChanged: (value) {
-                  context.read<VaultViewModel>().updateServerUrl(value);
+                  context.read<ConnectionViewModel>().updateServerUrl(value);
                 },
                 decoration: const InputDecoration(
                   label: Text("Server URL"),
@@ -52,7 +52,7 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
               TextField(
                 controller: _apiKeyController,
                 onChanged: (value) {
-                  context.read<VaultViewModel>().updateApiKey(value);
+                  context.read<ConnectionViewModel>().updateApiKey(value);
                 },
                 decoration: const InputDecoration(
                   label: Text("Api Key"),
@@ -61,13 +61,13 @@ class _ConnectonScreenState extends State<ConnectonScreen> {
                 keyboardType: TextInputType.emailAddress,
               ),
 
-              Selector<VaultViewModel, bool>(
-                selector: (_, vvm) => vvm.isConnectionFormValid,
+              Selector<ConnectionViewModel, bool>(
+                selector: (_, cvm) => cvm.isConnectionFormValid,
                 builder: (_, isValid, _) {
                   return ConfirmButton(
                     text: "Connect",
                     onTap: isValid
-                        ? () => context.read<VaultViewModel>().connect()
+                        ? () => context.read<ConnectionViewModel>().connect()
                         : null,
                   );
                 },
