@@ -30,10 +30,10 @@ class DemoApiAlbumRepository extends AlbumRepository {
     Result<AlbumResponseDTO> albumRes = await DemoApiClient().getAlbum(
       kAlbumId,
     );
+    print(albumRes.toString());
     switch (albumRes) {
       case Ok<AlbumResponseDTO>():
         final AlbumResponseDTO album = albumRes.value;
-        print(album);
         return Result.ok(
           Album(
             name: album.albumName ?? "Not available",
@@ -41,6 +41,10 @@ class DemoApiAlbumRepository extends AlbumRepository {
               for (var asset in album.assets)
                 Asset(
                   id: asset.id,
+                  serverUrl: Uri.https(
+                    DemoApiClient.kDemoDomain,
+                    "",
+                  ).toString(),
                   mimeType: asset.originalMimeType ?? "",
                   isVideo: asset.type == .VIDEO,
                   width: asset.width,
@@ -69,7 +73,7 @@ class DemoApiAlbumRepository extends AlbumRepository {
     switch (albumsRes) {
       case Ok<List<AlbumResponseDTO>>():
         albums = albumsRes.value;
-        printAlbums(albums);
+        print(albums);
 
         return Result.ok([Album(name: "some name", assets: [])]);
       case Error<List<AlbumResponseDTO>>():

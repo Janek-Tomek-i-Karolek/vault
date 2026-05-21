@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/data/repositories/vault/vault_repository.dart';
+import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/album_screen.dart';
 import 'package:vault/ui/features/albums/view/albums_screen.dart';
@@ -43,18 +45,26 @@ class MyApp extends StatelessWidget {
             assetRepository: MockAssetRepository(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              AlbumViewModel(albumRepository: DemoApiAlbumRepository()),
+        ),
       ],
       child: MaterialApp(
         title: 'vault',
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: const ConnectonScreen(),
+        // home: const ConnectonScreen(),
+        home: const AlbumScreen(
+          albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
+        ),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) => AlbumsScreen(),
-          "/album": (context) => AlbumScreen(),
+          "/album": (context) =>
+              AlbumScreen(albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0"),
         },
       ),
     );

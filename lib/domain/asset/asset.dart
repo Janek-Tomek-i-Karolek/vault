@@ -10,7 +10,7 @@ class Asset {
     this.width,
     this.height,
     required this.id,
-    // required this.serverUrl,
+    this.serverUrl,
     required this.mimeType,
     required this.isVideo,
   });

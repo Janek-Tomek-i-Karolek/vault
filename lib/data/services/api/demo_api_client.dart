@@ -10,8 +10,8 @@ import 'package:vault/utils/result.dart';
 
 class DemoApiClient {
   static const String kDemoDomain = "demo.immich.app";
-  static const String kDemoApiKey = "jr3yYwZO9H2tUa0GgURTOmxIxYiIbwqccZ5CvDpyY";
-  static const String kAlbumId = "0bbbcbd6-4061-4f85-97f6-7b3dc3d4b7ac";
+  static const String kDemoApiKey =
+      "bY4Puavp8jBnCc4mxh0BtHtUfFGBSRptxq44vF1vTU";
 
   static final Map<String, String> demoRequestHeaders = {
     "Content-Type": "application/json",
@@ -38,8 +38,10 @@ class DemoApiClient {
 
   Future<Result<AlbumResponseDTO>> getAlbum(String id) async {
     final uri = Uri.https(kDemoDomain, "/api/albums/$id");
+    print(uri);
 
     final response = await get(uri, headers: demoRequestHeaders);
+    print(response.body);
 
     if (response.statusCode != 200) {
       return Result.error(HttpException("Failed to fetch the album"));

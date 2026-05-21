@@ -30,22 +30,21 @@ class _AlbumScreenState extends State<AlbumScreen> {
     // Safely extract the title based on state
     final String appBarTitle = switch ((viewModel.isLoading, viewModel.album)) {
       (true, _) => "Loading...",
-      (_, final album!) => album.name,
+      (_, final album?) => album.name,
       _ => "Album",
     };
-
     return Scaffold(
       appBar: AppBar(title: Text(appBarTitle), centerTitle: true),
       body: switch ((viewModel.isLoading, viewModel.album, viewModel.error)) {
         (true, _, _) => const Center(child: CircularProgressIndicator()),
         (_, _, final Exception e) => Center(child: Text("Error: $e")),
-        (_, final album!, _) => MasonryGridView.builder(
-          itemCount: album.assets.length,
+        (_, final album?, _) => MasonryGridView.builder(
+          itemCount: album!.assets.length,
           gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
           itemBuilder: (context, index) {
-            final asset = album.assets[index];
+            final asset = album!.assets[index];
 
             // We pass the asset directly or use a builder pattern (discussed in Part 2)
             return Padding(
@@ -54,15 +53,19 @@ class _AlbumScreenState extends State<AlbumScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(2),
                 child: AssetTile(
-                  viewModel.getOriginalUri(asset.id),
+                  "${asset.serverUrl}/api/assets/${asset.id}/original",
                   width: asset.width?.toDouble(),
                   height: asset.height?.toDouble(),
-                  headers: viewModel.getHeaders,
+                  headers: {
+                    "x-api-key": viewModel.apiKey,
+                    "content-type": "application/json",
+                  },
                 ),
               ),
             );
           },
         ),
+        _ => const Text("Something went wrong!"),
       },
     );
   }
@@ -86,6 +89,10 @@ class AssetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(uri);
+    print(headers);
+    print(height);
+    print(width);
     return GestureDetector(
       onTap: onTap,
       child: Image.network(
