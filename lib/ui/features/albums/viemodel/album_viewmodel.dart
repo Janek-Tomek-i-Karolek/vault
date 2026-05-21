@@ -24,7 +24,6 @@ class AlbumViewModel extends ChangeNotifier {
   String get apiKey => "bY4Puavp8jBnCc4mxh0BtHtUfFGBSRptxq44vF1vTU";
 
   Future<void> loadAlbum(String albumId) async {
-    _albumRepository.getAlbums();
     await Future.microtask(() {
       _isLoading = true;
       notifyListeners();
@@ -40,7 +39,6 @@ class AlbumViewModel extends ChangeNotifier {
           _error = albumResult.error;
       }
     } on Exception catch (e) {
-      // TODO: add more graceul error logic ...
       _error = e;
     } finally {
       _isLoading = false;

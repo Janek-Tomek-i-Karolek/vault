@@ -63,8 +63,6 @@ class MyApp extends StatelessWidget {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) => AlbumsScreen(),
-          "/album": (context) =>
-              AlbumScreen(albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0"),
         },
       ),
     );
