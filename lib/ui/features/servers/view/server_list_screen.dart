@@ -11,18 +11,18 @@ class ServerListScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('My Vaults')),
 
       body: Consumer<ServersViewModel>(
-        builder: (context, viewModel, child) {
-          final servers = viewModel.servers;
+        builder: (context, svm, child) {
+          final servers = svm.servers;
 
           if (servers.isEmpty) {
             return RefreshIndicator(
-              onRefresh: viewModel.refreshServers,
+              onRefresh: svm.refreshServers,
               child: ListView(physics: const AlwaysScrollableScrollPhysics()),
             );
           }
 
           return RefreshIndicator(
-            onRefresh: viewModel.refreshServers,
+            onRefresh: svm.refreshServers,
             child: ListView.builder(
               padding: const EdgeInsets.all(16.0),
               physics: const AlwaysScrollableScrollPhysics(),
@@ -33,7 +33,7 @@ class ServerListScreen extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.dns),
-                    subtitle: Text("Vault Server"),
+                    subtitle: const Text("Vault Server"),
                     title: Text(server.serverUrl),
 
                     trailing: IconButton(

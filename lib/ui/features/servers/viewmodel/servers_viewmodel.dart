@@ -14,8 +14,6 @@ class ServersViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadServers() async {
-    notifyListeners();
-
     final result = await _connectionRepository.getConnections();
 
     switch (result) {

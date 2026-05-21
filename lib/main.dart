@@ -37,12 +37,14 @@ class MyApp extends StatelessWidget {
         //ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(
           create: (_) => ServersViewModel(
-            connectionRepository: LocalConnectionRepository(),
+            connectionRepository:
+                LocalConnectionRepository(), // TODO: Try sharing this repo
           ),
         ),
         ChangeNotifierProvider(
           create: (_) => ConnectionViewModel(
-            connectionRepository: LocalConnectionRepository(),
+            connectionRepository:
+                LocalConnectionRepository(), // TODO: Try sharing this repo
           ),
         ),
         ChangeNotifierProvider(
@@ -73,8 +75,8 @@ class MyApp extends StatelessWidget {
             return PageRouteBuilder(
               opaque: false,
               barrierDismissible: true,
-              barrierColor: Colors.black54,
-              pageBuilder: (context, _, __) {
+              barrierColor: Colors.black,
+              pageBuilder: (_, _, _) {
                 return const ConnectionDialog();
               },
             );
