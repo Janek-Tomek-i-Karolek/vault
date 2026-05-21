@@ -12,9 +12,9 @@ import 'package:vault/ui/features/auth/view/login_screen.dart';
 import 'package:vault/ui/features/auth/view/register_screen.dart';
 import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
 import 'package:vault/ui/core/theme/material_theme.dart';
-import 'package:vault/ui/features/user/view/profile_screen.dart';
 import 'package:vault/ui/features/vault/view/connecton_screen.dart';
 import 'package:vault/ui/features/vault/viewmodel/vault_viewmodel.dart';
+import 'package:vault/domain/server/server_connection.dart';
 
 void main() {
   runApp(MyApp());
@@ -56,7 +56,11 @@ class MyApp extends StatelessWidget {
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
         // home: const ConnectonScreen(),
-        home: const AlbumScreen(
+        home: AlbumScreen(
+          serverConnection: ServerConnection(
+            serverUrl: Uri.https('demo.immich.app', "").toString(),
+            apiKey: "8BfmzacyEyO9b1jlpQ8hmUtQMgyCxBh3oFhjnG4QRyQ",
+          ),
           albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         ),
         routes: {

@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
+import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 
 class AlbumScreen extends StatefulWidget {
   final String albumId;
+  final ServerConnection serverConnection;
 
-  const AlbumScreen({super.key, required this.albumId});
+  const AlbumScreen({
+    super.key,
+    required this.albumId,
+    required this.serverConnection,
+  });
 
   @override
   State<StatefulWidget> createState() => _AlbumScreenState();
@@ -19,7 +25,10 @@ class _AlbumScreenState extends State<AlbumScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<AlbumViewModel>().loadAlbum(widget.albumId);
+    context.read<AlbumViewModel>().loadAlbum(
+      widget.serverConnection,
+      widget.albumId,
+    );
   }
 
   @override
@@ -46,17 +55,14 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
             return Padding(
               padding: const EdgeInsets.all(1.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(2),
-                child: AssetTile(
-                  "${asset.serverUrl}/api/assets/${asset.id}/original",
-                  width: asset.width?.toDouble(),
-                  height: asset.height?.toDouble(),
-                  headers: {
-                    "x-api-key": viewModel.apiKey,
-                    "content-type": "application/json",
-                  },
-                ),
+              child: AssetTile(
+                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/original",
+                width: asset.width?.toDouble(),
+                height: asset.height?.toDouble(),
+                headers: {
+                  "x-api-key": album.serverConnection.apiKey,
+                  "content-type": "application/json",
+                },
               ),
             );
           },
@@ -85,18 +91,17 @@ class AssetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(uri);
-    print(headers);
-    print(height);
-    print(width);
-    return GestureDetector(
-      onTap: onTap,
-      child: Image.network(
-        uri,
-        width: width,
-        height: height,
-        headers: headers,
-        fit: BoxFit.cover,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(2),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Image.network(
+          uri,
+          width: width,
+          height: height,
+          headers: headers,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

@@ -1,18 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:http/http.dart';
 import 'package:vault/data/model/album/album_response_dto.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/services/api/demo_api_client.dart';
 import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/album/album_preview.dart';
 import 'package:vault/domain/asset/asset.dart';
+import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 
 class DemoApiAlbumRepository extends AlbumRepository {
-  static const String kAlbumId = "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0";
-
   @override
   Future<Result<void>> create(Album album) {
     // TODO: implement create
@@ -26,11 +21,14 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
-  Future<Result<Album>> getAlbum(String id) async {
+  Future<Result<Album>> getAlbum(
+    ServerConnection serverConnection,
+    String id,
+  ) async {
     Result<AlbumResponseDTO> albumRes = await DemoApiClient().getAlbum(
-      kAlbumId,
+      serverConnection,
+      id,
     );
-    print(albumRes.toString());
     switch (albumRes) {
       case Ok<AlbumResponseDTO>():
         final AlbumResponseDTO album = albumRes.value;
@@ -41,16 +39,14 @@ class DemoApiAlbumRepository extends AlbumRepository {
               for (var asset in album.assets)
                 Asset(
                   id: asset.id,
-                  serverUrl: Uri.https(
-                    DemoApiClient.kDemoDomain,
-                    "",
-                  ).toString(),
+                  serverUrl: serverConnection.serverUrl,
                   mimeType: asset.originalMimeType ?? "",
                   isVideo: asset.type == .VIDEO,
                   width: asset.width,
                   height: asset.height,
                 ),
             ],
+            serverConnection: serverConnection,
           ),
         );
       case Error<AlbumResponseDTO>():
@@ -65,9 +61,12 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
-  Future<Result<List<Album>>> getAlbums() async {
-    Result<List<AlbumResponseDTO>> albumsRes = await DemoApiClient()
-        .getAlbums();
+  Future<Result<List<Album>>> getAlbums(
+    ServerConnection serverConnection,
+  ) async {
+    Result<List<AlbumResponseDTO>> albumsRes = await DemoApiClient().getAlbums(
+      serverConnection,
+    );
 
     List<AlbumResponseDTO> albums;
     switch (albumsRes) {
@@ -75,15 +74,15 @@ class DemoApiAlbumRepository extends AlbumRepository {
         albums = albumsRes.value;
         print(albums);
 
-        return Result.ok([Album(name: "some name", assets: [])]);
+        return Result.ok([
+          Album(
+            name: "some name",
+            assets: [],
+            serverConnection: serverConnection,
+          ),
+        ]);
       case Error<List<AlbumResponseDTO>>():
         return Result.error(albumsRes.error);
     }
-  }
-
-  void printAlbums(List<AlbumResponseDTO> albums) async {
-    Result<AlbumResponseDTO> albumRes = await DemoApiClient().getAlbum(
-      kAlbumId,
-    );
   }
 }
