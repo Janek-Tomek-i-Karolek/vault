@@ -47,18 +47,25 @@ class _AlbumScreenState extends State<AlbumScreen> {
         (_, _, final Exception e) => Center(child: Text("Error: $e")),
         (_, final album?, _) => MasonryGridView.builder(
           itemCount: album.assets.length,
+          cacheExtent: 500.0,
           gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
           itemBuilder: (context, index) {
             final asset = album.assets[index];
+            final tileSize = _tileSize(
+              originalWidth: asset.width,
+              originalHeight: asset.height,
+            );
 
             return Padding(
               padding: const EdgeInsets.all(1.0),
               child: AssetTile(
-                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail",
-                width: asset.width?.toDouble(),
-                height: asset.height?.toDouble(),
+                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail?size=thumbnail",
+                // height: max(asset.height?.toDouble() ?? double.nan, 200),
+                // width: asset.width?.toDouble(),
+                width: tileSize["width"],
+                height: tileSize["height"],
                 headers: {
                   "x-api-key": album.serverConnection.apiKey,
                   "content-type": "application/json",
@@ -70,6 +77,18 @@ class _AlbumScreenState extends State<AlbumScreen> {
         _ => const Text("Something went wrong!"),
       },
     );
+  }
+
+  Map<String, double> _tileSize({int? originalWidth, int? originalHeight}) {
+    if (originalWidth == null || originalHeight == null) {
+      return {"width": 100, "height": 200};
+    }
+    double aspectRatio = originalWidth / originalHeight;
+    if (aspectRatio == 1 || aspectRatio < 1) {
+      return {"width": 100, "height": 200};
+    } else {
+      return {"width": 100, "height": 300};
+    }
   }
 }
 
@@ -91,16 +110,14 @@ class AssetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(2),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Image.network(
-          uri,
-          width: width,
-          height: height,
-          headers: headers,
-          fit: BoxFit.cover,
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(2),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Image.network(uri, headers: headers, fit: BoxFit.cover),
         ),
       ),
     );
