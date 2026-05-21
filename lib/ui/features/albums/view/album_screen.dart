@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 
@@ -62,8 +59,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
               padding: const EdgeInsets.all(1.0),
               child: AssetTile(
                 "${album.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail?size=thumbnail",
-                // height: max(asset.height?.toDouble() ?? double.nan, 200),
-                // width: asset.width?.toDouble(),
                 width: tileSize["width"],
                 height: tileSize["height"],
                 headers: {
