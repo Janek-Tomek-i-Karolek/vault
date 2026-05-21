@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
-import 'package:vault/domain/album/server_connection.dart';
+import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
 

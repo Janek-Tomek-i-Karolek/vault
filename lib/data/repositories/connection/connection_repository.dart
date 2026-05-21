@@ -1,5 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:vault/domain/album/server_connection.dart';
+import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 import 'package:http/http.dart';
 import 'package:pair/pair.dart';
