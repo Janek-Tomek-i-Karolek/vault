@@ -46,6 +46,7 @@ class MockAlbumRepository implements AlbumRepository {
         AlbumPreview(
           albumId: "album-$i",
           albumName: "Album $i",
+          serverConnection: ServerConnection(serverUrl: "", apiKey: ""),
           thumbnail: assets[i % assets.length],
         ),
       );

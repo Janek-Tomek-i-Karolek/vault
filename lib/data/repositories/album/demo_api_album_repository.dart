@@ -86,6 +86,7 @@ class DemoApiAlbumRepository extends AlbumRepository {
     return AlbumPreview(
       albumId: dto.id,
       albumName: dto.albumName ?? "Unavailable",
+      serverConnection: conn,
       thumbnail: thumbnail,
     );
   }
