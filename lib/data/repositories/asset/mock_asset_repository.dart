@@ -1,3 +1,5 @@
+import 'package:vault/domain/server/server_connection.dart';
+
 import '../../../domain/asset/asset.dart';
 import '../../../utils/result.dart';
 import 'asset_repository.dart';
@@ -19,19 +21,12 @@ class MockAssetRepository implements AssetRepository {
 
   @override
   Future<Result<Asset>> getAsset(String id) {
-    return Future.value(
-      Result.ok(Asset(id: id, mimeType: "image/jpg", isVideo: false)),
-    );
+    return Future.value(Result.ok(mockAsset(id)));
   }
 
   @override
   Future<Result<List<Asset>>> getAssets() async {
-    return Future.value(
-      Result.ok([
-        Asset(id: "kopice", mimeType: "image/jpg", isVideo: false),
-        Asset(id: "grodkow", mimeType: "image/png", isVideo: true),
-      ]),
-    );
+    return Future.value(Result.ok([mockAsset("kopice"), mockAsset("grodkow")]));
   }
 
   @override
@@ -41,24 +36,10 @@ class MockAssetRepository implements AssetRepository {
     );
   }
 
-  @override
-  Uri getThumbnailUri(Asset asset) {
-    if (asset.id == null) {
-      return Uri.parse(
-        "https://upload.wikimedia.org/wikipedia/commons/6/62/Palac_milicz_bogox_panorama.jpg",
-      );
-    }
-
-    return switch (asset.id!.toLowerCase()) {
-      "kopice" => Uri.parse(
-        "https://upload.wikimedia.org/wikipedia/commons/1/17/Widok_pa%C5%82acu_w_Kopicach_od_g%C5%82%C3%B3wnego_wjazdu.jpg",
-      ),
-      "grodkow" => Uri.parse(
-        "https://upload.wikimedia.org/wikipedia/commons/7/7f/SM_Grodk%C3%B3w_ratusz_ID_609916.jpg",
-      ),
-      _ => Uri.parse(
-        "https://upload.wikimedia.org/wikipedia/commons/6/62/Palac_milicz_bogox_panorama.jpg",
-      ),
-    };
-  }
+  Asset mockAsset(String id) => Asset(
+    id: id,
+    mimeType: "image/jpg",
+    isVideo: true,
+    serverConnection: ServerConnection(serverUrl: "", apiKey: ""),
+  );
 }

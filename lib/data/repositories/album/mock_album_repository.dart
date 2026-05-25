@@ -27,7 +27,9 @@ class MockAlbumRepository implements AlbumRepository {
   }
 
   @override
-  Future<Result<List<AlbumPreview>>> getAlbumPreviews() async {
+  Future<Result<List<AlbumPreview>>> getAlbumPreviews(
+    ServerConnection serverConnection,
+  ) async {
     Result<List<Asset>> assetsRes = await MockAssetRepository().getAssets();
 
     List<Asset> assets;

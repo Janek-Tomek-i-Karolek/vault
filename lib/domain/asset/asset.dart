@@ -1,9 +1,10 @@
 import 'package:vault/data/model/asset/asset_response_dto.dart';
+import 'package:vault/domain/server/server_connection.dart';
 
 class Asset {
   // nullable in case it's not stored yet
   String id;
-  String? serverUrl;
+  ServerConnection serverConnection;
   int? width;
   int? height;
   String mimeType;
@@ -12,20 +13,23 @@ class Asset {
     this.width,
     this.height,
     required this.id,
-    this.serverUrl,
+    required this.serverConnection,
     required this.mimeType,
     required this.isVideo,
   });
 
-  static Asset fromDTO({
-    required AssetResponseDTO dto,
-    required String serverUrl,
-  }) => Asset(
+  static Asset fromDTO(
+    AssetResponseDTO dto,
+    ServerConnection serverConnection,
+  ) => Asset(
     id: dto.id,
-    serverUrl: serverUrl,
+    serverConnection: serverConnection,
     mimeType: dto.originalMimeType ?? "",
     isVideo: dto.type == .VIDEO,
     width: dto.width,
     height: dto.height,
   );
+
+  String get thumbnailUri =>
+      "${serverConnection.serverUrl}/api/assets/$id/thumbnail";
 }

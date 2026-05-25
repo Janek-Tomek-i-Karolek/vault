@@ -21,7 +21,7 @@ class Album {
     name: dto.albumName ?? "Not available",
     assets: [
       for (final assetDto in dto.assets)
-        Asset.fromDTO(dto: assetDto, serverUrl: serverConnection.serverUrl),
+        Asset.fromDTO(assetDto, serverConnection),
     ],
     serverConnection: serverConnection,
   );

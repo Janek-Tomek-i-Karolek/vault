@@ -29,6 +29,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  ServerConnection get _demoServerConn => ServerConnection(
+    serverUrl: Uri.https('demo.immich.app', "").toString(),
+    apiKey: "9lSvYQEufFnX1XSmzDA92VdvwDUJwIvKZDE6sC3Tc",
+  );
+
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => AlbumsViewModel(
-            albumRepository: MockAlbumRepository(),
+            albumRepository: DemoApiAlbumRepository(),
             assetRepository: MockAssetRepository(),
           ),
         ),
@@ -65,18 +70,20 @@ class MyApp extends StatelessWidget {
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
         // home: const ServerListScreen(),
-        home: AlbumScreen(
-          serverConnection: ServerConnection(
-            serverUrl: Uri.https('demo.immich.app', "").toString(),
-            // NOTE: na docsach szybko deaktywują klucze skurczybyki
-            apiKey: "fL70DGWmNa6xwFFfNc9LesY8wlo6Wb8Lh2ImHD2JreQ",
-          ),
-          albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
-        ),
+        // home: AlbumScreen(
+        //   serverConnection: ServerConnection(
+        //     serverUrl: Uri.https('demo.immich.app', "").toString(),
+        //     // NOTE: na docsach szybko deaktywują klucze skurczybyki
+        //     apiKey: "fL70DGWmNa6xwFFfNc9LesY8wlo6Wb8Lh2ImHD2JreQ",
+        //   ),
+        //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
+        // ),
+        home: AlbumsScreen(serverConnection: _demoServerConn),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
-          "/albums": (context) => AlbumsScreen(),
+          "/albums": (context) =>
+              AlbumsScreen(serverConnection: _demoServerConn),
           "/server-list-screen": (context) => ServerListScreen(),
         },
         onGenerateRoute: (settings) {

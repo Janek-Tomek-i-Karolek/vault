@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
+import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
 class AlbumsScreen extends StatefulWidget {
-  const AlbumsScreen({super.key});
+  final ServerConnection serverConnection;
+
+  const AlbumsScreen({required this.serverConnection, super.key});
 
   @override
   State<AlbumsScreen> createState() => _AlbumsScreenState();
@@ -17,11 +21,12 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   void initState() {
     super.initState();
 
-    context.read<AlbumsViewModel>().fetchPreviews();
+    context.read<AlbumsViewModel>().fetchPreviews(widget.serverConnection);
   }
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Lazy preview loading
     final viewModel = context.read<AlbumsViewModel>();
 
     return Scaffold(
@@ -40,17 +45,13 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               (_, final albumPreviews?, _) => GridView.builder(
                 padding: const EdgeInsets.all(20),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  mainAxisExtent: 190,
-                  maxCrossAxisExtent: 220,
-                  childAspectRatio: 1,
+                  maxCrossAxisExtent: 250,
+                  childAspectRatio: 0.85,
                 ),
                 itemCount: albumPreviews.length,
                 itemBuilder: (context, index) {
                   final preview = albumPreviews[index];
-                  return AlbumPreviewTile(
-                    albumPreview: preview,
-                    thumbnailUriBuilder: viewModel.getThumbnailUri,
-                  );
+                  return AlbumPreviewTile(albumPreview: preview);
                 },
               ),
               _ => const Text("Something went wrong!"),

@@ -78,10 +78,7 @@ class DemoApiAlbumRepository extends AlbumRepository {
       );
 
       thumbnail = switch (thumbnailRes) {
-        Ok<AssetResponseDTO>() => Asset.fromDTO(
-          dto: thumbnailRes.value,
-          serverUrl: conn.serverUrl,
-        ),
+        Ok<AssetResponseDTO>() => Asset.fromDTO(thumbnailRes.value, conn),
         Error<AssetResponseDTO>() => null,
       };
     }
