@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:vault/data/model/album/album_response_dto.dart';
+import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 
@@ -52,5 +53,23 @@ class DemoApiClient {
     }
 
     return Result.ok(AlbumResponseDTO.fromJson(jsonDecode(response.body)));
+  }
+
+  Future<Result<AssetResponseDTO>> getAsset(
+    ServerConnection serverConnection,
+    String id,
+  ) async {
+    final uri = Uri.parse("${serverConnection.serverUrl}/api/assets/$id");
+
+    final response = await get(
+      uri,
+      headers: demoRequestHeaders(serverConnection.apiKey),
+    );
+
+    if (response.statusCode != 200) {
+      return Result.error(HttpException("Failed to fetch the asset"));
+    }
+
+    return Result.ok(AssetResponseDTO.fromJson(jsonDecode(response.body)));
   }
 }

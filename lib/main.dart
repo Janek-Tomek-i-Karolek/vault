@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
           serverConnection: ServerConnection(
             serverUrl: Uri.https('demo.immich.app', "").toString(),
             // NOTE: na docsach szybko deaktywują klucze skurczybyki
-            apiKey: "PP1hLvOURSgbnx7FIjh3Zu9KvJbSxjQKFzUAxXjxE",
+            apiKey: "fL70DGWmNa6xwFFfNc9LesY8wlo6Wb8Lh2ImHD2JreQ",
           ),
           albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         ),

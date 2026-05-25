@@ -1,4 +1,5 @@
 import 'package:vault/data/model/album/album_response_dto.dart';
+import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/services/api/demo_api_client.dart';
 import 'package:vault/domain/album/album.dart';
@@ -31,21 +32,9 @@ class DemoApiAlbumRepository extends AlbumRepository {
     );
     switch (albumRes) {
       case Ok<AlbumResponseDTO>():
-        final AlbumResponseDTO album = albumRes.value;
         return Result.ok(
-          Album(
-            name: album.albumName ?? "Not available",
-            assets: [
-              for (var asset in album.assets)
-                Asset(
-                  id: asset.id,
-                  serverUrl: serverConnection.serverUrl,
-                  mimeType: asset.originalMimeType ?? "",
-                  isVideo: asset.type == .VIDEO,
-                  width: asset.width,
-                  height: asset.height,
-                ),
-            ],
+          Album.fromDTO(
+            dto: albumRes.value,
             serverConnection: serverConnection,
           ),
         );
@@ -55,13 +44,7 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
-  Future<Result<List<AlbumPreview>>> getAlbumPreviews() {
-    // TODO: implement getAlbumPreviews
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Result<List<Album>>> getAlbums(
+  Future<Result<List<AlbumPreview>>> getAlbumPreviews(
     ServerConnection serverConnection,
   ) async {
     Result<List<AlbumResponseDTO>> albumsRes = await DemoApiClient().getAlbums(
@@ -72,14 +55,57 @@ class DemoApiAlbumRepository extends AlbumRepository {
     switch (albumsRes) {
       case Ok<List<AlbumResponseDTO>>():
         albums = albumsRes.value;
-        print(albums);
+      case Error<List<AlbumResponseDTO>>():
+        return Result.error(albumsRes.error);
+    }
 
+    return Result.ok(
+      await Future.wait(
+        albums.map((dto) async => _getAlbumPreview(serverConnection, dto)),
+      ),
+    );
+  }
+
+  Future<AlbumPreview> _getAlbumPreview(
+    ServerConnection conn,
+    AlbumResponseDTO dto,
+  ) async {
+    Asset? thumbnail;
+    if (dto.albumThumbnailAssetId != null) {
+      Result<AssetResponseDTO> thumbnailRes = await DemoApiClient().getAsset(
+        conn,
+        dto.albumThumbnailAssetId!,
+      );
+
+      thumbnail = switch (thumbnailRes) {
+        Ok<AssetResponseDTO>() => Asset.fromDTO(
+          dto: thumbnailRes.value,
+          serverUrl: conn.serverUrl,
+        ),
+        Error<AssetResponseDTO>() => null,
+      };
+    }
+
+    return AlbumPreview(
+      albumId: dto.id,
+      albumName: dto.albumName ?? "Unavailable",
+      thumbnail: thumbnail,
+    );
+  }
+
+  @override
+  Future<Result<List<Album>>> getAlbums(
+    ServerConnection serverConnection,
+  ) async {
+    Result<List<AlbumResponseDTO>> albumsRes = await DemoApiClient().getAlbums(
+      serverConnection,
+    );
+
+    switch (albumsRes) {
+      case Ok<List<AlbumResponseDTO>>():
         return Result.ok([
-          Album(
-            name: "some name",
-            assets: [],
-            serverConnection: serverConnection,
-          ),
+          for (final albumDto in albumsRes.value)
+            Album.fromDTO(dto: albumDto, serverConnection: serverConnection),
         ]);
       case Error<List<AlbumResponseDTO>>():
         return Result.error(albumsRes.error);

@@ -15,7 +15,15 @@ class AlbumPreviewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final thumbnailUri = thumbnailUriBuilder(albumPreview.thumbnail);
+    final String thumbnailUri;
+
+    // TODO: handle thumbnail uri better
+    if (albumPreview.thumbnail == null) {
+      thumbnailUri =
+          "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
+    } else {
+      thumbnailUri = thumbnailUriBuilder(albumPreview.thumbnail!).toString();
+    }
     return Card.outlined(
       margin: EdgeInsets.all(12),
       child: Column(
@@ -28,7 +36,7 @@ class AlbumPreviewTile extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                thumbnailUri.toString(),
+                thumbnailUri,
                 fit: BoxFit.contain,
                 loadingBuilder: (context, child, progress) {
                   if (progress == null) return child;

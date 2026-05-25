@@ -4,7 +4,7 @@ class AlbumPreview {
   // nullable in case it's not stored yet
   String? albumId;
   String albumName;
-  Asset thumbnail;
+  Asset? thumbnail;
 
   AlbumPreview({
     this.albumId,
