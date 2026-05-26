@@ -45,7 +45,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
         centerTitle: true,
         actions: const [ProfileButton()],
       ),
-      drawer: SidebarMenu(),
       body: switch ((viewModel.isLoading, viewModel.album, viewModel.error)) {
         (true, _, _) => const Center(child: CircularProgressIndicator()),
         (_, _, final Exception e) => Center(child: Text("Error: $e")),

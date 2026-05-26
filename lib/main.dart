@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
   ServerConnection get _demoServerConn => ServerConnection(
     serverUrl: Uri.https('demo.immich.app', "").toString(),
-    apiKey: "9lSvYQEufFnX1XSmzDA92VdvwDUJwIvKZDE6sC3Tc",
+    apiKey: "VrIsNmRUrruSGeqXWvwAhMPZ1FJq8YXK7CO58NVCifA",
   );
 
   @override
