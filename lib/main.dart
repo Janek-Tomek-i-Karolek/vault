@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
     final MaterialTheme materialTheme = MaterialTheme(textTheme);
     return MultiProvider(
       providers: [
-        //ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(
           create: (_) => ServersViewModel(
             connectionRepository:
@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
+
         // home: const ServerListScreen(),
         // home: AlbumScreen(
         //   serverConnection: ServerConnection(
@@ -79,8 +80,8 @@ class MyApp extends StatelessWidget {
         //   ),
         //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         // ),
-        home: AlbumsScreen(serverConnection: _demoServerConn),
-
+        // home: AlbumsScreen(serverConnection: _demoServerConn),
+        home: RegisterScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),

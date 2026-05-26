@@ -145,6 +145,7 @@ class LocalConnectionRepository implements ConnectionRepository {
         }
       case Error():
         {
+          print(serverUrlResult.error);
           return Result.error(serverUrlResult.error);
         }
     }
@@ -157,6 +158,7 @@ class LocalConnectionRepository implements ConnectionRepository {
         }
       case Error():
         {
+          print("apiKey error");
           return Result.error(apiKeyResult.error);
         }
     }
@@ -172,6 +174,7 @@ class LocalConnectionRepository implements ConnectionRepository {
   }
 
   Future<Result<String>> _getApiKey() async {
+    print(1);
     try {
       String? apiKey = await _storage.read(key: 'apiKey');
       if (apiKey == null) {
@@ -194,6 +197,7 @@ class LocalConnectionRepository implements ConnectionRepository {
   }
 
   Future<Result<String>> _getUrl() async {
+    print(2);
     try {
       String? url = await _storage.read(key: 'serverUrl');
       if (url == null) {

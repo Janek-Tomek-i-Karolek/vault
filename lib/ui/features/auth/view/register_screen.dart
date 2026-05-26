@@ -80,7 +80,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return ConfirmButton(
                     text: "Register",
                     onTap: isValid
-                        ? () => context.read<AuthViewModel>().register()
+                        ? () async {
+                            await context.read<AuthViewModel>().register();
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/albums');
+                          }
                         : null,
                   );
                 },
@@ -88,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               const SizedBox(height: 10),
               InkWell(
-                onTap: () {},
+                onTap: () => Navigator.popAndPushNamed(context, '/login'),
                 child: Text(
                   "Already have an account?",
                   style: TextStyle(

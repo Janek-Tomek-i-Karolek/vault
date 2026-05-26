@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
+import 'package:vault/domain/user/user.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -9,8 +10,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final String _currentEmail = "jan.kowalski@gmail.com";
-  final String _currentUsername = "JanKow";
+  // TODO: viewmodel
+  final String _currentEmail = User.email;
+  final String _currentUsername = User.username;
 
   late TextEditingController _usernameController;
   late TextEditingController _emailController;

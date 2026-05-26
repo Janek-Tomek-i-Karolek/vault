@@ -89,7 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   return ConfirmButton(
                     text: "Login",
                     onTap: isValid
-                        ? () => context.read<AuthViewModel>().login()
+                        ? () async {
+                            await context.read<AuthViewModel>().register();
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed('/albums');
+                          }
                         : null,
                   );
                 },
@@ -97,7 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 25),
               InkWell(
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushReplacementNamed(context, '/register'),
                 child: const Text(
                   "Create new account",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

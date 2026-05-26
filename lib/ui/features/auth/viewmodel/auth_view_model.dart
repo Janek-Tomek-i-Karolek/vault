@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vault/domain/user/user.dart';
 
 class AuthViewModel extends ChangeNotifier {
   String _email = "";
@@ -6,18 +7,23 @@ class AuthViewModel extends ChangeNotifier {
   String _password = "";
 
   bool get isRegisterFormValid =>
-      _email.isNotEmpty && _login.isNotEmpty && _password.length >= 6;
+      User.email.isNotEmpty &&
+      User.username.isNotEmpty &&
+      _password.length >= 6;
 
-  bool get isLoginFormValid => _login.isNotEmpty && _password.length >= 6;
+  bool get isLoginFormValid =>
+      User.username.isNotEmpty && _password.length >= 6;
 
   Future<void> login() async {
     debugPrint("Login button pressed");
-    debugPrint("Logging in with data: $_login, $_password");
+    debugPrint("Logging in with data: ${User.username}, $_password");
   }
 
   Future<void> register() async {
     debugPrint("Register button pressed");
-    debugPrint("Registering with data: $_email, $_login, $_password");
+    debugPrint(
+      "Registering with data: ${User.email}, ${User.username}, $_password",
+    );
   }
 
   Future<void> forgotPassword() async {
@@ -25,12 +31,12 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   void updateEmail(String value) {
-    _email = value;
+    User.email = value;
     notifyListeners();
   }
 
   void updateLogin(String value) {
-    _login = value;
+    User.username = value;
     notifyListeners();
   }
 

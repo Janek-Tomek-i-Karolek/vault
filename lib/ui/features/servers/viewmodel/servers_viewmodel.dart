@@ -25,7 +25,6 @@ class ServersViewModel extends ChangeNotifier {
     }
 
     notifyListeners();
-    await refreshServers();
   }
 
   Future<void> refreshServers() async {
