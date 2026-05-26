@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vault/ui/core/nav/sidebar_menu.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -5,6 +5,7 @@ import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/album_screen.dart';
@@ -79,19 +80,21 @@ class MyApp extends StatelessWidget {
         //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         // ),
         home: AlbumsScreen(serverConnection: _demoServerConn),
+
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
           "/albums": (context) =>
               AlbumsScreen(serverConnection: _demoServerConn),
-          "/server-list-screen": (context) => ServerListScreen(),
+          "/server-list": (context) => ServerListScreen(),
+          "/profile": (context) => ProfileScreen(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/add-server') {
             return PageRouteBuilder(
               opaque: false,
               barrierDismissible: true,
-              barrierColor: Colors.black,
+              barrierColor: Colors.black54,
               pageBuilder: (_, _, _) {
                 return const ConnectionDialog();
               },

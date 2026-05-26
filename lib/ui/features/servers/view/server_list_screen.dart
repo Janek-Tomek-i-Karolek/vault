@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/ui/core/nav/sidebar_menu.dart';
+import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/servers/viewmodel/servers_viewmodel.dart';
 
 class ServerListScreen extends StatelessWidget {
@@ -8,8 +10,11 @@ class ServerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Vaults')),
-
+      appBar: AppBar(
+        title: const Text('My Vaults'),
+        actions: const [ProfileButton()],
+      ),
+      drawer: SidebarMenu(),
       body: Consumer<ServersViewModel>(
         builder: (context, svm, child) {
           final servers = svm.servers;

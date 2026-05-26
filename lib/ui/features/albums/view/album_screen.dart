@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/ui/core/nav/sidebar_menu.dart';
+import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 
 class AlbumScreen extends StatefulWidget {
@@ -38,7 +40,12 @@ class _AlbumScreenState extends State<AlbumScreen> {
       _ => "Album",
     };
     return Scaffold(
-      appBar: AppBar(title: Text(appBarTitle), centerTitle: true),
+      appBar: AppBar(
+        title: Text(appBarTitle),
+        centerTitle: true,
+        actions: const [ProfileButton()],
+      ),
+      drawer: SidebarMenu(),
       body: switch ((viewModel.isLoading, viewModel.album, viewModel.error)) {
         (true, _, _) => const Center(child: CircularProgressIndicator()),
         (_, _, final Exception e) => Center(child: Text("Error: $e")),

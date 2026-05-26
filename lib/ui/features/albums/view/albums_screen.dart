@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/ui/core/nav/sidebar_menu.dart';
+import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
@@ -30,7 +32,11 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
     final viewModel = context.read<AlbumsViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Albums")),
+      appBar: AppBar(
+        title: const Text("Albums"),
+        actions: const [ProfileButton()],
+      ),
+      drawer: SidebarMenu(),
       body: Center(
         child: ListenableBuilder(
           listenable: viewModel,
