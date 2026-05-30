@@ -85,7 +85,8 @@ class MyApp extends StatelessWidget {
         //   ),
         //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         // ),
-        home: RegisterScreen(),
+        home: AlbumsScreen(serverConnection: _demoServerConn),
+        // home: RegisterScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),

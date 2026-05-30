@@ -30,6 +30,17 @@ class Asset {
     height: dto.height,
   );
 
-  String get thumbnailUri =>
-      "${serverConnection.serverUrl}/api/assets/$id/thumbnail";
+  String _makeUri({required String suffix}) =>
+      "${serverConnection.serverUrl}/api/assets/$id/$suffix";
+
+  String get originalUri => _makeUri(suffix: "original");
+  String get thumbnailUri => _makeUri(suffix: "thumbnail?size=thumbnail");
+  String get previewUri => _makeUri(suffix: "thumbnail?size=preview");
+
+  Map<String, String> get headers {
+    return {
+      "x-api-key": serverConnection.apiKey,
+      "content-type": "application/json",
+    };
+  }
 }

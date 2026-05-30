@@ -6,6 +6,7 @@ import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/asset_screen.dart';
 
 class AlbumScreen extends StatefulWidget {
   final String albumId;
@@ -65,10 +66,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 asset: asset,
                 onAssetSelected: (asset) => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(title: Text("Zdjęcie lol")),
-                      body: Center(child: Text("Zdjęcie lol")),
-                    ),
+                    builder: (context) => AssetScreen(asset: asset),
                   ),
                 ),
               ),
@@ -101,8 +99,8 @@ class AssetTile extends StatelessWidget {
         child: GestureDetector(
           onTap: () => onAssetSelected?.call(asset),
           child: Image.network(
-            _makeUri(asset),
-            headers: _makeHeaders(asset),
+            asset.thumbnailUri,
+            headers: asset.headers,
             fit: BoxFit.cover,
           ),
         ),
@@ -110,22 +108,12 @@ class AssetTile extends StatelessWidget {
     );
   }
 
-  String _makeUri(Asset asset) =>
-      "${asset.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail?size=thumbnail";
-
-  Map<String, String> _makeHeaders(Asset asset) {
-    return {
-      "x-api-key": asset.serverConnection.apiKey,
-      "content-type": "application/json",
-    };
-  }
-
   Map<String, double> _tileSize({int? originalWidth, int? originalHeight}) {
     if (originalWidth == null || originalHeight == null) {
       return {"width": 100, "height": 200};
     }
     double aspectRatio = originalWidth / originalHeight;
-    if (aspectRatio == 1 || aspectRatio < 1) {
+    if (aspectRatio == 1 || aspectRatio > 1) {
       return {"width": 100, "height": 200};
     } else {
       return {"width": 100, "height": 300};
