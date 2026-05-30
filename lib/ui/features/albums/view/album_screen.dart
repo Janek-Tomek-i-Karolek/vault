@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
@@ -24,10 +25,12 @@ class _AlbumScreenState extends State<AlbumScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<AlbumViewModel>().loadAlbum(
-      widget.serverConnection,
-      widget.albumId,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AlbumViewModel>().loadAlbum(
+        widget.serverConnection,
+        widget.albumId,
+      );
+    });
   }
 
   @override
@@ -56,21 +59,18 @@ class _AlbumScreenState extends State<AlbumScreen> {
           ),
           itemBuilder: (context, index) {
             final asset = album.assets[index];
-            final tileSize = _tileSize(
-              originalWidth: asset.width,
-              originalHeight: asset.height,
-            );
-
             return Padding(
               padding: const EdgeInsets.all(1.0),
               child: AssetTile(
-                "${album.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail?size=thumbnail",
-                width: tileSize["width"],
-                height: tileSize["height"],
-                headers: {
-                  "x-api-key": album.serverConnection.apiKey,
-                  "content-type": "application/json",
-                },
+                asset: asset,
+                onAssetSelected: (asset) => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Scaffold(
+                      appBar: AppBar(title: Text("Zdjęcie lol")),
+                      body: Center(child: Text("Zdjęcie lol")),
+                    ),
+                  ),
+                ),
               ),
             );
           },
@@ -78,6 +78,46 @@ class _AlbumScreenState extends State<AlbumScreen> {
         _ => const Text("Something went wrong!"),
       },
     );
+  }
+}
+
+class AssetTile extends StatelessWidget {
+  final Asset asset;
+  final void Function(Asset)? onAssetSelected;
+
+  const AssetTile({super.key, required this.asset, this.onAssetSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    final tileSize = _tileSize(
+      originalWidth: asset.width,
+      originalHeight: asset.height,
+    );
+    return SizedBox(
+      width: tileSize["width"],
+      height: tileSize["height"],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(2),
+        child: GestureDetector(
+          onTap: () => onAssetSelected?.call(asset),
+          child: Image.network(
+            _makeUri(asset),
+            headers: _makeHeaders(asset),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _makeUri(Asset asset) =>
+      "${asset.serverConnection.serverUrl}/api/assets/${asset.id}/thumbnail?size=thumbnail";
+
+  Map<String, String> _makeHeaders(Asset asset) {
+    return {
+      "x-api-key": asset.serverConnection.apiKey,
+      "content-type": "application/json",
+    };
   }
 
   Map<String, double> _tileSize({int? originalWidth, int? originalHeight}) {
@@ -90,37 +130,5 @@ class _AlbumScreenState extends State<AlbumScreen> {
     } else {
       return {"width": 100, "height": 300};
     }
-  }
-}
-
-class AssetTile extends StatelessWidget {
-  final String uri;
-  final double? width;
-  final double? height;
-  final Map<String, String>? headers;
-  final VoidCallback? onTap;
-
-  const AssetTile(
-    this.uri, {
-    super.key,
-    this.width,
-    this.height,
-    this.headers,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(2),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Image.network(uri, headers: headers, fit: BoxFit.cover),
-        ),
-      ),
-    );
   }
 }
