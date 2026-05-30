@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   ServerConnection get _demoServerConn => ServerConnection(
-    serverUrl: Uri.https('demo.immich.app', "").toString(),
-    apiKey: "VrIsNmRUrruSGeqXWvwAhMPZ1FJq8YXK7CO58NVCifA",
+    serverUrl: Uri.https('immich.wolkowscy.net', "").toString(),
+    apiKey: "IGj5f4Jw8wUYfu5Ki8EkMUClLueFllFaFv0PJY6NU",
   );
 
   @override
