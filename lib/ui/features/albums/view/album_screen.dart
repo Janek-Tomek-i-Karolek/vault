@@ -68,26 +68,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 onAssetSelected: (asset) => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => AssetScreen(asset: asset),
-                    // builder: (context) => PhotoView(
-                    //   imageProvider: NetworkImage(
-                    //     asset.previewUri,
-                    //     headers: asset.headers,
-                    //   ),
-                    //   loadingBuilder: (context, progress) => Center(
-                    //     child: SizedBox(
-                    //       width: 20.0,
-                    //       height: 20.0,
-                    //       child: CircularProgressIndicator(
-                    //         value: progress == null
-                    //             ? null
-                    //             : progress.cumulativeBytesLoaded /
-                    //                   progress.expectedTotalBytes!,
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   minScale: PhotoViewComputedScale.contained * 1.0,
-                    //   gaplessPlayback: true,
-                    // ),
                   ),
                 ),
               ),
