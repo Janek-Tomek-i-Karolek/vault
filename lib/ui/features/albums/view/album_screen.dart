@@ -67,7 +67,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 asset: asset,
                 onAssetSelected: (asset) => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => AssetScreen(asset: asset),
+                    builder: (context) => AssetScreen(assets: album.assets),
                   ),
                 ),
               ),

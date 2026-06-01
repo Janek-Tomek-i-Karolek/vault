@@ -1,11 +1,23 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:vault/domain/asset/asset.dart';
 
-class AssetScreen extends StatelessWidget {
-  const AssetScreen({super.key, required this.asset});
-  final Asset asset;
+class AssetScreen extends StatefulWidget {
+  const AssetScreen({super.key, required this.assets});
+  final List<Asset> assets;
+
+  @override
+  State<AssetScreen> createState() => _AssetScreenState();
+}
+
+class _AssetScreenState extends State<AssetScreen> {
+  final ValueNotifier<bool> _isScaled = ValueNotifier(false);
+
+  void _onZoom(double scale) {
+    _isScaled.value = scale != 1.0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +30,36 @@ class AssetScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       bottomNavigationBar: BottomAppBar(color: Colors.transparent),
-      body: AssetViewer(asset: asset),
+      // body: AssetViewer(asset: asset),
+      body: ValueListenableBuilder(
+        valueListenable: _isScaled,
+        builder: (context, isScaled, child) {
+          return PageView.builder(
+            itemCount: widget.assets.length,
+            allowImplicitScrolling: true,
+            scrollCacheExtent: ScrollCacheExtent.viewport(1),
+            physics: isScaled
+                ? NeverScrollableScrollPhysics()
+                : PageScrollPhysics(),
+            itemBuilder: (context, index) {
+              return RepaintBoundary(
+                child: AssetViewer(
+                  asset: widget.assets[index],
+                  onZoom: _onZoom,
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
 
 class AssetViewer extends StatefulWidget {
-  const AssetViewer({super.key, required this.asset});
+  const AssetViewer({super.key, required this.asset, required this.onZoom});
   final Asset asset;
+  final Function(double) onZoom;
 
   @override
   State<AssetViewer> createState() => _AssetViewerState();
@@ -45,7 +79,6 @@ class _AssetViewerState extends State<AssetViewer>
   late Size size;
   late EdgeInsets imageBoundaryMargin;
 
-  // At class level
   final ValueNotifier<bool> _isFull = ValueNotifier<bool>(false);
   final ValueNotifier<bool> _isOriginal = ValueNotifier<bool>(false);
   bool _isScaleInteraction = false;
@@ -103,9 +136,33 @@ class _AssetViewerState extends State<AssetViewer>
     }
   }
 
-  void _updateLock() {
+  void _onInteractionStart(ScaleStartDetails details) {
+    if (details.pointerCount > 1) {
+      // this means that the user is using two fingers
+      // i want to listen to scaling only
+      _isScaleInteraction = true;
+      _isFull.value = false;
+    }
+  }
+
+  void _onInteractionEnd(ScaleEndDetails details) {
+    _isScaleInteraction = false;
+
+    // update boundary margin aftet reenabling
+    _onTransformationChange();
+  }
+
+  void _onTransformationChange() {
+    final scale = _transformationController.value.getMaxScaleOnAxis();
+
+    // notify parent layout
+    widget.onZoom(scale);
+
+    // track resolution threshold
+    _isOriginal.value = scale >= kOriginalScaleThreshold;
+
+    // update boundary margin constraints
     if (!_isScaleInteraction) {
-      final scale = _transformationController.value.getMaxScaleOnAxis();
       final imageSize = _imageKey.currentContext!.size;
       if (imageSize != null) {
         final isFull = imageSize.height * scale >= size.height;
@@ -118,27 +175,6 @@ class _AssetViewerState extends State<AssetViewer>
     }
   }
 
-  void _updateOriginal() {
-    // print(_transformationController.value.transposed());
-    _isOriginal.value =
-        _transformationController.value.getMaxScaleOnAxis() >=
-        kOriginalScaleThreshold;
-  }
-
-  void _onInteractionStart(ScaleStartDetails details) {
-    if (details.pointerCount > 1) {
-      // this means that the user is using two fingers
-      // i want to listen to scaling only
-      _isScaleInteraction = true;
-      _isFull.value = false;
-    }
-  }
-
-  void _onInteractionEnd() {
-    _isScaleInteraction = false;
-    _updateLock();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -146,8 +182,7 @@ class _AssetViewerState extends State<AssetViewer>
       vsync: this,
       duration: const Duration(milliseconds: kZoomDuration),
     );
-    _transformationController.addListener(_updateLock);
-    _transformationController.addListener(_updateOriginal);
+    _transformationController.addListener(_onTransformationChange);
   }
 
   @override
@@ -174,7 +209,7 @@ class _AssetViewerState extends State<AssetViewer>
               boundaryMargin: isFull ? imageBoundaryMargin : EdgeInsets.zero,
               transformationController: _transformationController,
               onInteractionStart: _onInteractionStart,
-              onInteractionEnd: (_) => _onInteractionEnd(),
+              onInteractionEnd: _onInteractionEnd,
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onDoubleTap: _animateZoomInitialize,
