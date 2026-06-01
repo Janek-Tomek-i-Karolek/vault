@@ -50,23 +50,27 @@ class _AssetScreenState extends State<AssetScreen>
       if (currentTransform != Matrix4.identity()) {
         endMatrix = Matrix4.identity();
       } else {
-        final imageSize = _imageKey.currentContext!.size;
+        final imageSize = _imageKey.currentContext!.size!;
         final center = Offset(size.width / 2, size.height / 2);
-        Offset tap = _doubleTapLocation ?? center;
-        final tapOffset = (center.dy - tap.dy).abs();
-        final margin = (size.height - imageSize!.height) / 2;
-        if (tapOffset > margin) {
-          tap = Offset(
-            tap.dx,
-            tap.dy > center.dy ? center.dy + margin : center.dy - margin,
-          );
-        }
+
+        // Constrain the tap vertical value so the zoom-in
+        // does not zoom into black void weirdly.
+        final dy = min(
+          (size.height - imageSize.height) / 2,
+          (imageSize.height * kTargetScale) - size.height,
+        );
+
+        // clamped Y is based on tap-position, relative to center
+        final double targetY = _doubleTapLocation!.dy > center.dy
+            ? center.dy + dy
+            : center.dy - dy;
+
+        final tap = Offset(_doubleTapLocation!.dx, targetY);
+
         endMatrix = Matrix4.identity()
-          ..translate(tap.dx, tap.dy)
-          // ..translate(center.dx, center.dy)
-          ..scale(kTargetScale)
-          // ..translate(-center.dx, -center.dy); // zoom in the middle
-          ..translate(-tap.dx, -tap.dy); // follow double tap (works mehh)
+          ..translateByDouble(tap.dx, tap.dy, 1, 1)
+          ..scaleByDouble(kTargetScale, kTargetScale, kTargetScale, 1)
+          ..translateByDouble(-tap.dx, -tap.dy, 1, 1);
       }
       _animationZoom = Matrix4Tween(
         begin: currentTransform,
