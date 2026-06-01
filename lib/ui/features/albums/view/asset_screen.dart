@@ -90,10 +90,13 @@ class _AssetViewerState extends State<AssetViewer>
           ..scaleByDouble(kTargetScale, kTargetScale, kTargetScale, 1)
           ..translateByDouble(-tap.dx, -tap.dy, 1, 1);
       }
-      _animationZoom = Matrix4Tween(
-        begin: currentTransform,
-        end: endMatrix,
-      ).animate(_animationControllerZoom);
+      _animationZoom = Matrix4Tween(begin: currentTransform, end: endMatrix)
+          .animate(
+            CurvedAnimation(
+              parent: _animationControllerZoom,
+              curve: Curves.ease,
+            ),
+          );
 
       _animationZoom!.addListener(_onAnimateZoom);
       _animationControllerZoom.forward();
