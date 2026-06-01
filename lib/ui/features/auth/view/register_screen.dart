@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
 import 'package:vault/ui/features/auth/view/widgets/auth_text_field.dart';
 import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
@@ -41,8 +42,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const Text("vault"), // TODO: Trzeba jakieś logo stworzyć
 
               const SizedBox(height: 50),
-              const Text(
-                "Witamy w kolonii",
+              Text(
+                AppLocalizations.of(context)!.welcome,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
@@ -78,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 selector: (_, avm) => avm.isRegisterFormValid,
                 builder: (context, isValid, _) {
                   return ConfirmButton(
-                    text: "Register",
+                    text: AppLocalizations.of(context)!.register,
                     onTap: isValid
                         ? () async {
                             await context.read<AuthViewModel>().register();

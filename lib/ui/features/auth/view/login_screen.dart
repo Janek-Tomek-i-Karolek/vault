@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
 import 'package:vault/ui/features/auth/view/widgets/auth_text_field.dart';
 import 'package:vault/ui/features/auth/viewmodel/auth_view_model.dart';
@@ -39,8 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text("vault"), // TODO: Logo
 
               const SizedBox(height: 50),
-              const Text(
-                "Witamy w kolonii",
+              Text(
+                AppLocalizations.of(context)!.welcome,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 

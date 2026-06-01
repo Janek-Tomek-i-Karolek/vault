@@ -1,0 +1,3 @@
+arb-dir: lib/l10n
+template-arb-file: vault_en.arb
+output-localization-file: vault_localizations.dart

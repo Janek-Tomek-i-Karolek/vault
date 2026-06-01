@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
 import 'package:vault/data/repositories/album/mock_album_repository.dart';
 import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
@@ -70,6 +72,9 @@ class MyApp extends StatelessWidget {
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale("pl"),
 
         // home: const ServerListScreen(),
         // home: AlbumScreen(
@@ -80,7 +85,6 @@ class MyApp extends StatelessWidget {
         //   ),
         //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         // ),
-        // home: AlbumsScreen(serverConnection: _demoServerConn),
         home: RegisterScreen(),
         routes: {
           "/login": (context) => LoginScreen(),

@@ -1,0 +1,12 @@
+{
+  "welcome": "Welcome!",
+  "register": "Register",
+  "@welcome": {
+    "description": "Register screen greeting"
+  },
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  }
+}
+
