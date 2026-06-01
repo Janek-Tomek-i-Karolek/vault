@@ -2,18 +2,36 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:vault/domain/asset/asset.dart';
-import 'package:vector_math/vector_math_64.dart' as v_math;
 
-class AssetScreen extends StatefulWidget {
+class AssetScreen extends StatelessWidget {
   const AssetScreen({super.key, required this.asset});
-
   final Asset asset;
 
   @override
-  State<AssetScreen> createState() => _AssetScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+      ),
+      bottomNavigationBar: BottomAppBar(color: Colors.transparent),
+      body: AssetViewer(asset: asset),
+    );
+  }
 }
 
-class _AssetScreenState extends State<AssetScreen>
+class AssetViewer extends StatefulWidget {
+  const AssetViewer({super.key, required this.asset});
+  final Asset asset;
+
+  @override
+  State<AssetViewer> createState() => _AssetViewerState();
+}
+
+class _AssetViewerState extends State<AssetViewer>
     with TickerProviderStateMixin {
   final TransformationController _transformationController =
       TransformationController();
@@ -21,7 +39,7 @@ class _AssetScreenState extends State<AssetScreen>
 
   static const double kTargetScale = 3.0;
   static const double kOriginalScaleThreshold = 3.0;
-  static const int kZoomDuration = 100;
+  static const int kZoomDuration = 300;
 
   late final AnimationController _animationControllerZoom;
   late Size size;
@@ -138,63 +156,53 @@ class _AssetScreenState extends State<AssetScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-      ),
-      bottomNavigationBar: BottomAppBar(color: Colors.transparent),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          size = Size(constraints.maxWidth, constraints.maxHeight);
-          return ValueListenableBuilder(
-            valueListenable: _isFull,
-            builder: (context, isFull, child) {
-              return InteractiveViewer(
-                clipBehavior: Clip.none,
-                minScale: 1.0,
-                maxScale: 10,
-                constrained: false,
-                panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
-                boundaryMargin: isFull ? imageBoundaryMargin : EdgeInsets.zero,
-                transformationController: _transformationController,
-                onInteractionStart: _onInteractionStart,
-                onInteractionEnd: (_) => _onInteractionEnd(),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onDoubleTap: _animateZoomInitialize,
-                  onDoubleTapDown: (details) =>
-                      _doubleTapLocation = details.localPosition,
-                  onDoubleTapCancel: () => _doubleTapLocation = null,
-                  child: SizedBox(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    child: Center(
-                      child: ValueListenableBuilder(
-                        valueListenable: _isOriginal,
-                        builder: (context, isOriginal, child) {
-                          return Image.network(
-                            key: _imageKey,
-                            isOriginal
-                                ? widget.asset.originalUri
-                                : widget.asset.previewUri,
-                            headers: widget.asset.headers,
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                          );
-                        },
-                      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        size = Size(constraints.maxWidth, constraints.maxHeight);
+        return ValueListenableBuilder(
+          valueListenable: _isFull,
+          builder: (context, isFull, child) {
+            return InteractiveViewer(
+              clipBehavior: Clip.none,
+              minScale: 1.0,
+              maxScale: 10,
+              constrained: false,
+              panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
+              boundaryMargin: isFull ? imageBoundaryMargin : EdgeInsets.zero,
+              transformationController: _transformationController,
+              onInteractionStart: _onInteractionStart,
+              onInteractionEnd: (_) => _onInteractionEnd(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onDoubleTap: _animateZoomInitialize,
+                onDoubleTapDown: (details) =>
+                    _doubleTapLocation = details.localPosition,
+                onDoubleTapCancel: () => _doubleTapLocation = null,
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: Center(
+                    child: ValueListenableBuilder(
+                      valueListenable: _isOriginal,
+                      builder: (context, isOriginal, child) {
+                        return Image.network(
+                          key: _imageKey,
+                          isOriginal
+                              ? widget.asset.originalUri
+                              : widget.asset.previewUri,
+                          headers: widget.asset.headers,
+                          fit: BoxFit.contain,
+                          gaplessPlayback: true,
+                        );
+                      },
                     ),
                   ),
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
