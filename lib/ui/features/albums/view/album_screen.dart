@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:flutter_thumbhash/flutter_thumbhash.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
-import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_screen.dart';
@@ -55,7 +57,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
         (_, _, final Exception e) => Center(child: Text("Error: $e")),
         (_, final album?, _) => MasonryGridView.builder(
           itemCount: album.assets.length,
-          cacheExtent: 500.0,
+          cacheExtent: ScrollCacheExtent.viewport(3).value,
           gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
@@ -93,18 +95,33 @@ class AssetTile extends StatelessWidget {
       originalWidth: asset.width,
       originalHeight: asset.height,
     );
+    final double width = tileSize["width"]!;
+    final double height = tileSize["height"]!;
     return SizedBox(
-      width: tileSize["width"],
-      height: tileSize["height"],
+      width: width,
+      height: height,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(2),
-        child: GestureDetector(
-          onTap: () => onAssetSelected?.call(asset),
-          child: Image.network(
-            asset.thumbnailUri,
-            headers: asset.headers,
-            fit: BoxFit.cover,
-          ),
+        child: Image.network(
+          asset.thumbnailUri,
+          headers: asset.headers,
+          fit: BoxFit.cover,
+          frameBuilder:
+              (context, child, int? frame, bool wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded || frame != null) {
+                  return GestureDetector(
+                    onTap: () => onAssetSelected?.call(asset),
+                    child: child,
+                  );
+                }
+                final widget = Image(
+                  image: asset.thumbImageProvider!,
+                  width: width,
+                  height: height,
+                  fit: BoxFit.cover,
+                );
+                return widget;
+              },
         ),
       ),
     );

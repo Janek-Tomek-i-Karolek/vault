@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_thumbhash/flutter_thumbhash.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/domain/server/server_connection.dart';
 
@@ -9,7 +11,7 @@ class Asset {
   final int? height;
   final String mimeType;
   final bool isVideo;
-  final String? thumbhash;
+  final ImageProvider? thumbImageProvider;
   Asset({
     this.width,
     this.height,
@@ -17,7 +19,7 @@ class Asset {
     required this.serverConnection,
     required this.mimeType,
     required this.isVideo,
-    required this.thumbhash,
+    this.thumbImageProvider,
   });
 
   static Asset fromDTO(
@@ -30,7 +32,9 @@ class Asset {
     isVideo: dto.type == .VIDEO,
     width: dto.width,
     height: dto.height,
-    thumbhash: dto.thumbhash,
+    thumbImageProvider: dto.thumbhash != null
+        ? ThumbHash.fromBase64(dto.thumbhash!).toImage()
+        : null,
   );
 
   String _makeUri({required String suffix}) =>
