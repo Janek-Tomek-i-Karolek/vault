@@ -20,13 +20,16 @@ class _AssetScreenState extends State<AssetScreen>
   final GlobalKey _imageKey = GlobalKey();
 
   static const double kTargetScale = 3.0;
+  static const double kOriginalScaleThreshold = 3.0;
   static const int kZoomDuration = 100;
+
   late final AnimationController _animationControllerZoom;
   late Size size;
   late EdgeInsets imageBoundaryMargin;
 
   // At class level
   final ValueNotifier<bool> _isFull = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _isOriginal = ValueNotifier<bool>(false);
   bool _isScaleInteraction = false;
   Animation<Matrix4>? _animationZoom;
   Offset? _doubleTapLocation;
@@ -84,11 +87,17 @@ class _AssetScreenState extends State<AssetScreen>
         if (isFull != _isFull.value) {
           final margin = (size.height - imageSize.height) / 2;
           imageBoundaryMargin = EdgeInsets.fromLTRB(0, -margin, 0, -margin);
-          print("is full: $isFull");
           _isFull.value = isFull;
         }
       }
     }
+  }
+
+  void _updateOriginal() {
+    // print(_transformationController.value.transposed());
+    _isOriginal.value =
+        _transformationController.value.getMaxScaleOnAxis() >=
+        kOriginalScaleThreshold;
   }
 
   void _onInteractionStart(ScaleStartDetails details) {
@@ -113,6 +122,7 @@ class _AssetScreenState extends State<AssetScreen>
       duration: const Duration(milliseconds: kZoomDuration),
     );
     _transformationController.addListener(_updateLock);
+    _transformationController.addListener(_updateOriginal);
   }
 
   @override
@@ -159,11 +169,19 @@ class _AssetScreenState extends State<AssetScreen>
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
                     child: Center(
-                      child: Image.network(
-                        widget.asset.previewUri,
-                        key: _imageKey,
-                        headers: widget.asset.headers,
-                        fit: BoxFit.contain,
+                      child: ValueListenableBuilder(
+                        valueListenable: _isOriginal,
+                        builder: (context, isOriginal, child) {
+                          return Image.network(
+                            key: _imageKey,
+                            isOriginal
+                                ? widget.asset.originalUri
+                                : widget.asset.previewUri,
+                            headers: widget.asset.headers,
+                            fit: BoxFit.contain,
+                            gaplessPlayback: true,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -175,12 +193,4 @@ class _AssetScreenState extends State<AssetScreen>
       ),
     );
   }
-
-  // void _onDoubleTapDownDebug(TapDownDetails details) {
-  //   print("local coordinates ${details.localPosition}");
-  //   // print(
-  //   //   "transformed coordinates ${_transformationController.toScene(details.localPosition)}",
-  //   // );
-  //   _doubleTapLocation = details.localPosition;
-  // }
 }
