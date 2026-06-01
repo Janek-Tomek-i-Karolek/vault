@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:vault/domain/asset/asset.dart';
 
+enum Delta { height, width }
+
 class AssetScreen extends StatefulWidget {
   const AssetScreen({super.key, required this.assets, required this.index});
   final List<Asset> assets;
@@ -110,37 +112,67 @@ class _AssetViewerState extends State<AssetViewer>
     }
   }
 
+  ({double d1, double d2}) _calculateDeltas({required Delta axis}) {
+    final imageSize = _imageKey.currentContext!.size!;
+    final center = Offset(size.width / 2, size.height / 2);
+    late final double d1;
+    late final double d2;
+
+    final (
+      double imageFactor,
+      double viewPortFactor,
+      double centerFactor,
+      double tapFactor,
+    ) = switch (axis) {
+      Delta.height => (
+        imageSize.height,
+        size.height,
+        center.dy,
+        _doubleTapLocation!.dy,
+      ),
+      Delta.width => (
+        imageSize.width,
+        size.width,
+        center.dx,
+        _doubleTapLocation!.dx,
+      ),
+    };
+
+    if (imageFactor == viewPortFactor) {
+      d1 = tapFactor;
+      d2 = -tapFactor;
+    } else if (imageFactor * kTargetScale > viewPortFactor) {
+      final margin = (viewPortFactor - imageFactor) / 2;
+      final constraints = [-margin * 2, -margin];
+      final shift = constraints.fold(0.0, (sum, value) => sum - value) / 2;
+      final standardised = [for (var val in constraints) val + shift];
+      final tapCenterOffset = centerFactor - tapFactor;
+      // shift back to remove standarisation
+      d2 = max(min(standardised[1], tapCenterOffset), standardised[0]) - shift;
+      d1 = 0;
+    } else {
+      d1 = centerFactor;
+      d2 = -centerFactor;
+    }
+    return (d1: d1, d2: d2);
+  }
+
+  Matrix4 _zoomEndMatrix() {
+    final yDelta = _calculateDeltas(axis: Delta.height);
+    final xDelta = _calculateDeltas(axis: Delta.width);
+
+    return Matrix4.identity()
+      ..translateByDouble(xDelta.d1, yDelta.d1, 1, 1)
+      ..scaleByDouble(kTargetScale, kTargetScale, kTargetScale, 1)
+      ..translateByDouble(xDelta.d2, yDelta.d2, 1, 1);
+  }
+
   void _animateZoomInitialize() {
     if (!_animationControllerZoom.isAnimating) {
       final currentTransform = _transformationController.value;
-      late final Matrix4 endMatrix;
-      if (currentTransform != Matrix4.identity()) {
-        endMatrix = Matrix4.identity();
-      } else {
-        final imageSize = _imageKey.currentContext!.size!;
-        final margin = (size.height - imageSize.height) / 2;
-        final scaledImageHeight = imageSize.height * kTargetScale;
-        final center = Offset(size.width / 2, size.height / 2);
-        final double dx = _doubleTapLocation!.dx;
-        late double dy;
-
-        if (scaledImageHeight > size.height) {
-          final constraints = [-margin * 2, -margin];
-          final shift = constraints.fold(0.0, (sum, value) => sum - value) / 2;
-          final standardised = [for (var val in constraints) val + shift];
-          final tapCenterOffset = center.dy - _doubleTapLocation!.dy;
-          dy = max(min(standardised[1], tapCenterOffset), standardised[0]);
-          // shift back to remove standarisation
-          dy -= shift;
-        } else {
-          dy = center.dy;
-        }
-
-        endMatrix = Matrix4.identity()
-          ..translateByDouble(dx, 1, 1, 1)
-          ..scaleByDouble(kTargetScale, kTargetScale, kTargetScale, 1)
-          ..translateByDouble(-dx, dy, 1, 1);
-      }
+      final endMatrix = currentTransform != Matrix4.identity()
+          ? Matrix4.identity()
+          : _zoomEndMatrix();
       _animationZoom = Matrix4Tween(begin: currentTransform, end: endMatrix)
           .animate(
             CurvedAnimation(
@@ -148,7 +180,6 @@ class _AssetViewerState extends State<AssetViewer>
               curve: Curves.ease,
             ),
           );
-
       _animationZoom!.addListener(_onAnimateZoom);
       _animationControllerZoom.forward();
     }
@@ -185,8 +216,8 @@ class _AssetViewerState extends State<AssetViewer>
       if (imageSize != null) {
         final isFull = imageSize.height * scale >= size.height;
         if (isFull != _isFull.value) {
-          final margin = (size.height - imageSize.height) / 2;
-          imageBoundaryMargin = EdgeInsets.fromLTRB(0, -margin, 0, -margin);
+          final yMargin = (size.height - imageSize.height) / 2;
+          imageBoundaryMargin = EdgeInsets.fromLTRB(0, -yMargin, 0, -yMargin);
           _isFull.value = isFull;
         }
       }
