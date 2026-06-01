@@ -3,12 +3,13 @@ import 'package:vault/domain/server/server_connection.dart';
 
 class Asset {
   // nullable in case it's not stored yet
-  String id;
-  ServerConnection serverConnection;
-  int? width;
-  int? height;
-  String mimeType;
-  bool isVideo;
+  final String id;
+  final ServerConnection serverConnection;
+  final int? width;
+  final int? height;
+  final String mimeType;
+  final bool isVideo;
+  final String? thumbhash;
   Asset({
     this.width,
     this.height,
@@ -16,6 +17,7 @@ class Asset {
     required this.serverConnection,
     required this.mimeType,
     required this.isVideo,
+    required this.thumbhash,
   });
 
   static Asset fromDTO(
@@ -28,6 +30,7 @@ class Asset {
     isVideo: dto.type == .VIDEO,
     width: dto.width,
     height: dto.height,
+    thumbhash: dto.thumbhash,
   );
 
   String _makeUri({required String suffix}) =>
