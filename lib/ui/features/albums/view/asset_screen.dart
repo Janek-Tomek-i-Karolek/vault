@@ -5,8 +5,9 @@ import 'package:flutter/rendering.dart';
 import 'package:vault/domain/asset/asset.dart';
 
 class AssetScreen extends StatefulWidget {
-  const AssetScreen({super.key, required this.assets});
+  const AssetScreen({super.key, required this.assets, required this.index});
   final List<Asset> assets;
+  final int index;
 
   @override
   State<AssetScreen> createState() => _AssetScreenState();
@@ -15,8 +16,22 @@ class AssetScreen extends StatefulWidget {
 class _AssetScreenState extends State<AssetScreen> {
   final ValueNotifier<bool> _isScaled = ValueNotifier(false);
 
+  late PageController _pageController;
+
   void _onZoom(double scale) {
     _isScaled.value = scale != 1.0;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.index);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,6 +53,7 @@ class _AssetScreenState extends State<AssetScreen> {
             itemCount: widget.assets.length,
             allowImplicitScrolling: true,
             scrollCacheExtent: ScrollCacheExtent.viewport(1),
+            controller: _pageController,
             physics: isScaled
                 ? NeverScrollableScrollPhysics()
                 : PageScrollPhysics(),
