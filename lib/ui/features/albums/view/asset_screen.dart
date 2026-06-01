@@ -87,7 +87,7 @@ class _AssetViewerState extends State<AssetViewer>
       TransformationController();
   final GlobalKey _imageKey = GlobalKey();
 
-  static const double kTargetScale = 3.0;
+  static const double kTargetScale = 2.5;
   static const double kOriginalScaleThreshold = 3.0;
   static const int kZoomDuration = 300;
 
@@ -118,26 +118,28 @@ class _AssetViewerState extends State<AssetViewer>
         endMatrix = Matrix4.identity();
       } else {
         final imageSize = _imageKey.currentContext!.size!;
+        final margin = (size.height - imageSize.height) / 2;
+        final scaledImageHeight = imageSize.height * kTargetScale;
         final center = Offset(size.width / 2, size.height / 2);
+        final double dx = _doubleTapLocation!.dx;
+        late double dy;
 
-        // Constrain the tap vertical value so the zoom-in
-        // does not zoom into black void weirdly.
-        final dy = min(
-          (size.height - imageSize.height) / 2,
-          (imageSize.height * kTargetScale) - size.height,
-        );
-
-        // clamped Y is based on tap-position, relative to center
-        final double targetY = _doubleTapLocation!.dy > center.dy
-            ? center.dy + dy
-            : center.dy - dy;
-
-        final tap = Offset(_doubleTapLocation!.dx, targetY);
+        if (scaledImageHeight > size.height) {
+          final constraints = [-margin * 2, -margin];
+          final shift = constraints.fold(0.0, (sum, value) => sum - value) / 2;
+          final standardised = [for (var val in constraints) val + shift];
+          final tapCenterOffset = center.dy - _doubleTapLocation!.dy;
+          dy = max(min(standardised[1], tapCenterOffset), standardised[0]);
+          // shift back to remove standarisation
+          dy -= shift;
+        } else {
+          dy = center.dy;
+        }
 
         endMatrix = Matrix4.identity()
-          ..translateByDouble(tap.dx, tap.dy, 1, 1)
+          ..translateByDouble(dx, 1, 1, 1)
           ..scaleByDouble(kTargetScale, kTargetScale, kTargetScale, 1)
-          ..translateByDouble(-tap.dx, -tap.dy, 1, 1);
+          ..translateByDouble(-dx, dy, 1, 1);
       }
       _animationZoom = Matrix4Tween(begin: currentTransform, end: endMatrix)
           .animate(
