@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:vault/domain/server/server_connection.dart';
 
 import '../../../domain/asset/asset.dart';
@@ -8,8 +10,8 @@ const String IMMICH_DEMO_DOMAIN = "";
 
 class MockAssetRepository implements AssetRepository {
   @override
-  Future<Result<void>> create(Asset asset) {
-    // TODO: implement create
+  Future<Result<void>> upload(File asset, ServerConnection connection) {
+    // TODO: implement upload
     throw UnimplementedError();
   }
 

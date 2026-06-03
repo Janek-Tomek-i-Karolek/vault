@@ -72,4 +72,32 @@ class DemoApiClient {
 
     return Result.ok(AssetResponseDTO.fromJson(jsonDecode(response.body)));
   }
+
+  Future<Result<void>> uploadAsset(
+    ServerConnection serverConnection,
+    File asset,
+  ) async {
+    final uri = Uri.parse("${serverConnection.serverUrl}/api/assets");
+
+    final request = MultipartRequest('POST', uri);
+
+    request.headers['x-api-key'] = serverConnection.apiKey;
+
+    request.files.add(await MultipartFile.fromPath('assetData', asset.path));
+
+    request.fields['deviceAssetId'] = asset.path;
+    request.fields['deviceId'] = 'vault'; // TODO: add userID
+    request.fields['fileCreatedAt'] = DateTime.now().toString();
+    request.fields['fileModifiedAt'] = DateTime.now().toString();
+    request.fields['isFavorite'] = 'false';
+
+    final response = await request.send();
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return Result.ok(null);
+    } else {
+      final body = await response.stream.bytesToString();
+      return Result.error(Exception(body));
+    }
+  }
 }

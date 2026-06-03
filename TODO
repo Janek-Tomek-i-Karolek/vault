@@ -1,0 +1,7 @@
+1. Obsłużyć response z add asset do immicha
+2. Funkcja add Asset powinna zwracac ten response
+3. Następnie powinien ten response być przekierowywany do addAssetToAlbum, a własćiwie ID
+4. Powinien być wtedy wysyłany request do API, ktory dodaje asset do albumu
+
+Bonus:
+- globalny serverConnection pobiera dane z ServerConnectionRepo

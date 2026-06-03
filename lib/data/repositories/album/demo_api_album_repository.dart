@@ -22,6 +22,12 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
+  Future<Result<void>> addAsset(Album album, String assetId) {
+    // TODO: implement addAsset
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Result<Album>> getAlbum(
     ServerConnection serverConnection,
     String id,

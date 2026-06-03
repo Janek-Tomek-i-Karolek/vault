@@ -79,6 +79,11 @@ class _AlbumScreenState extends State<AlbumScreen> {
         ),
         _ => const Text("Something went wrong!"),
       },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Add Server',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
