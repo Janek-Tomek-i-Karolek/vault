@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:http/http.dart';
+import 'package:vault/data/model/asset/asset_media_response_dto.dart';
+import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/data/services/api/demo_api_client.dart';
 import 'package:vault/domain/server/server_connection.dart';
 
@@ -8,22 +9,20 @@ import '../../../domain/asset/asset.dart';
 import '../../../utils/result.dart';
 import 'asset_repository.dart';
 
-const String IMMICH_DEMO_DOMAIN = "";
-
 class ImmichAssetRepository implements AssetRepository {
   @override
-  Future<Result<void>> upload(
+  Future<Result<Asset>> upload(
     File asset,
     ServerConnection serverConnection,
   ) async {
-    Result<void> assetRes = await DemoApiClient().uploadAsset(
+    Result<AssetMediaResponseDTO> assetRes = await DemoApiClient().uploadAsset(
       serverConnection,
       asset,
     );
 
     return switch (assetRes) {
       Error(:final error) => Result.error(error),
-      _ => Result.ok(null),
+      Ok(:final value) => await getAsset(serverConnection, value.id),
     };
   }
 
@@ -34,8 +33,21 @@ class ImmichAssetRepository implements AssetRepository {
   }
 
   @override
-  Future<Result<Asset>> getAsset(String id) {
-    throw UnimplementedError();
+  Future<Result<Asset>> getAsset(
+    ServerConnection serverConnection,
+    String id,
+  ) async {
+    Result<AssetResponseDTO> assetRes = await DemoApiClient().getAsset(
+      serverConnection,
+      id,
+    );
+
+    switch (assetRes) {
+      case Ok<AssetResponseDTO>():
+        return Result.ok(Asset.fromDTO(assetRes.value, serverConnection));
+      case Error<AssetResponseDTO>():
+        return Result.error(assetRes.error);
+    }
   }
 
   @override

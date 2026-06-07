@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:vault/data/model/album/album_response_dto.dart';
+import 'package:vault/data/model/asset/asset_media_response_dto.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
@@ -73,7 +74,7 @@ class DemoApiClient {
     return Result.ok(AssetResponseDTO.fromJson(jsonDecode(response.body)));
   }
 
-  Future<Result<void>> uploadAsset(
+  Future<Result<AssetMediaResponseDTO>> uploadAsset(
     ServerConnection serverConnection,
     File asset,
   ) async {
@@ -92,12 +93,31 @@ class DemoApiClient {
     request.fields['isFavorite'] = 'false';
 
     final response = await request.send();
+    final body = await response.stream.bytesToString();
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return Result.ok(null);
-    } else {
-      final body = await response.stream.bytesToString();
-      return Result.error(Exception(body));
-    }
+    return switch (response.statusCode) {
+      >= 200 && < 300 => Result.ok(
+        AssetMediaResponseDTO.fromJson(jsonDecode(body)),
+      ),
+      _ => Result.error(Exception(body)),
+    };
+  }
+
+  Future<Result<void>> addAssetsToAlbum(
+    ServerConnection serverConnection,
+    String albumId,
+    List<String> assetIds,
+  ) async {
+    final uri = Uri.parse("${serverConnection.serverUrl}/api/albums/assets");
+    final response = await post(
+      uri,
+      headers: demoRequestHeaders(serverConnection.apiKey),
+      body: jsonEncode({'albumIds': albumId, 'assetIds': assetIds}),
+    );
+
+    return switch (response.statusCode) {
+      >= 200 && < 300 => Result.ok(null),
+      _ => Result.error(Exception(response.body)),
+    };
   }
 }

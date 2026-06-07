@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:provider/provider.dart';
-import 'package:vault/data/repositories/album/mock_album_repository.dart';
-import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';

@@ -4,11 +4,13 @@ import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 
 class Album {
+  final String id;
   final String name;
   final List<Asset> assets;
   final ServerConnection serverConnection;
 
   Album({
+    required this.id,
     required this.name,
     required this.assets,
     required this.serverConnection,
@@ -18,6 +20,7 @@ class Album {
     required AlbumResponseDTO dto,
     required ServerConnection serverConnection,
   }) => Album(
+    id: dto.id,
     name: dto.albumName ?? "Not available",
     assets: [
       for (final assetDto in dto.assets)

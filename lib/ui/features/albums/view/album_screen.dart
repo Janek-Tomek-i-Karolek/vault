@@ -81,7 +81,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
       },
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        tooltip: 'Add Server',
+        tooltip: 'Add Photos',
         child: const Icon(Icons.add),
       ),
     );

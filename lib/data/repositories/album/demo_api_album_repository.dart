@@ -16,14 +16,22 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
-  Future<Result<void>> delete(String id) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Result<void>> addAssetsToAlbum(
+    ServerConnection serverConnection,
+    Album album,
+    List<Asset> assets,
+  ) async {
+    final assetIds = assets.map((asset) => asset.id).toList();
+    return DemoApiClient().addAssetsToAlbum(
+      serverConnection,
+      album.id,
+      assetIds,
+    );
   }
 
   @override
-  Future<Result<void>> addAsset(Album album, String assetId) {
-    // TODO: implement addAsset
+  Future<Result<void>> delete(String id) {
+    // TODO: implement delete
     throw UnimplementedError();
   }
 

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/album/demo_api_album_repository.dart';
-import 'package:vault/data/repositories/album/mock_album_repository.dart';
-import 'package:vault/data/repositories/asset/mock_asset_repository.dart';
+import 'package:vault/data/repositories/asset/immich_asset_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/l10n/vault_localizations.dart';
@@ -33,8 +32,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   ServerConnection get _demoServerConn => ServerConnection(
-    serverUrl: Uri.https('immich.wolkowscy.net', "").toString(),
-    apiKey: "IGj5f4Jw8wUYfu5Ki8EkMUClLueFllFaFv0PJY6NU",
+    serverUrl: Uri.https('demo.immich.app', "").toString(),
+    apiKey: "gb2bPHoG18FTVt7XoVssrM6CqlcS5ZlRZhAp7n8G4U",
   );
 
   @override
@@ -59,7 +58,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AlbumsViewModel(
             albumRepository: DemoApiAlbumRepository(),
-            assetRepository: MockAssetRepository(),
+            assetRepository: ImmichAssetRepository(),
           ),
         ),
         ChangeNotifierProvider(

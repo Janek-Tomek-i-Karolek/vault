@@ -1,54 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:vault/data/model/asset/asset_type_enum.dart';
-import 'package:vault/data/model/asset/exif_response_dto.dart';
-import 'package:vault/data/model/user/user_response_dto.dart';
+import 'package:vault/data/model/asset/asseta_media_status_enum.dart';
 
-part 'asset_response_dto.g.dart';
+part 'asset_media_response_dto.g.dart';
 
 @JsonSerializable()
-class AssetResponseDTO {
+class AssetMediaResponseDTO {
   final String id;
-  final ExifResponseDTO? exifInfo;
-  final DateTime fileCreatedAt;
-  final DateTime fileModifiedAt;
-  final bool hasMetadata;
-  final int? height;
-  final int? width;
-  final bool isFavorite;
-  final String originalFileName;
-  final String? originalMimeType;
-  final String originalPath;
-  final UserResponseDTO? owner;
-  final String ownerId;
-  final String? thumbhash; // can be usefull for thumbnails, idk for now
-  final AssetTypeEnum type;
-  final String duration;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final AssetMediaStatus status;
 
-  AssetResponseDTO({
-    required this.id,
-    required this.exifInfo,
-    required this.fileCreatedAt,
-    required this.fileModifiedAt,
-    required this.hasMetadata,
-    required this.height,
-    required this.width,
-    required this.isFavorite,
-    required this.originalFileName,
-    required this.originalMimeType,
-    required this.originalPath,
-    required this.owner,
-    required this.ownerId,
-    required this.thumbhash,
-    required this.type,
-    required this.duration,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  AssetMediaResponseDTO({required this.id, required this.status});
 
-  factory AssetResponseDTO.fromJson(Map<String, dynamic> json) =>
-      _$AssetResponseDTOFromJson(json);
+  factory AssetMediaResponseDTO.fromJson(Map<String, dynamic> json) =>
+      _$AssetMediaResponseDTOFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AssetResponseDTOToJson(this);
+  Map<String, dynamic> toJson() => _$AssetMediaResponseDTOToJson(this);
 }

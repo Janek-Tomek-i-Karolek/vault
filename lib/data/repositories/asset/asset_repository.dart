@@ -7,7 +7,7 @@ import "../../../domain/asset/asset.dart";
 
 abstract class AssetRepository {
   Future<Result<List<Asset>>> getAssets();
-  Future<Result<Asset>> getAsset(String id);
-  Future<Result<void>> upload(File asset, ServerConnection connection);
+  Future<Result<Asset>> getAsset(ServerConnection serverConnection, String id);
+  Future<Result<Asset>> upload(File asset, ServerConnection serverConnection);
   Future<Result<void>> delete(Asset asset);
 }
