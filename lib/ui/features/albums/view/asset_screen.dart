@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/extensions/FastScrollPhysics.dart';
 import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/ui/features/albums/view/widgets/pointer_listener.dart';
@@ -90,7 +91,7 @@ class _AssetScreenState extends State<AssetScreen> {
               controller: _pageController,
               physics: isScaled || moreThanOnePointer
                   ? NeverScrollableScrollPhysics()
-                  : PageScrollPhysics(),
+                  : FastClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 return RepaintBoundary(
                   child: AssetViewer(
