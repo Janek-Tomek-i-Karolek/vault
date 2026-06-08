@@ -16,6 +16,11 @@ abstract class AlbumRepository {
     Album album,
     List<Asset> assets,
   );
+  Future<Result<void>> removeAssetFromAlbum(
+    ServerConnection serverConnection,
+    Album album,
+    Asset asset,
+  );
   Future<Result<void>> create(Album album);
   Future<Result<void>> delete(String id);
 }

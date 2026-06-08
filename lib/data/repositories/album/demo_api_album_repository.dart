@@ -30,6 +30,22 @@ class DemoApiAlbumRepository extends AlbumRepository {
   }
 
   @override
+  Future<Result<void>> removeAssetFromAlbum(
+    ServerConnection serverConnection,
+    Album album,
+    Asset asset,
+  ) async {
+    return switch (await DemoApiClient().removeAssetsFromAlbum(
+      serverConnection,
+      album.id,
+      [asset.id],
+    )) {
+      Ok() => Result.ok(null),
+      Error(:final error) => Result.error(error),
+    };
+  }
+
+  @override
   Future<Result<void>> delete(String id) {
     // TODO: implement delete
     throw UnimplementedError();

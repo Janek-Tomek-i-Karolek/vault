@@ -2,14 +2,26 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
+import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 enum Delta { height, width }
 
 class AssetScreen extends StatefulWidget {
-  const AssetScreen({super.key, required this.assets, required this.index});
+  const AssetScreen({
+    super.key,
+    required this.serverConnection,
+    required this.assets,
+    required this.album,
+    required this.index,
+  });
   final List<Asset> assets;
+  final Album album;
   final int index;
+  final ServerConnection serverConnection;
 
   @override
   State<AssetScreen> createState() => _AssetScreenState();
@@ -46,7 +58,25 @@ class _AssetScreenState extends State<AssetScreen> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
       ),
-      bottomNavigationBar: BottomAppBar(color: Colors.transparent),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton(
+              onPressed: () async {
+                await context.read<AssetViewModel>().removeAssetFromAlbum(
+                  widget.serverConnection,
+                  widget.album,
+                  widget.assets[widget.index],
+                );
+              },
+              tooltip: 'Add Photos',
+              child: const Icon(Icons.delete_outline),
+            ),
+          ],
+        ),
+      ),
       // body: AssetViewer(asset: asset),
       body: ValueListenableBuilder(
         valueListenable: _isScaled,

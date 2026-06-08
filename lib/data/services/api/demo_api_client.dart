@@ -110,11 +110,39 @@ class DemoApiClient {
     List<String> assetIds,
   ) async {
     final uri = Uri.parse("${serverConnection.serverUrl}/api/albums/assets");
-    final response = await post(
+    final response = await put(
       uri,
       headers: demoRequestHeaders(serverConnection.apiKey),
-      body: jsonEncode({'albumIds': albumId, 'assetIds': assetIds}),
+      body: jsonEncode({
+        'albumIds': [albumId],
+        'assetIds': assetIds,
+      }),
     );
+
+    print(response.body);
+
+    return switch (response.statusCode) {
+      >= 200 && < 300 => Result.ok(null),
+      _ => Result.error(Exception(response.body)),
+    };
+  }
+
+  Future<Result<void>> removeAssetsFromAlbum(
+    ServerConnection serverConnection,
+    String albumId,
+    List<String> assetIds,
+  ) async {
+    final uri = Uri.parse(
+      "${serverConnection.serverUrl}/api/albums/$albumId/assets",
+    );
+    print(assetIds);
+    final response = await delete(
+      uri,
+      headers: demoRequestHeaders(serverConnection.apiKey),
+      body: jsonEncode({'ids': assetIds}),
+    );
+
+    print(response.body);
 
     return switch (response.statusCode) {
       >= 200 && < 300 => Result.ok(null),

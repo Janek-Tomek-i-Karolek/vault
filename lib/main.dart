@@ -9,6 +9,7 @@ import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/album_screen.dart';
 import 'package:vault/ui/features/albums/view/albums_screen.dart';
 import 'package:vault/ui/features/auth/view/login_screen.dart';
@@ -32,8 +33,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   ServerConnection get _demoServerConn => ServerConnection(
-    serverUrl: Uri.https('demo.immich.app', "").toString(),
-    apiKey: "sCjqf4VWg9uKShYFOooLephZhwKu6gzJARvdUBBT18",
+    serverUrl: Uri.https('immich.wolkowscy.net', "").toString(),
+    apiKey: "IGj5f4Jw8wUYfu5Ki8EkMUClLueFllFaFv0PJY6NU",
   );
 
   @override
@@ -53,6 +54,12 @@ class MyApp extends StatelessWidget {
           create: (_) => ConnectionViewModel(
             connectionRepository:
                 LocalConnectionRepository(), // TODO: Try sharing this repo
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AssetViewModel(
+            albumRepository: DemoApiAlbumRepository(),
+            assetRepository: ImmichAssetRepository(),
           ),
         ),
         ChangeNotifierProvider(

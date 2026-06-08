@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
-import 'package:vault/ui/features/albums/viemodel/add_asset_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_screen.dart';
 
@@ -53,33 +52,50 @@ class _AlbumScreenState extends State<AlbumScreen> {
         centerTitle: true,
         actions: const [ProfileButton()],
       ),
-      body: switch ((viewModel.isLoading, viewModel.album, viewModel.error)) {
-        (true, _, _) => const Center(child: CircularProgressIndicator()),
-        (_, _, final Exception e) => Center(child: Text("Error: $e")),
-        (_, final album?, _) => MasonryGridView.builder(
-          itemCount: album.assets.length,
-          cacheExtent: ScrollCacheExtent.viewport(3).value,
-          gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemBuilder: (context, index) {
-            final asset = album.assets[index];
-            return Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: AssetTile(
-                asset: asset,
-                onAssetSelected: (asset) => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AssetScreen(assets: album.assets, index: index),
+
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<AlbumViewModel>().loadAlbum(
+            widget.serverConnection,
+            widget.albumId,
+          );
+        },
+        child: switch ((
+          viewModel.isLoading,
+          viewModel.album,
+          viewModel.error,
+        )) {
+          (true, _, _) => const Center(child: CircularProgressIndicator()),
+          (_, _, final Exception e) => Center(child: Text("Error: $e")),
+          (_, final album?, _) => MasonryGridView.builder(
+            itemCount: album.assets.length,
+            cacheExtent: ScrollCacheExtent.viewport(3).value,
+            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (context, index) {
+              final asset = album.assets[index];
+              return Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: AssetTile(
+                  asset: asset,
+                  onAssetSelected: (asset) => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AssetScreen(
+                        serverConnection: widget.serverConnection,
+                        album: album,
+                        assets: album.assets,
+                        index: index,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-        _ => const Text("Something went wrong!"),
-      },
+              );
+            },
+          ),
+          _ => const Text("Something went wrong!"),
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await context.read<AlbumViewModel>().addAsset(
