@@ -7,6 +7,7 @@ import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/ui/features/albums/view/widgets/pointer_listener.dart';
 
 enum Delta { height, width }
 
@@ -81,22 +82,24 @@ class _AssetScreenState extends State<AssetScreen> {
       body: ValueListenableBuilder(
         valueListenable: _isScaled,
         builder: (context, isScaled, child) {
-          return PageView.builder(
-            itemCount: widget.assets.length,
-            allowImplicitScrolling: true,
-            scrollCacheExtent: ScrollCacheExtent.viewport(1),
-            controller: _pageController,
-            physics: isScaled
-                ? NeverScrollableScrollPhysics()
-                : PageScrollPhysics(),
-            itemBuilder: (context, index) {
-              return RepaintBoundary(
-                child: AssetViewer(
-                  asset: widget.assets[index],
-                  onZoom: _onZoom,
-                ),
-              );
-            },
+          return PointersListener(
+            builder: (_, moreThanOnePointer) => PageView.builder(
+              itemCount: widget.assets.length,
+              allowImplicitScrolling: true,
+              scrollCacheExtent: ScrollCacheExtent.viewport(1),
+              controller: _pageController,
+              physics: isScaled || moreThanOnePointer
+                  ? NeverScrollableScrollPhysics()
+                  : PageScrollPhysics(),
+              itemBuilder: (context, index) {
+                return RepaintBoundary(
+                  child: AssetViewer(
+                    asset: widget.assets[index],
+                    onZoom: _onZoom,
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
