@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_thumbhash/flutter_thumbhash.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
@@ -60,6 +57,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
             widget.albumId,
           );
         },
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
         child: switch ((
           viewModel.isLoading,
           viewModel.album,

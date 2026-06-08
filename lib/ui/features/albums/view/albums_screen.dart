@@ -46,17 +46,25 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
             )) {
               (true, _, _) => const CircularProgressIndicator(),
               (_, _, final Exception e) => Text('Error: $e'),
-              (_, final albumPreviews?, _) => GridView.builder(
-                padding: const EdgeInsets.all(20),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 250,
-                  childAspectRatio: 0.85,
-                ),
-                itemCount: albumPreviews.length,
-                itemBuilder: (context, index) {
-                  final preview = albumPreviews[index];
-                  return AlbumPreviewTile(albumPreview: preview);
+              (_, final albumPreviews?, _) => RefreshIndicator(
+                onRefresh: () async {
+                  context.read<AlbumsViewModel>().fetchPreviews(
+                    widget.serverConnection,
+                  );
                 },
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(20),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: albumPreviews.length,
+                  itemBuilder: (context, index) {
+                    final preview = albumPreviews[index];
+                    return AlbumPreviewTile(albumPreview: preview);
+                  },
+                ),
               ),
               _ => const Text("Something went wrong!"),
             };
