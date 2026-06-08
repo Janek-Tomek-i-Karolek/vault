@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:vault/data/model/asset/asset_media_response_dto.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
 import 'package:vault/data/services/api/demo_api_client.dart';
@@ -12,7 +13,7 @@ import 'asset_repository.dart';
 class ImmichAssetRepository implements AssetRepository {
   @override
   Future<Result<Asset>> upload(
-    File asset,
+    XFile asset,
     ServerConnection serverConnection,
   ) async {
     Result<AssetMediaResponseDTO> assetRes = await DemoApiClient().uploadAsset(

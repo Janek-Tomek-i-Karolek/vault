@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
+import 'package:vault/ui/features/albums/viemodel/add_asset_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_screen.dart';
 
@@ -80,7 +81,12 @@ class _AlbumScreenState extends State<AlbumScreen> {
         _ => const Text("Something went wrong!"),
       },
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          await context.read<AlbumViewModel>().addAsset(
+            widget.albumId,
+            widget.serverConnection,
+          );
+        },
         tooltip: 'Add Photos',
         child: const Icon(Icons.add),
       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vault/data/model/album/album_response_dto.dart';
 import 'package:vault/data/model/asset/asset_media_response_dto.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
@@ -76,7 +77,7 @@ class DemoApiClient {
 
   Future<Result<AssetMediaResponseDTO>> uploadAsset(
     ServerConnection serverConnection,
-    File asset,
+    XFile asset,
   ) async {
     final uri = Uri.parse("${serverConnection.serverUrl}/api/assets");
 

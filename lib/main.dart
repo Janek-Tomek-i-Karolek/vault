@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
 
   ServerConnection get _demoServerConn => ServerConnection(
     serverUrl: Uri.https('demo.immich.app', "").toString(),
-    apiKey: "gb2bPHoG18FTVt7XoVssrM6CqlcS5ZlRZhAp7n8G4U",
+    apiKey: "sCjqf4VWg9uKShYFOooLephZhwKu6gzJARvdUBBT18",
   );
 
   @override
@@ -62,8 +62,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) =>
-              AlbumViewModel(albumRepository: DemoApiAlbumRepository()),
+          create: (_) => AlbumViewModel(
+            albumRepository: DemoApiAlbumRepository(),
+            assetRepository: ImmichAssetRepository(),
+          ),
         ),
       ],
       child: MaterialApp(

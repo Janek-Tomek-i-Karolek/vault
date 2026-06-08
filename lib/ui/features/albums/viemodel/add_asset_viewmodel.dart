@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/repositories/asset/asset_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
@@ -24,10 +25,13 @@ class AddAssetViewModel extends ChangeNotifier {
 
   Future<Result<void>> addAsset(
     Album album,
-    List<File> assetFiles,
     ServerConnection serverConnection,
   ) async {
+    final picker = ImagePicker();
+    List<XFile> assetFiles = await picker.pickMultiImage();
+
     List<Asset> assets = [];
+
     for (final asset in assetFiles) {
       final res = await _assetRepository.upload(asset, serverConnection);
       switch (res) {
