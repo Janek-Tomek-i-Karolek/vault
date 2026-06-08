@@ -54,10 +54,10 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                 },
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 child: GridView.builder(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(10),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 250,
-                    childAspectRatio: 0.85,
+                    // childAspectRatio: 0.85,
                   ),
                   itemCount: albumPreviews.length,
                   itemBuilder: (context, index) {

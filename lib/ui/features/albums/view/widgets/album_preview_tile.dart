@@ -27,33 +27,45 @@ class AlbumPreviewTile extends StatelessWidget {
             ),
           },
       },
-      child: Card.outlined(
-        margin: EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(12),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: _ImagePreview.create(albumPreview: albumPreview),
-                ),
+      child: Card(
+        child: SizedBox.square(
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: ClipRRect(
+              borderRadius: BorderRadiusGeometry.circular(8),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  _ImagePreview.create(
+                    key: ValueKey(albumPreview.albumId),
+                    albumPreview: albumPreview,
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment(0, -0.5),
+                        colors: <Color>[Colors.black54, Colors.transparent],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        albumPreview.albumName,
+                        textAlign: TextAlign.start,
+                        style: theme.textTheme.titleLarge,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsetsGeometry.fromLTRB(8, 4, 8, 12),
-              child: Text(
-                albumPreview.albumName,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleSmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -61,42 +73,45 @@ class AlbumPreviewTile extends StatelessWidget {
 }
 
 abstract class _ImagePreview extends StatelessWidget {
+  const _ImagePreview({super.key, required this.provider});
+
   static const kThumbnailPlaceholderPath =
       'lib/assetImages/thumbnail-placeholder.jpg';
   final ImageProvider provider;
 
-  factory _ImagePreview.create({required AlbumPreview albumPreview}) {
+  factory _ImagePreview.create({Key? key, required AlbumPreview albumPreview}) {
     if (albumPreview.thumbnail != null) {
       final asset = albumPreview.thumbnail!;
       return _InternetImagePreview(
+        key: key,
         provider: NetworkImage(asset.thumbnailUri, headers: asset.headers),
         thumbHashProvider: asset.thumbImageProvider!,
       );
     } else {
       return _StaticImagePreview(
+        key: key,
         provider: AssetImage(kThumbnailPlaceholderPath),
       );
     }
   }
-
-  const _ImagePreview({super.key, required this.provider});
 }
 
 class _StaticImagePreview extends _ImagePreview {
-  _StaticImagePreview({required super.provider});
+  const _StaticImagePreview({super.key, required super.provider});
 
   @override
   Widget build(BuildContext context) {
-    return Image(image: provider);
+    return Image(image: provider, fit: BoxFit.cover);
   }
 }
 
 class _InternetImagePreview extends _ImagePreview {
-  _InternetImagePreview({
+  const _InternetImagePreview({
+    super.key,
     required super.provider,
     required this.thumbHashProvider,
   });
-  ImageProvider thumbHashProvider;
+  final ImageProvider thumbHashProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +125,6 @@ class _InternetImagePreview extends _ImagePreview {
         }
         final widget = Image(image: thumbHashProvider, fit: BoxFit.cover);
         return widget;
-        return child;
       },
       loadingBuilder: (context, child, progress) {
         if (progress == null) return child;
