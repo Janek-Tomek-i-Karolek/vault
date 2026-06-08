@@ -44,7 +44,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               viewModel.albumPreviews,
               viewModel.error,
             )) {
-              (true, _, _) => const CircularProgressIndicator(),
+              (true, null, _) => const CircularProgressIndicator(),
               (_, _, final Exception e) => Text('Error: $e'),
               (_, final albumPreviews?, _) => RefreshIndicator(
                 onRefresh: () async {

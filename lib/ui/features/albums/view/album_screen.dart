@@ -38,9 +38,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<AlbumViewModel>();
 
-    final String appBarTitle = switch ((viewModel.isLoading, viewModel.album)) {
-      (true, _) => "Loading...",
-      (_, final album?) => album.name,
+    final String appBarTitle = switch ((
+      viewModel.isLoading,
+      viewModel.justEntered,
+      viewModel.album,
+    )) {
+      (true, true, _) => "Loading...",
+      (_, _, final album?) => album.name,
       _ => "Album",
     };
     return Scaffold(
@@ -62,10 +66,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
           viewModel.isLoading,
           viewModel.album,
           viewModel.error,
+          viewModel.justEntered,
         )) {
-          (true, _, _) => const Center(child: CircularProgressIndicator()),
-          (_, _, final Exception e) => Center(child: Text("Error: $e")),
-          (_, final album?, _) => MasonryGridView.builder(
+          (true, _, _, true) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          (_, _, final Exception e, _) => Center(child: Text("Error: $e")),
+          (_, final album?, _, _) => MasonryGridView.builder(
             itemCount: album.assets.length,
             cacheExtent: ScrollCacheExtent.viewport(3).value,
             gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
