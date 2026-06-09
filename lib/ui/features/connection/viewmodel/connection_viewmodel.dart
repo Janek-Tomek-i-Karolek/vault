@@ -8,6 +8,7 @@ class ConnectionViewModel extends ChangeNotifier {
   String _serverUrl = "";
   String _apiKey = "";
   ConnectionStatus status = ConnectionStatus.loading;
+  String? errorMessage;
 
   final ConnectionRepository _connectionRepository;
 
@@ -28,7 +29,8 @@ class ConnectionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isConnectionFormValid => _serverUrl.isNotEmpty && _apiKey.isNotEmpty;
+  bool get isConnectionFormValid =>
+      Uri.parse(_serverUrl).isAbsolute && _apiKey.isNotEmpty;
 
   void updateServerUrl(String value) {
     _serverUrl = value;
@@ -40,7 +42,7 @@ class ConnectionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> connect() async {
+  Future<bool> connect() async {
     status = ConnectionStatus.loading;
     notifyListeners();
 
@@ -48,11 +50,28 @@ class ConnectionViewModel extends ChangeNotifier {
       serverUrl: _serverUrl,
       apiKey: _apiKey,
     );
-    status = switch (result) {
-      Ok() => ConnectionStatus.connected,
-      Error() => ConnectionStatus.disconnected,
-    };
+
+    switch (result) {
+      case Ok(value: final connection):
+        final testResult = await _connectionRepository.testConnection(
+          connection: connection,
+        );
+
+        switch (testResult) {
+          case Ok():
+            status = ConnectionStatus.connected;
+            notifyListeners();
+            return true;
+          case Error(error: final error):
+            status = ConnectionStatus.disconnected;
+            errorMessage = "Connection test failed: ${error.toString()}";
+        }
+      case Error(error: final error):
+        status = ConnectionStatus.disconnected;
+        errorMessage = "Failed to save connection: ${error.toString()}";
+    }
 
     notifyListeners();
+    return false;
   }
 }

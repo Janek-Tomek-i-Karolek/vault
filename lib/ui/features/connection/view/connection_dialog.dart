@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
+import 'package:vault/utils/result.dart';
 
 class ConnectionDialog extends StatefulWidget {
   const ConnectionDialog({super.key});
@@ -66,10 +68,26 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
                   text: "Connect",
                   onTap: isValid
                       ? () async {
-                          await context.read<ConnectionViewModel>().connect();
+                          final scaffoldMessenger = ScaffoldMessenger.of(
+                            context,
+                          );
+                          final vm = context.read<ConnectionViewModel>();
 
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
+                          final success = await vm.connect();
+                          if (context.mounted) Navigator.of(context).pop();
+
+                          if (!success) {
+                            scaffoldMessenger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  vm.errorMessage ?? "An unknown error occured",
+                                ),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.error,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
                           }
                         }
                       : null,
