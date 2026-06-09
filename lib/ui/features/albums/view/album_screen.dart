@@ -37,6 +37,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<AlbumViewModel>();
+    final theme = Theme.of(context);
 
     final String appBarTitle = switch ((
       viewModel.isLoading,
@@ -52,6 +53,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
         title: Text(appBarTitle),
         centerTitle: true,
         actions: const [ProfileButton()],
+        foregroundColor: theme.colorScheme.onSurface,
       ),
 
       body: RefreshIndicator(

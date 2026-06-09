@@ -56,7 +56,10 @@ class AlbumPreviewTile extends StatelessWidget {
                       child: Text(
                         albumPreview.albumName,
                         textAlign: TextAlign.start,
-                        style: theme.textTheme.titleLarge,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                          fontSize: theme.textTheme.titleLarge!.fontSize,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

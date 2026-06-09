@@ -30,12 +30,17 @@ class AssetScreen extends StatefulWidget {
 }
 
 class _AssetScreenState extends State<AssetScreen> {
-  final ValueNotifier<bool> _isScaled = ValueNotifier(false);
+  final ValueNotifier<bool> _isZoomed = ValueNotifier(false);
+  bool _uiVisible = true;
 
   late PageController _pageController;
 
   void _onZoom(double scale) {
-    _isScaled.value = scale != 1.0;
+    _isZoomed.value = scale != 1.0;
+
+    if (_uiVisible && _isZoomed.value || !_uiVisible && !_isZoomed.value) {
+      _toggleUIVisibility();
+    }
   }
 
   @override
@@ -47,56 +52,117 @@ class _AssetScreenState extends State<AssetScreen> {
   @override
   void dispose() {
     _pageController.dispose();
+    _isZoomed.dispose();
     super.dispose();
+  }
+
+  void _toggleUIVisibility() {
+    setState(() {
+      _uiVisible = !_uiVisible;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FloatingActionButton(
-              onPressed: () async {
-                await context.read<AssetViewModel>().removeAssetFromAlbum(
-                  widget.serverConnection,
-                  widget.album,
-                  widget.assets[widget.index],
-                );
-              },
-              tooltip: 'Add Photos',
-              child: const Icon(Icons.delete_outline),
-            ),
-          ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: AnimatedOpacity(
+          opacity: _uiVisible ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          child: _uiVisible
+              ? AppBar(
+                  backgroundColor: Colors.black38,
+                  foregroundColor: theme.colorScheme.onSurface,
+                )
+              : const SizedBox.shrink(),
         ),
       ),
-      // body: AssetViewer(asset: asset),
+      bottomNavigationBar: AnimatedOpacity(
+        opacity: _uiVisible ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 200),
+        child: _uiVisible
+            ? BottomAppBar(
+                color: Colors.black38,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () async {
+                        await context
+                            .read<AssetViewModel>()
+                            .removeAssetFromAlbum(
+                              widget.serverConnection,
+                              widget.album,
+                              widget.assets[widget.index],
+                            );
+                      },
+                      tooltip: 'Add Photos',
+                      child: const Icon(Icons.delete_outline),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: theme.colorScheme.onSurface,
+                      splashColor: theme.colorScheme.primary,
+                    ),
+                    FloatingActionButton(
+                      onPressed: () async {
+                        await context
+                            .read<AssetViewModel>()
+                            .removeAssetFromAlbum(
+                              widget.serverConnection,
+                              widget.album,
+                              widget.assets[widget.index],
+                            );
+                      },
+                      child: const Icon(Icons.share),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: theme.colorScheme.onSurface,
+                      splashColor: theme.colorScheme.primary,
+                    ),
+                    FloatingActionButton(
+                      onPressed: () async {
+                        await context
+                            .read<AssetViewModel>()
+                            .removeAssetFromAlbum(
+                              widget.serverConnection,
+                              widget.album,
+                              widget.assets[widget.index],
+                            );
+                      },
+                      child: const Icon(Icons.download),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: theme.colorScheme.onSurface,
+                      splashColor: theme.colorScheme.primary,
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
+      ),
       body: ValueListenableBuilder(
-        valueListenable: _isScaled,
-        builder: (context, isScaled, child) {
+        valueListenable: _isZoomed,
+        builder: (context, isZoomed, child) {
+          return GestureDetector(
+            onVerticalDragUpdate: isZoomed ? null : (details) => {},
+          );
           return PointersListener(
             builder: (_, moreThanOnePointer) => PageView.builder(
               itemCount: widget.assets.length,
               allowImplicitScrolling: true,
               scrollCacheExtent: ScrollCacheExtent.viewport(1),
               controller: _pageController,
-              physics: isScaled || moreThanOnePointer
-                  ? NeverScrollableScrollPhysics()
-                  : FastClampingScrollPhysics(),
+              physics: isZoomed || moreThanOnePointer
+                  ? const NeverScrollableScrollPhysics()
+                  : const FastClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 return RepaintBoundary(
                   child: AssetViewer(
                     asset: widget.assets[index],
                     onZoom: _onZoom,
+                    onTap: _toggleUIVisibility,
                   ),
                 );
               },
@@ -109,9 +175,15 @@ class _AssetScreenState extends State<AssetScreen> {
 }
 
 class AssetViewer extends StatefulWidget {
-  const AssetViewer({super.key, required this.asset, required this.onZoom});
+  const AssetViewer({
+    super.key,
+    required this.asset,
+    required this.onZoom,
+    required this.onTap,
+  });
   final Asset asset;
   final Function(double) onZoom;
+  final Function() onTap;
 
   @override
   State<AssetViewer> createState() => _AssetViewerState();
@@ -296,6 +368,7 @@ class _AssetViewerState extends State<AssetViewer>
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onDoubleTap: _animateZoomInitialize,
+                onTap: widget.onTap,
                 onDoubleTapDown: (details) =>
                     _doubleTapLocation = details.localPosition,
                 onDoubleTapCancel: () => _doubleTapLocation = null,
