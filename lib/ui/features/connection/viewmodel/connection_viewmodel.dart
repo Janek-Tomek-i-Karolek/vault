@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/utils/enums/connection_status.dart';
 import 'package:vault/utils/result.dart';
 
@@ -42,7 +43,7 @@ class ConnectionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> connect() async {
+  Future<bool> connect(AppLocalizations? localizations) async {
     status = ConnectionStatus.loading;
     notifyListeners();
 
@@ -62,13 +63,15 @@ class ConnectionViewModel extends ChangeNotifier {
             status = ConnectionStatus.connected;
             notifyListeners();
             return true;
-          case Error(error: final error):
+          case Error(error: final e):
             status = ConnectionStatus.disconnected;
-            errorMessage = "Connection test failed: ${error.toString()}";
+            errorMessage = localizations!.failedConnectionTestMessage(
+              e.toString(),
+            );
         }
-      case Error(error: final error):
+      case Error(error: final e):
         status = ConnectionStatus.disconnected;
-        errorMessage = "Failed to save connection: ${error.toString()}";
+        errorMessage = localizations!.failedConnectionSaveMessage(e.toString());
     }
 
     notifyListeners();

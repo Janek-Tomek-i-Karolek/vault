@@ -15,5 +15,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get register => 'Zarejestruj';
 
   @override
-  String get helloWorld => 'Hello World!';
+  String get unknownErrorMessage => 'Wystąpił nieoczekiwany błąd';
+
+  @override
+  String get connectAction => 'Połącz';
+
+  @override
+  String failedConnectionTestMessage(Object error) {
+    return 'Nie udało się połączyć: $error';
+  }
+
+  @override
+  String failedConnectionSaveMessage(Object error) {
+    return 'Nie udało się zapisać połączenia: $error';
+  }
 }

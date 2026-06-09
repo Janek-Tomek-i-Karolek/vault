@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
 import 'package:vault/utils/result.dart';
@@ -65,22 +66,25 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
               selector: (_, cvm) => cvm.isConnectionFormValid,
               builder: (_, isValid, _) {
                 return ConfirmButton(
-                  text: "Connect",
+                  text: AppLocalizations.of(context)!.connectAction,
                   onTap: isValid
                       ? () async {
+                          final AppLocalizations? localizations =
+                              AppLocalizations.of(context);
                           final scaffoldMessenger = ScaffoldMessenger.of(
                             context,
                           );
                           final vm = context.read<ConnectionViewModel>();
 
-                          final success = await vm.connect();
+                          final success = await vm.connect(localizations);
                           if (context.mounted) Navigator.of(context).pop();
 
                           if (!success) {
                             scaffoldMessenger.showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  vm.errorMessage ?? "An unknown error occured",
+                                  vm.errorMessage ??
+                                      localizations!.unknownErrorMessage,
                                 ),
                                 backgroundColor: Theme.of(
                                   context,

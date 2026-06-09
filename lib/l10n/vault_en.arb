@@ -1,12 +1,14 @@
 {
   "welcome": "Welcome!",
-  "register": "Register",
   "@welcome": {
     "description": "Register screen greeting"
   },
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+
+  "register": "Register",
+  "unknownErrorMessage": "An unknown error occured",
+  "connectAction": "Connect",
+
+  "failedConnectionTestMessage": "Connection test failed: {error}",
+  "failedConnectionSaveMessage": "Failed to save connection: {error}"
 }
 

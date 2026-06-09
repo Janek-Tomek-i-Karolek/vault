@@ -1,4 +1,9 @@
 {
     "welcome": "Witamy w kolonii!",
-    "register": "Zarejestruj"
+    "register": "Zarejestruj",
+    "unknownErrorMessage": "Wystąpił nieoczekiwany błąd",
+    "connectAction": "Połącz",
+
+    "failedConnectionTestMessage": "Nie udało się połączyć: {error}",
+    "failedConnectionSaveMessage": "Nie udało się zapisać połączenia: {error}"
 }

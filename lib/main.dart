@@ -32,11 +32,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  ServerConnection get _demoServerConn => ServerConnection(
-    serverUrl: Uri.https('immich.wolkowscy.net', "").toString(),
-    apiKey: "IGj5f4Jw8wUYfu5Ki8EkMUClLueFllFaFv0PJY6NU",
-  );
-
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -84,17 +79,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         locale: Locale("pl"),
 
-        // home: const ServerListScreen(),
-        // home: AlbumScreen(
-        //   serverConnection: ServerConnection(
-        //     serverUrl: Uri.https('demo.immich.app', "").toString(),
-        //     // NOTE: na docsach szybko deaktywują klucze skurczybyki
-        //     apiKey: "fL70DGWmNa6xwFFfNc9LesY8wlo6Wb8Lh2ImHD2JreQ",
-        //   ),
-        //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
-        // ),
         home: AlbumsScreen(),
-        // home: RegisterScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
