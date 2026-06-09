@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
-import 'package:vault/data/repositories/asset/asset_repository.dart';
+import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/album/album_preview.dart';
-import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 
@@ -12,30 +11,53 @@ class AlbumsViewModel extends ChangeNotifier {
   bool isLoading = false;
 
   final AlbumRepository _albumRepository;
-  final AssetRepository _assetRepository;
+  final LocalConnectionRepository _connectionRepository;
   AlbumsViewModel({
     required AlbumRepository albumRepository,
-    required AssetRepository assetRepository,
+    required LocalConnectionRepository connectionRepository,
   }) : _albumRepository = albumRepository,
-       _assetRepository = assetRepository;
+       _connectionRepository = connectionRepository;
 
-  Future<void> fetchPreviews(ServerConnection serverConnection) async {
+  Future<void> fetchPreviews() async {
     await Future.microtask(() {
       isLoading = true;
       notifyListeners();
     });
 
-    var result = await _albumRepository.getAlbumPreviews(serverConnection);
-    switch (result) {
-      case Ok<List<AlbumPreview>>():
-        albumPreviews = result.value;
+    var connectionsRes = await _connectionRepository.getConnections();
+    List<ServerConnection> connections;
+    switch (connectionsRes) {
+      case Ok():
+        connections = connectionsRes.value;
         error = null;
-      case Error<List<AlbumPreview>>():
+      case Error():
+        error = connectionsRes.error;
         albumPreviews = null;
-        error = result.error;
+
+        isLoading = false;
+        notifyListeners();
+        return;
     }
 
+    albumPreviews = List.empty(growable: true);
+    for (var connection in connections) {
+      var previewsRes = await _albumRepository.getAlbumPreviews(connection);
+      switch (previewsRes) {
+        case Ok():
+          albumPreviews!.addAll(previewsRes.value);
+        case Error():
+          albumPreviews = null;
+          error = previewsRes.error;
+
+          isLoading = false;
+          notifyListeners();
+          return;
+      }
+    }
+
+    error = null;
     isLoading = false;
     notifyListeners();
+    return;
   }
 }

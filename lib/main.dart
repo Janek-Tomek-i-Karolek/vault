@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AlbumsViewModel(
             albumRepository: DemoApiAlbumRepository(),
-            assetRepository: ImmichAssetRepository(),
+            connectionRepository: LocalConnectionRepository(),
           ),
         ),
         ChangeNotifierProvider(
@@ -93,13 +93,12 @@ class MyApp extends StatelessWidget {
         //   ),
         //   albumId: "f0b9c2d8-e4cc-4bdb-9c36-cda764479bd0",
         // ),
-        home: AlbumsScreen(serverConnection: _demoServerConn),
+        home: AlbumsScreen(),
         // home: RegisterScreen(),
         routes: {
           "/login": (context) => LoginScreen(),
           "/register": (context) => RegisterScreen(),
-          "/albums": (context) =>
-              AlbumsScreen(serverConnection: _demoServerConn),
+          "/albums": (context) => AlbumsScreen(),
           "/server-list": (context) => ServerListScreen(),
           "/profile": (context) => ProfileScreen(),
         },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
@@ -8,9 +9,7 @@ import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
 class AlbumsScreen extends StatefulWidget {
-  final ServerConnection serverConnection;
-
-  const AlbumsScreen({required this.serverConnection, super.key});
+  const AlbumsScreen({super.key});
 
   @override
   State<AlbumsScreen> createState() => _AlbumsScreenState();
@@ -21,7 +20,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   void initState() {
     super.initState();
 
-    context.read<AlbumsViewModel>().fetchPreviews(widget.serverConnection);
+    context.read<AlbumsViewModel>().fetchPreviews();
   }
 
   @override
@@ -48,9 +47,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               (_, _, final Exception e) => Text('Error: $e'),
               (_, final albumPreviews?, _) => RefreshIndicator(
                 onRefresh: () async {
-                  context.read<AlbumsViewModel>().fetchPreviews(
-                    widget.serverConnection,
-                  );
+                  context.read<AlbumsViewModel>().fetchPreviews();
                 },
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 child: GridView.builder(
