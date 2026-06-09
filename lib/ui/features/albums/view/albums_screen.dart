@@ -28,11 +28,13 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   Widget build(BuildContext context) {
     // TODO: Lazy preview loading
     final viewModel = context.read<AlbumsViewModel>();
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Albums"),
         actions: const [ProfileButton()],
+        foregroundColor: theme.colorScheme.onSurface,
       ),
       drawer: SidebarMenu(),
       body: Center(
