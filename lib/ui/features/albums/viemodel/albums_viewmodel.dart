@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fuzzy/fuzzy.dart';
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
@@ -10,8 +12,10 @@ class AlbumsViewModel extends ChangeNotifier {
   List<AlbumPreview>? _albumPreviews;
 
   // TODO: think of a different way to handle this
+  Timer? _filterDebounceTimer;
+  static const Duration _filterDebounceDuration = Duration(milliseconds: 300);
   List<AlbumPreview>? filteredAlbumPreviews;
-  Fuzzy<AlbumPreview>? fuzzy;
+  Fuzzy<AlbumPreview>? _fuzzy;
 
   Exception? error;
   bool isLoading = false;
@@ -64,7 +68,7 @@ class AlbumsViewModel extends ChangeNotifier {
     }
 
     filteredAlbumPreviews = _albumPreviews;
-    fuzzy = Fuzzy<AlbumPreview>(
+    _fuzzy = Fuzzy<AlbumPreview>(
       _albumPreviews!,
       options: FuzzyOptions(
         threshold: 0.4,
@@ -84,7 +88,17 @@ class AlbumsViewModel extends ChangeNotifier {
   }
 
   void filterPreviews(String search) {
-    if (fuzzy == null || _albumPreviews == null) {
+    if (_filterDebounceTimer?.isActive ?? false) {
+      _filterDebounceTimer!.cancel();
+    }
+
+    _filterDebounceTimer = Timer(_filterDebounceDuration, () {
+      _runFilter(search);
+    });
+  }
+
+  void _runFilter(String search) {
+    if (_fuzzy == null || _albumPreviews == null) {
       return;
     }
 
@@ -94,9 +108,13 @@ class AlbumsViewModel extends ChangeNotifier {
       return;
     }
 
-    final results = fuzzy!.search(search);
+    final results = _fuzzy!.search(search);
 
-    filteredAlbumPreviews = results.map((result) => result.item).toList();
+    final Set<String> seenNames = {};
+    filteredAlbumPreviews = results
+        .map((result) => result.item)
+        .where((album) => seenNames.add(album.albumName))
+        .toList();
     notifyListeners();
   }
 }
