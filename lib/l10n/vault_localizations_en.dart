@@ -15,5 +15,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register => 'Register';
 
   @override
-  String get helloWorld => 'Hello World!';
+  String get unknownErrorMessage => 'An unknown error occured';
+
+  @override
+  String get connectAction => 'Connect';
+
+  @override
+  String failedConnectionTestMessage(Object error) {
+    return 'Connection test failed: $error';
+  }
+
+  @override
+  String failedConnectionSaveMessage(Object error) {
+    return 'Failed to save connection: $error';
+  }
 }

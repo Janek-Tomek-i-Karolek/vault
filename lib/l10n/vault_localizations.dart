@@ -110,11 +110,29 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get register;
 
-  /// The conventional newborn programmer greeting
+  /// No description provided for @unknownErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Hello World!'**
-  String get helloWorld;
+  /// **'An unknown error occured'**
+  String get unknownErrorMessage;
+
+  /// No description provided for @connectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get connectAction;
+
+  /// No description provided for @failedConnectionTestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection test failed: {error}'**
+  String failedConnectionTestMessage(Object error);
+
+  /// No description provided for @failedConnectionSaveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save connection: {error}'**
+  String failedConnectionSaveMessage(Object error);
 }
 
 class _AppLocalizationsDelegate
