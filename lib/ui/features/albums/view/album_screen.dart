@@ -6,7 +6,7 @@ import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
-import 'package:vault/ui/features/albums/view/asset_screen.dart';
+import 'package:vault/ui/features/albums/view/asset_viewer.dart';
 
 class AlbumScreen extends StatefulWidget {
   final String albumId;
@@ -88,11 +88,11 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   asset: asset,
                   onAssetSelected: (asset) => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => AssetScreen(
+                      builder: (context) => AssetViewer(
                         serverConnection: widget.serverConnection,
                         album: album,
                         assets: album.assets,
-                        index: index,
+                        startIndex: index,
                       ),
                     ),
                   ),

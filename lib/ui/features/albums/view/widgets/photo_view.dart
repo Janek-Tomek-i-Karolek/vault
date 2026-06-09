@@ -5,33 +5,34 @@ import 'package:vault/domain/asset/asset.dart';
 
 enum Delta { height, width }
 
-class AssetViewer extends StatefulWidget {
-  const AssetViewer({
+class PhotoView extends StatefulWidget {
+  const PhotoView({
     super.key,
     required this.asset,
     required this.onZoom,
-    required this.onTap,
+    this.onTap,
     this.onDragStart,
     this.onDragEnd,
     this.onDragUpdate,
     this.onDragCancel,
     this.onPageBuild,
+    this.disableZoomGestures,
   });
   final Asset asset;
   final Function(double) onZoom;
-  final Function() onTap;
-  final Function(BuildContext context, DragStartDetails details)? onDragStart;
+  final Function()? onTap;
+  final Function(DragStartDetails details)? onDragStart;
   final Function(DragEndDetails details)? onDragEnd;
   final Function(DragUpdateDetails details)? onDragUpdate;
   final Function(Size imageSize)? onPageBuild;
   final VoidCallback? onDragCancel;
+  final bool? disableZoomGestures;
 
   @override
-  State<AssetViewer> createState() => _AssetViewerState();
+  State<PhotoView> createState() => _PhotoViewState();
 }
 
-class _AssetViewerState extends State<AssetViewer>
-    with TickerProviderStateMixin {
+class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   final TransformationController _transformationController =
       TransformationController();
   final GlobalKey _imageKey = GlobalKey();
@@ -46,7 +47,7 @@ class _AssetViewerState extends State<AssetViewer>
 
   final ValueNotifier<bool> _isFull = ValueNotifier<bool>(false);
   final ValueNotifier<bool> _isOriginal = ValueNotifier<bool>(false);
-  bool _isScaleInteraction = false;
+  bool _isZoomInteraction = false;
   Animation<Matrix4>? _animationZoom;
   Offset? _doubleTapLocation;
 
@@ -116,6 +117,9 @@ class _AssetViewerState extends State<AssetViewer>
   }
 
   void _animateZoomInitialize() {
+    if (widget.disableZoomGestures ?? false) {
+      return;
+    }
     if (!_animationControllerZoom.isAnimating) {
       final currentTransform = _transformationController.value;
       final endMatrix = currentTransform != Matrix4.identity()
@@ -137,13 +141,13 @@ class _AssetViewerState extends State<AssetViewer>
     if (details.pointerCount > 1) {
       // this means that the user is using two fingers
       // i want to listen to scaling only
-      _isScaleInteraction = true;
+      _isZoomInteraction = true;
       _isFull.value = false;
     }
   }
 
   void _onInteractionEnd(ScaleEndDetails details) {
-    _isScaleInteraction = false;
+    _isZoomInteraction = false;
 
     // update boundary margin aftet reenabling
     _onTransformationChange();
@@ -159,7 +163,7 @@ class _AssetViewerState extends State<AssetViewer>
     _isOriginal.value = scale >= kOriginalScaleThreshold;
 
     // update boundary margin constraints
-    if (!_isScaleInteraction) {
+    if (!_isZoomInteraction) {
       final imageSize = _imageKey.currentContext!.size;
       if (imageSize != null) {
         final isFull = imageSize.height * scale >= size.height;
@@ -205,6 +209,7 @@ class _AssetViewerState extends State<AssetViewer>
               minScale: 1.0,
               maxScale: 10,
               constrained: false,
+              scaleEnabled: widget.disableZoomGestures ?? true,
               panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
               boundaryMargin: isFull ? imageBoundaryMargin : EdgeInsets.zero,
               transformationController: _transformationController,
@@ -217,9 +222,7 @@ class _AssetViewerState extends State<AssetViewer>
                 onDoubleTapDown: (details) =>
                     _doubleTapLocation = details.localPosition,
                 onDoubleTapCancel: () => _doubleTapLocation = null,
-                onVerticalDragStart: widget.onDragStart != null
-                    ? (details) => widget.onDragStart!(context, details)
-                    : null,
+                onVerticalDragStart: widget.onDragStart,
                 onVerticalDragUpdate: widget.onDragUpdate,
                 onVerticalDragEnd: widget.onDragEnd,
                 onVerticalDragCancel: widget.onDragCancel,
@@ -230,15 +233,7 @@ class _AssetViewerState extends State<AssetViewer>
                     child: ValueListenableBuilder(
                       valueListenable: _isOriginal,
                       builder: (context, isOriginal, child) {
-                        return Image.network(
-                          key: _imageKey,
-                          isOriginal
-                              ? widget.asset.originalUri
-                              : widget.asset.previewUri,
-                          headers: widget.asset.headers,
-                          fit: BoxFit.contain,
-                          gaplessPlayback: true,
-                        );
+                        return _buildImage(isOriginal);
                       },
                     ),
                   ),
@@ -248,6 +243,16 @@ class _AssetViewerState extends State<AssetViewer>
           },
         );
       },
+    );
+  }
+
+  Image _buildImage(bool isOriginal) {
+    return Image.network(
+      key: _imageKey,
+      isOriginal ? widget.asset.originalUri : widget.asset.previewUri,
+      headers: widget.asset.headers,
+      fit: BoxFit.contain,
+      gaplessPlayback: true,
     );
   }
 }
