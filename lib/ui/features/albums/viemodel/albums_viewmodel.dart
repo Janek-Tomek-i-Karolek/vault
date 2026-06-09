@@ -10,12 +10,11 @@ import 'package:vault/utils/result.dart';
 
 class AlbumsViewModel extends ChangeNotifier {
   List<AlbumPreview>? _albumPreviews;
+  List<AlbumPreview>? filteredAlbumPreviews;
 
-  // TODO: think of a different way to handle this
+  Fuzzy<AlbumPreview>? _fuzzyFilter;
   Timer? _filterDebounceTimer;
   static const Duration _filterDebounceDuration = Duration(milliseconds: 300);
-  List<AlbumPreview>? filteredAlbumPreviews;
-  Fuzzy<AlbumPreview>? _fuzzy;
 
   Exception? error;
   bool isLoading = false;
@@ -37,17 +36,12 @@ class AlbumsViewModel extends ChangeNotifier {
     });
 
     var connectionsRes = await _connectionRepository.getConnections();
-    List<ServerConnection> connections;
+    List<ServerConnection>? connections;
     switch (connectionsRes) {
       case Ok():
         connections = connectionsRes.value;
-        error = null;
       case Error():
-        error = connectionsRes.error;
-        _albumPreviews = null;
-
-        isLoading = false;
-        notifyListeners();
+        _handleError(connectionsRes.error);
         return;
     }
 
@@ -58,17 +52,30 @@ class AlbumsViewModel extends ChangeNotifier {
         case Ok():
           _albumPreviews!.addAll(previewsRes.value);
         case Error():
-          _albumPreviews = null;
-          error = previewsRes.error;
-
-          isLoading = false;
-          notifyListeners();
+          _handleError(previewsRes.error);
           return;
       }
     }
 
-    filteredAlbumPreviews = _albumPreviews;
-    _fuzzy = Fuzzy<AlbumPreview>(
+    filteredAlbumPreviews = List.from(_albumPreviews!);
+    _initializeFuzzy();
+
+    error = null;
+    isLoading = false;
+    notifyListeners();
+    return;
+  }
+
+  void _handleError(Exception e) {
+    error = e;
+    _albumPreviews = null;
+    filteredAlbumPreviews = null;
+    isLoading = false;
+    notifyListeners();
+  }
+
+  void _initializeFuzzy() {
+    _fuzzyFilter = Fuzzy<AlbumPreview>(
       _albumPreviews!,
       options: FuzzyOptions(
         threshold: 0.4,
@@ -81,10 +88,6 @@ class AlbumsViewModel extends ChangeNotifier {
         ],
       ),
     );
-    error = null;
-    isLoading = false;
-    notifyListeners();
-    return;
   }
 
   void filterPreviews(String search) {
@@ -98,20 +101,19 @@ class AlbumsViewModel extends ChangeNotifier {
   }
 
   void _runFilter(String search) {
-    if (_fuzzy == null || _albumPreviews == null) {
+    if (_fuzzyFilter == null || _albumPreviews == null) {
       return;
     }
 
     if (search.isEmpty) {
-      filteredAlbumPreviews = _albumPreviews;
+      filteredAlbumPreviews = List.from(_albumPreviews!);
       notifyListeners();
       return;
     }
 
-    final results = _fuzzy!.search(search);
-
     final Set<String> seenNames = {};
-    filteredAlbumPreviews = results
+    filteredAlbumPreviews = _fuzzyFilter!
+        .search(search)
         .map((result) => result.item)
         .where((album) => seenNames.add(album.albumName))
         .toList();
