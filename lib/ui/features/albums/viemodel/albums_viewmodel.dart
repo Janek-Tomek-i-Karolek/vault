@@ -1,3 +1,4 @@
+import 'package:fuzzy/fuzzy.dart';
 import 'package:flutter/material.dart';
 import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
@@ -6,7 +7,12 @@ import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 
 class AlbumsViewModel extends ChangeNotifier {
-  List<AlbumPreview>? albumPreviews;
+  List<AlbumPreview>? _albumPreviews;
+
+  // TODO: think of a different way to handle this
+  List<AlbumPreview>? filteredAlbumPreviews;
+  Fuzzy<AlbumPreview>? fuzzy;
+
   Exception? error;
   bool isLoading = false;
 
@@ -19,6 +25,8 @@ class AlbumsViewModel extends ChangeNotifier {
        _connectionRepository = connectionRepository;
 
   Future<void> fetchPreviews() async {
+    if (isLoading) return;
+
     await Future.microtask(() {
       isLoading = true;
       notifyListeners();
@@ -32,21 +40,21 @@ class AlbumsViewModel extends ChangeNotifier {
         error = null;
       case Error():
         error = connectionsRes.error;
-        albumPreviews = null;
+        _albumPreviews = null;
 
         isLoading = false;
         notifyListeners();
         return;
     }
 
-    albumPreviews = List.empty(growable: true);
+    _albumPreviews = List.empty(growable: true);
     for (var connection in connections) {
       var previewsRes = await _albumRepository.getAlbumPreviews(connection);
       switch (previewsRes) {
         case Ok():
-          albumPreviews!.addAll(previewsRes.value);
+          _albumPreviews!.addAll(previewsRes.value);
         case Error():
-          albumPreviews = null;
+          _albumPreviews = null;
           error = previewsRes.error;
 
           isLoading = false;
@@ -55,9 +63,40 @@ class AlbumsViewModel extends ChangeNotifier {
       }
     }
 
+    filteredAlbumPreviews = _albumPreviews;
+    fuzzy = Fuzzy<AlbumPreview>(
+      _albumPreviews!,
+      options: FuzzyOptions(
+        threshold: 0.4,
+        keys: [
+          WeightedKey(
+            name: 'albumName',
+            getter: (AlbumPreview prev) => prev.albumName,
+            weight: 1.0,
+          ),
+        ],
+      ),
+    );
     error = null;
     isLoading = false;
     notifyListeners();
     return;
+  }
+
+  void filterPreviews(String search) {
+    if (fuzzy == null || _albumPreviews == null) {
+      return;
+    }
+
+    if (search.isEmpty) {
+      filteredAlbumPreviews = _albumPreviews;
+      notifyListeners();
+      return;
+    }
+
+    final results = fuzzy!.search(search);
+
+    filteredAlbumPreviews = results.map((result) => result.item).toList();
+    notifyListeners();
   }
 }
