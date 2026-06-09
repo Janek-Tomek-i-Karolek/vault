@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/extensions/FastScrollPhysics.dart';
+import 'package:vault/ui/features/albums/view/widgets/asset_details.dart';
 import 'package:vault/ui/features/albums/view/widgets/photo_view.dart';
 
 enum _DragIntent { none, scroll, dismiss }
@@ -11,8 +12,16 @@ enum _DragIntent { none, scroll, dismiss }
 class SingleAssetPageViewer extends StatefulWidget {
   final Asset asset;
   final Function(double)? onZoom;
+  final Function(bool)? onDetails;
+  final VoidCallback? onTap;
 
-  const SingleAssetPageViewer({super.key, required this.asset, this.onZoom});
+  const SingleAssetPageViewer({
+    super.key,
+    required this.asset,
+    this.onZoom,
+    this.onDetails,
+    this.onTap,
+  });
   @override
   State<SingleAssetPageViewer> createState() => _SingleAssetPageViewerState();
 }
@@ -34,11 +43,14 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
     _isZoomed.value = scale != 1.0;
   }
 
-  void _beginDrag(DragStartDetails details) {
-    if (_isZoomed.value) {
-      _dragStart = null;
+  void _onImageDragStart(DragStartDetails details) {
+    if (!_isShowingDetails.value || _isZoomed.value) {
       return;
     }
+    _beginDrag(details);
+  }
+
+  void _beginDrag(DragStartDetails details) {
     _dragStart = details;
 
     if (_isShowingDetails.value) {
@@ -136,10 +148,15 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
     return min(maxWidth / r, maxHeight);
   }
 
+  void _onShowingDetails() {
+    widget.onDetails?.call(_isShowingDetails.value);
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController = SnapScrollController();
+    _isShowingDetails.addListener(_onShowingDetails);
 
     // TODO: resolve how to hide/open details on new page
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -162,12 +179,10 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
   }
 
   PhotoView _buildPhotoView({bool? disableZoomGestures}) {
-    print("PhotoView is rebuilt");
-    print("DisableZoomGestures: $disableZoomGestures");
     return PhotoView(
       asset: widget.asset,
       onZoom: _onZoom,
-      // onTap: _toggleUIVisibility,
+      onTap: widget.onTap,
       disableZoomGestures: disableZoomGestures,
       onDragStart: _beginDrag,
       onDragUpdate: _updateDrag,
@@ -201,6 +216,7 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
     return SingleChildScrollView(
       physics: const SnapScrollPhysics(),
       controller: _scrollController,
+      hitTestBehavior: HitTestBehavior.opaque,
       child: ValueListenableBuilder(
         valueListenable: _isShowingDetails,
         builder: (context, isShowingDetails, child) {
@@ -217,15 +233,16 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
                   children: [
                     SizedBox(height: detailsOffset),
                     GestureDetector(
-                      onVerticalDragStart: _beginDrag,
+                      onVerticalDragStart: _onImageDragStart,
                       onVerticalDragUpdate: _updateDrag,
                       onVerticalDragEnd: _endDrag,
                       onVerticalDragCancel: _onDragCancel,
-                      child: SizedBox(
-                        height: 600,
-                        child: ColoredBox(
-                          color: theme.colorScheme.primary,
-                          child: Center(child: Text("dupa jasiu")),
+                      child: AnimatedOpacity(
+                        opacity: isShowingDetails ? 1.0 : 0.0,
+                        duration: Durations.short2,
+                        child: AssetDetails(
+                          asset: widget.asset,
+                          minHeight: viewportHeight - snapTarget,
                         ),
                       ),
                     ),

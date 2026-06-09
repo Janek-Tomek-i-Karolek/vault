@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:vault/domain/asset/asset.dart';
+import 'package:vault/ui/features/albums/view/widgets/pointer_listener.dart';
 
 enum Delta { height, width }
 
@@ -193,10 +194,14 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  bool _disableZoomGestures() {
+    return widget.disableZoomGestures ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => widget.onPageBuild ?? (),
+      (_) => widget.onPageBuild ?? (_imageKey.currentContext!.size!),
     );
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -204,41 +209,55 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
         return ValueListenableBuilder(
           valueListenable: _isFull,
           builder: (context, isFull, child) {
-            return InteractiveViewer(
-              clipBehavior: Clip.none,
-              minScale: 1.0,
-              maxScale: 10,
-              constrained: false,
-              scaleEnabled: widget.disableZoomGestures ?? true,
-              panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
-              boundaryMargin: isFull ? imageBoundaryMargin : EdgeInsets.zero,
-              transformationController: _transformationController,
-              onInteractionStart: _onInteractionStart,
-              onInteractionEnd: _onInteractionEnd,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onDoubleTap: _animateZoomInitialize,
-                onTap: widget.onTap,
-                onDoubleTapDown: (details) =>
-                    _doubleTapLocation = details.localPosition,
-                onDoubleTapCancel: () => _doubleTapLocation = null,
-                onVerticalDragStart: widget.onDragStart,
-                onVerticalDragUpdate: widget.onDragUpdate,
-                onVerticalDragEnd: widget.onDragEnd,
-                onVerticalDragCancel: widget.onDragCancel,
-                child: SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight,
-                  child: Center(
-                    child: ValueListenableBuilder(
-                      valueListenable: _isOriginal,
-                      builder: (context, isOriginal, child) {
-                        return _buildImage(isOriginal);
-                      },
+            return PointersListener(
+              builder: (_, moreThanOnePointer) {
+                return InteractiveViewer(
+                  clipBehavior: Clip.none,
+                  minScale: 1.0,
+                  maxScale: 10,
+                  constrained: false,
+                  scaleEnabled: !_disableZoomGestures(),
+                  panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
+                  boundaryMargin: isFull
+                      ? imageBoundaryMargin
+                      : EdgeInsets.zero,
+                  transformationController: _transformationController,
+                  onInteractionStart: _onInteractionStart,
+                  onInteractionEnd: _onInteractionEnd,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onDoubleTap: _animateZoomInitialize,
+                    onTap: widget.onTap,
+                    onDoubleTapDown: (details) =>
+                        _doubleTapLocation = details.localPosition,
+                    onDoubleTapCancel: () => _doubleTapLocation = null,
+                    onVerticalDragStart: !moreThanOnePointer
+                        ? widget.onDragStart
+                        : null,
+                    onVerticalDragUpdate: !moreThanOnePointer
+                        ? widget.onDragUpdate
+                        : null,
+                    onVerticalDragEnd: !moreThanOnePointer
+                        ? widget.onDragEnd
+                        : null,
+                    onVerticalDragCancel: !moreThanOnePointer
+                        ? widget.onDragCancel
+                        : null,
+                    child: SizedBox(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      child: Center(
+                        child: ValueListenableBuilder(
+                          valueListenable: _isOriginal,
+                          builder: (context, isOriginal, child) {
+                            return _buildImage(isOriginal);
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );

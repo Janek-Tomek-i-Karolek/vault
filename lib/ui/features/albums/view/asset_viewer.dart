@@ -28,17 +28,24 @@ class AssetViewer extends StatefulWidget {
 
 class _AssetViewerState extends State<AssetViewer> {
   final ValueNotifier<bool> _isZoomed = ValueNotifier(false);
-  bool _uiVisible = true;
+  bool _topBottomAppBar = true;
+  bool _bottomAppBar = true;
 
   late int _currentIndex;
 
   void _onZoom(double scale) {
-    print("asset viewer on zoom");
     _isZoomed.value = scale != 1.0;
 
-    if (_uiVisible && _isZoomed.value || !_uiVisible && !_isZoomed.value) {
+    if (_topBottomAppBar && _isZoomed.value ||
+        !_topBottomAppBar && !_isZoomed.value) {
       _toggleUIVisibility();
     }
+  }
+
+  void _onDetails(bool visible) {
+    setState(() {
+      _bottomAppBar = !visible;
+    });
   }
 
   late PageController _pageController;
@@ -59,7 +66,7 @@ class _AssetViewerState extends State<AssetViewer> {
 
   void _toggleUIVisibility() {
     setState(() {
-      _uiVisible = !_uiVisible;
+      _topBottomAppBar = !_topBottomAppBar;
     });
   }
 
@@ -78,9 +85,9 @@ class _AssetViewerState extends State<AssetViewer> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AnimatedOpacity(
-          opacity: _uiVisible ? 1.0 : 0.0,
+          opacity: _topBottomAppBar ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 200),
-          child: _uiVisible
+          child: _topBottomAppBar
               ? AppBar(
                   backgroundColor: Colors.black38,
                   foregroundColor: theme.colorScheme.onSurface,
@@ -89,9 +96,9 @@ class _AssetViewerState extends State<AssetViewer> {
         ),
       ),
       bottomNavigationBar: AnimatedOpacity(
-        opacity: _uiVisible ? 1.0 : 0.0,
+        opacity: _topBottomAppBar ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 200),
-        child: _uiVisible
+        child: _topBottomAppBar && _bottomAppBar
             ? BottomAppBar(
                 color: Colors.black38,
                 child: Row(
@@ -108,20 +115,26 @@ class _AssetViewerState extends State<AssetViewer> {
       body: ValueListenableBuilder<bool>(
         valueListenable: _isZoomed,
         builder: (_, isZoomed, _) {
-          final pagePhysics = isZoomed
-              ? const NeverScrollableScrollPhysics()
-              : const FastClampingScrollPhysics();
-          return PageView.builder(
-            itemCount: widget.assets.length,
-            allowImplicitScrolling: true,
-            scrollCacheExtent: ScrollCacheExtent.viewport(1),
-            controller: _pageController,
-            physics: pagePhysics,
-            onPageChanged: _pageChanged,
-            itemBuilder: (_, index) {
-              return SingleAssetPageViewer(
-                asset: widget.assets[index],
-                onZoom: _onZoom,
+          return PointersListener(
+            builder: (_, moreThanOnePointer) {
+              final pagePhysics = isZoomed || moreThanOnePointer
+                  ? const NeverScrollableScrollPhysics()
+                  : const FastClampingScrollPhysics();
+              return PageView.builder(
+                itemCount: widget.assets.length,
+                allowImplicitScrolling: true,
+                scrollCacheExtent: ScrollCacheExtent.viewport(1),
+                controller: _pageController,
+                physics: pagePhysics,
+                onPageChanged: _pageChanged,
+                itemBuilder: (_, index) {
+                  return SingleAssetPageViewer(
+                    asset: widget.assets[index],
+                    onZoom: _onZoom,
+                    onDetails: _onDetails,
+                    onTap: _toggleUIVisibility,
+                  );
+                },
               );
             },
           );
