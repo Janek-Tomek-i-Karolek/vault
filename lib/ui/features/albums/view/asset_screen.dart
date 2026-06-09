@@ -65,6 +65,8 @@ class _AssetScreenState extends State<AssetScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final viewportWidth = MediaQuery.widthOf(context);
+    final viewportHeight = MediaQuery.heightOf(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -144,34 +146,80 @@ class _AssetScreenState extends State<AssetScreen> {
       ),
       body: ValueListenableBuilder(
         valueListenable: _isZoomed,
-        builder: (context, isZoomed, child) {
-          return GestureDetector(
-            onVerticalDragUpdate: isZoomed ? null : (details) => {},
-          );
+        builder: (_, isZoomed, _) {
           return PointersListener(
-            builder: (_, moreThanOnePointer) => PageView.builder(
-              itemCount: widget.assets.length,
-              allowImplicitScrolling: true,
-              scrollCacheExtent: ScrollCacheExtent.viewport(1),
-              controller: _pageController,
+            builder: (_, moreThanOnePointer) => SingleChildScrollView(
               physics: isZoomed || moreThanOnePointer
-                  ? const NeverScrollableScrollPhysics()
-                  : const FastClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return RepaintBoundary(
-                  child: AssetViewer(
-                    asset: widget.assets[index],
-                    onZoom: _onZoom,
-                    onTap: _toggleUIVisibility,
+                  ? NeverScrollableScrollPhysics()
+                  : ScrollPhysics(),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: viewportWidth,
+                    height: viewportHeight,
+                    child: PageView.builder(
+                      itemCount: widget.assets.length,
+                      allowImplicitScrolling: true,
+                      scrollCacheExtent: ScrollCacheExtent.viewport(1),
+                      controller: _pageController,
+                      physics: isZoomed || moreThanOnePointer
+                          ? NeverScrollableScrollPhysics()
+                          : const FastClampingScrollPhysics(),
+                      itemBuilder: (_, index) {
+                        return RepaintBoundary(
+                          child: AssetViewer(
+                            asset: widget.assets[index],
+                            onZoom: _onZoom,
+                            onTap: _toggleUIVisibility,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
+                  Column(
+                    children: [
+                      SizedBox(height: 1500),
+                      GestureDetector(
+                        // onVerticalDragStart: _beginDrag,
+                        // onVerticalDragUpdate: _updateDrag,
+                        // onVerticalDragEnd: _endDrag,
+                        // onVerticalDragCancel: _onDragCancel,
+                        child: Center(child: Text("dupa jasiu")),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
     );
   }
+
+  // return SingleChildScrollView(
+  //   child: Stack(
+  //     children: [
+  //       SizedBox(
+  //         width: viewportWidth,
+  //         height: viewportHeight,
+  //         child: _buildPhotoView(isZoomed),
+  //       ),
+  //       Column(
+  //         children: [
+  //           SizedBox(height: 1500),
+  //           GestureDetector(
+  //             // onVerticalDragStart: _beginDrag,
+  //             // onVerticalDragUpdate: _updateDrag,
+  //             // onVerticalDragEnd: _endDrag,
+  //             // onVerticalDragCancel: _onDragCancel,
+  //             child: Center(child: Text("dupa jasiu")),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   ),
+  // );
 }
 
 class AssetViewer extends StatefulWidget {
