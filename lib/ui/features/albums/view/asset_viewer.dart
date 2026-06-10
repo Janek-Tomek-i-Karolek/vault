@@ -4,7 +4,7 @@ import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/extensions/FastScrollPhysics.dart';
-import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
+import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/ui/features/albums/view/widgets/pointer_listener.dart';
 import 'package:vault/ui/features/albums/view/widgets/single_asset_page_viewer.dart';
@@ -166,11 +166,56 @@ class _AssetViewerState extends State<AssetViewer> {
         icon: Icons.delete_outline,
         tooltip: 'Remove Photo',
         onPressed: () async {
-          await context.read<AssetViewModel>().removeAssetFromAlbum(
-            widget.serverConnection,
-            widget.album,
-            widget.assets[_currentIndex],
+          final bool? shouldDelete = await showDialog<bool>(
+            context: context,
+            builder: (dialogContext) {
+              return AlertDialog(
+                title: const Text("Delete asset?"),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                    child: const Text('No'),
+                  ),
+                ],
+              );
+            },
           );
+          final deleteIndex = _currentIndex;
+          final deleteAsset = widget.assets[deleteIndex];
+
+          if (shouldDelete == true) {
+            final totalAssets = widget.assets.length;
+
+            if (_currentIndex == totalAssets - 1) {
+              await _pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              await _pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+
+            if (context.mounted) {
+              await context.read<AlbumViewModel>().removeAssetFromAlbum(
+                widget.serverConnection,
+                widget.album,
+                deleteAsset,
+              );
+            }
+            setState(() {
+              widget.assets.removeAt(deleteIndex);
+            });
+
+            _pageController.jumpToPage(deleteIndex);
+          }
         },
       );
 

@@ -98,4 +98,13 @@ class AlbumViewModel extends ChangeNotifier {
         }
     }
   }
+
+  Future<void> removeAssetFromAlbum(
+    ServerConnection serverConnection,
+    Album album,
+    Asset asset,
+  ) async {
+    await _albumRepository.removeAssetFromAlbum(serverConnection, album, asset);
+    notifyListeners();
+  }
 }
