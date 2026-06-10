@@ -9,23 +9,27 @@
     "logoutAction": "Wyloguj",
     "addServerAction": "Dodaj serwer",
     "addPhotosAction": "Dodaj zdjęcia",
+    "addAlbumAction": "Dodaj album",
 
     "usernameLabel": "Nazwa użytkownika",
     "emailLabel": "E-mail",
     "passwordLabel": "Hasło",
+    "albumNameLabel": "Nazwa albumu",
+    "serverUrlLabel": "URL Serwera",
+    "apiKeyLabel": "Klucz Api",
+
 
     "alreadyRegisteredQuestion": "Masz już konto?",
     "forgotPasswordQuestion": "Zapomniałeś/aś hasła?",
 
     "vaultServerLabel": "Serwer Vault",
 
-    "serverUrlLabel": "URL Serwera",
-    "apiKeyLabel": "Klucz Api",
-
+    "invalidValuesErrorMessage": "{count, plural, =1{Nieprawidłowa wartośc} other{Nieprawidłowe wartości}}",
     "unknownErrorMessage": "Wystąpił nieoczekiwany błąd",
     "genericErrorMessage": "Wystąpił błąd: {error}",
     "failedConnectionTestMessage": "Nie udało się połączyć: {error}",
     "failedConnectionSaveMessage": "Nie udało się zapisać połączenia: {error}",
+    "failedAddAlbumMessage": "Nie udało się dodać albumu: {error}",
 
     "loadingIndicator": "Ładowanie...",
 

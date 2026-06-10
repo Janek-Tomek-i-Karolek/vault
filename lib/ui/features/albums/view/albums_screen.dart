@@ -17,7 +17,7 @@ class AlbumsScreen extends StatefulWidget {
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
   String _currentSearchTerm = "";
-  late final SearchController _searchController;
+  SearchController? _searchController;
 
   @override
   void initState() {
@@ -119,7 +119,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
           if (context.mounted &&
               context.read<AddAlbumViewModel>().didAddAlbum()) {
             await viewModel.fetchPreviews();
-            _searchController.clear();
+            _searchController?.clear();
           }
         },
         tooltip: localizations.addAlbumAction,

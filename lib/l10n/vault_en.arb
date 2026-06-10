@@ -18,15 +18,15 @@
   "usernameLabel": "Username",
   "emailLabel": "Email",
   "passwordLabel": "Password",
+  "albumNameLabel": "Album name",
+  "serverUrlLabel": "Server URL",
+  "apiKeyLabel": "Api Key",
 
   "alreadyRegisteredQuestion": "Already have an account?",
   "forgotPasswordQuestion": "Forgot password?",
 
   "vaultServerLabel": "Vault Server",
 
-  "albumNameLabel": "Album name",
-  "serverUrlLabel": "Server URL",
-  "apiKeyLabel": "Api Key",
 
   "invalidValuesErrorMessage": "{count, plural, =1{Invalid value} other{Invalid values}}",
   "@invalidValuesErrorMessage": {

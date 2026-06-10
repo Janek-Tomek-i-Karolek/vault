@@ -48,15 +48,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordLabel => 'Password';
 
   @override
-  String get alreadyRegisteredQuestion => 'Already have an account?';
-
-  @override
-  String get forgotPasswordQuestion => 'Forgot password?';
-
-  @override
-  String get vaultServerLabel => 'Vault Server';
-
-  @override
   String get albumNameLabel => 'Album name';
 
   @override
@@ -64,6 +55,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get apiKeyLabel => 'Api Key';
+
+  @override
+  String get alreadyRegisteredQuestion => 'Already have an account?';
+
+  @override
+  String get forgotPasswordQuestion => 'Forgot password?';
+
+  @override
+  String get vaultServerLabel => 'Vault Server';
 
   @override
   String invalidValuesErrorMessage(num count) {

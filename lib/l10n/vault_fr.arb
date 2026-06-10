@@ -10,23 +10,27 @@
   "logoutAction": "Déconnexion",
   "addServerAction": "Ajouter un serveur",
   "addPhotosAction": "Ajouter des photos",
+  "addAlbumAction": "Ajouter un album",
 
   "usernameLabel": "Nom d'utilisateur",
   "emailLabel": "E-mail",
   "passwordLabel": "Mot de passe",
-
-  "alreadyRegisteredQuestion": "Vous avez déjà un compte?",
-  "forgotPasswordQuestion": "Mot de passe oublié?",
-
-  "vaultServerLabel": "Un Serveur Vault",
-
+  "albumNameLabel": "Nom de l'album",
   "serverUrlLabel": "L'URL du serveur",
   "apiKeyLabel": "Clé API",
 
-  "unknownErrorMessage": "Une erruer inconnue est survenue",
-  "genericErrorMessage": "Une erreur est survenue: {error}",
-  "failedConnectionTestMessage": "Échec du test de connexion: {error}",
-  "failedConnectionSaveMessage": "Échec de l'enregistrement de la connexion: {error}",
+  "alreadyRegisteredQuestion": "Vous avez déjà un compte ?",
+  "forgotPasswordQuestion": "Mot de passe oublié ?",
+
+  "vaultServerLabel": "Serveur Vault",
+
+
+  "invalidValuesErrorMessage": "{count, plural, =1{Valeur incorrecte} other{Valeurs incorrectes}}",
+  "unknownErrorMessage": "Une erreur inconnue est survenue",
+  "genericErrorMessage": "Une erreur est survenue : {error}",
+  "failedConnectionTestMessage": "Échec du test de connexion : {error}",
+  "failedConnectionSaveMessage": "Échec de l'enregistrement de la connexion : {error}",
+  "failedAddAlbumMessage": "Échec de l'ajout de l'album : {error}",
 
   "loadingIndicator": "Chargement...",
 

@@ -36,7 +36,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get addPhotosAction => 'Dodaj zdjęcia';
 
   @override
-  String get addAlbumAction => 'Add album';
+  String get addAlbumAction => 'Dodaj album';
 
   @override
   String get usernameLabel => 'Nazwa użytkownika';
@@ -48,6 +48,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get passwordLabel => 'Hasło';
 
   @override
+  String get albumNameLabel => 'Nazwa albumu';
+
+  @override
+  String get serverUrlLabel => 'URL Serwera';
+
+  @override
+  String get apiKeyLabel => 'Klucz Api';
+
+  @override
   String get alreadyRegisteredQuestion => 'Masz już konto?';
 
   @override
@@ -55,15 +64,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get vaultServerLabel => 'Serwer Vault';
-
-  @override
-  String get albumNameLabel => 'Album name';
-
-  @override
-  String get serverUrlLabel => 'URL Serwera';
-
-  @override
-  String get apiKeyLabel => 'Klucz Api';
 
   @override
   String invalidValuesErrorMessage(num count) {
@@ -75,8 +75,8 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Invalid values',
-      one: 'Invalid value',
+      other: 'Nieprawidłowe wartości',
+      one: 'Nieprawidłowa wartośc',
     );
     return '$_temp0';
   }
@@ -101,7 +101,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String failedAddAlbumMessage(Object error) {
-    return 'Failed to add album: $error';
+    return 'Nie udało się dodać albumu: $error';
   }
 
   @override

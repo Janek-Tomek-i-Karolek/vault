@@ -178,24 +178,6 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get passwordLabel;
 
-  /// No description provided for @alreadyRegisteredQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Already have an account?'**
-  String get alreadyRegisteredQuestion;
-
-  /// No description provided for @forgotPasswordQuestion.
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot password?'**
-  String get forgotPasswordQuestion;
-
-  /// No description provided for @vaultServerLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Vault Server'**
-  String get vaultServerLabel;
-
   /// No description provided for @albumNameLabel.
   ///
   /// In en, this message translates to:
@@ -213,6 +195,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Api Key'**
   String get apiKeyLabel;
+
+  /// No description provided for @alreadyRegisteredQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyRegisteredQuestion;
+
+  /// No description provided for @forgotPasswordQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordQuestion;
+
+  /// No description provided for @vaultServerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Server'**
+  String get vaultServerLabel;
 
   /// Generic invalid values error message
   ///

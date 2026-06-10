@@ -36,7 +36,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addPhotosAction => 'Ajouter des photos';
 
   @override
-  String get addAlbumAction => 'Add album';
+  String get addAlbumAction => 'Ajouter un album';
 
   @override
   String get usernameLabel => 'Nom d\'utilisateur';
@@ -48,22 +48,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get passwordLabel => 'Mot de passe';
 
   @override
-  String get alreadyRegisteredQuestion => 'Vous avez déjà un compte?';
-
-  @override
-  String get forgotPasswordQuestion => 'Mot de passe oublié?';
-
-  @override
-  String get vaultServerLabel => 'Un Serveur Vault';
-
-  @override
-  String get albumNameLabel => 'Album name';
+  String get albumNameLabel => 'Nom de l\'album';
 
   @override
   String get serverUrlLabel => 'L\'URL du serveur';
 
   @override
   String get apiKeyLabel => 'Clé API';
+
+  @override
+  String get alreadyRegisteredQuestion => 'Vous avez déjà un compte ?';
+
+  @override
+  String get forgotPasswordQuestion => 'Mot de passe oublié ?';
+
+  @override
+  String get vaultServerLabel => 'Serveur Vault';
 
   @override
   String invalidValuesErrorMessage(num count) {
@@ -75,33 +75,33 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Invalid values',
-      one: 'Invalid value',
+      other: 'Valeurs incorrectes',
+      one: 'Valeur incorrecte',
     );
     return '$_temp0';
   }
 
   @override
-  String get unknownErrorMessage => 'Une erruer inconnue est survenue';
+  String get unknownErrorMessage => 'Une erreur inconnue est survenue';
 
   @override
   String genericErrorMessage(Object error) {
-    return 'Une erreur est survenue: $error';
+    return 'Une erreur est survenue : $error';
   }
 
   @override
   String failedConnectionTestMessage(Object error) {
-    return 'Échec du test de connexion: $error';
+    return 'Échec du test de connexion : $error';
   }
 
   @override
   String failedConnectionSaveMessage(Object error) {
-    return 'Échec de l\'enregistrement de la connexion: $error';
+    return 'Échec de l\'enregistrement de la connexion : $error';
   }
 
   @override
   String failedAddAlbumMessage(Object error) {
-    return 'Failed to add album: $error';
+    return 'Échec de l\'ajout de l\'album : $error';
   }
 
   @override
