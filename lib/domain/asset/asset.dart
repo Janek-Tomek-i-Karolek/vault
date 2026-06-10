@@ -12,7 +12,7 @@ class Asset {
   final int? height;
   final String mimeType;
   final bool isVideo;
-  final AssetDetails details;
+  final Details details;
   final ImageProvider? thumbImageProvider;
   Asset({
     this.width,
@@ -35,7 +35,7 @@ class Asset {
     isVideo: dto.type == .VIDEO,
     width: dto.width,
     height: dto.height,
-    details: Details.fromDTO(dto.exifInfo),
+    details: Details.fromDTO(dto.exifInfo, serverConnection),
     thumbImageProvider: dto.thumbhash != null
         ? ThumbHash.fromBase64(dto.thumbhash!).toImage()
         : null,

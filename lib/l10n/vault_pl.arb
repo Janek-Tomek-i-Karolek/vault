@@ -37,5 +37,19 @@
 
     "navBarTitle": "Menu",
     "albumsNavBarEntry": "Albumy",
-    "serverListNavBarEntry": "Lista Serwerów"
+    "serverListNavBarEntry": "Lista Serwerów",
+
+    "weekday_1": "Poniedziałek",
+    "weekday_2": "Wtorek",
+    "weekday_3": "Środa",
+    "weekday_4": "Czwartek",
+    "weekday_5": "Piątek",
+    "weekday_6": "Sobota",
+    "weekday_7": "Niedziela",
+
+    "cameraLabel": "Aparat",
+    "lensLabel": "Obiektyw",
+    "serverLabel": "Serwer",
+    "resolutionLabel": "Rozdzielczość",
+    "sizeLabel": "Rozmiar"
 }

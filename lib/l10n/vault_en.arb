@@ -41,6 +41,20 @@
 
   "navBarTitle": "Menu",
   "albumsNavBarEntry": "Albums",
-  "serverListNavBarEntry": "Server List"
+  "serverListNavBarEntry": "Server List",
+
+  "weekday_1": "Monday",
+  "weekday_2": "Tuesday",
+  "weekday_3": "Wednesday",
+  "weekday_4": "Thursday",
+  "weekday_5": "Friday",
+  "weekday_6": "Saturday",
+  "weekday_7": "Sunday",
+
+  "cameraLabel": "Camera",
+  "lensLabel": "Lens",
+  "serverLabel": "Server",
+  "resolutionLabel": "Resolution",
+  "sizeLabel": "Size"
 }
 

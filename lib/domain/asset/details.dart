@@ -1,8 +1,9 @@
 import 'package:vault/data/model/asset/exif_response_dto.dart';
+import 'package:vault/domain/server/server_connection.dart';
 
 class Details {
   // date and localization
-  final DateTime? dateTimeOriginala;
+  final DateTime? dateTimeOriginal;
   final String? timeZone;
   final String? city;
   final String? country;
@@ -16,12 +17,15 @@ class Details {
   final String? cameraModel;
   final String? lensModel;
   final int? iso;
-  final String? exposure;
+  final String? exposureTime;
   final double? focalLength;
   final double? fStop;
 
+  // server
+  final String server;
+
   Details({
-    required this.dateTimeOriginala,
+    required this.dateTimeOriginal,
     required this.timeZone,
     required this.city,
     required this.country,
@@ -31,24 +35,31 @@ class Details {
     required this.cameraModel,
     required this.lensModel,
     required this.iso,
-    required this.exposure,
+    required this.exposureTime,
     required this.focalLength,
     required this.fStop,
+    required this.server,
   });
 
-  static Details fromDTO(ExifResponseDTO? dto) => Details(
-    dateTimeOriginala: dto?.dateTimeOriginal,
-    timeZone: dto?.timeZone,
-    city: dto?.city,
-    country: dto?.country,
-    fileSizeInByte: dto?.fileSizeInByte,
-    height: dto?.exifImageHeight,
-    width: dto?.exifImageWidth,
-    cameraModel: dto?.model,
-    lensModel: dto?.lensModel,
-    iso: dto?.iso,
-    exposure: dto?.exposureTime,
-    focalLength: dto?.focalLength,
-    fStop: dto?.fNumber,
-  );
+  static Details fromDTO(ExifResponseDTO? dto, ServerConnection server) =>
+      Details(
+        dateTimeOriginal: dto?.dateTimeOriginal,
+        timeZone: dto?.timeZone,
+        city: dto?.city,
+        country: dto?.country,
+        fileSizeInByte: dto?.fileSizeInByte,
+        height: dto?.exifImageHeight,
+        width: dto?.exifImageWidth,
+        cameraModel: dto?.model,
+        lensModel: dto?.lensModel,
+        iso: dto?.iso,
+        exposureTime: dto?.exposureTime,
+        focalLength: dto?.focalLength,
+        fStop: dto?.fNumber,
+        server: server.serverUrl,
+      );
+
+  bool hasDimensions() {
+    return width != null && height != null;
+  }
 }
