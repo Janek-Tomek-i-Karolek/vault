@@ -70,12 +70,12 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                     viewModel.filteredAlbumPreviews,
                     viewModel.error,
                   )) {
-                    (true, null, _) => SizedBox(
-                      height: 10,
-                      width: 10,
+                    (true, null, _) => Center(
                       child: const CircularProgressIndicator(),
                     ),
-                    (_, _, final Exception e) => Text('Error: $e'),
+                    (_, _, final Exception e) => Center(
+                      child: Text('Error: $e'),
+                    ),
                     (_, final albumPreviews?, _) => RefreshIndicator(
                       onRefresh: () async {
                         context.read<AlbumsViewModel>().fetchPreviews();
