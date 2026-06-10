@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
+import 'package:vault/ui/features/albums/viemodel/add_album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/add_album_dialog.dart';
 import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
 class AlbumsScreen extends StatefulWidget {
@@ -14,7 +16,8 @@ class AlbumsScreen extends StatefulWidget {
 }
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
-  String currentSearchTerm = "";
+  String _currentSearchTerm = "";
+  late final SearchController _searchController;
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                 height: 50,
                 child: SearchAnchor(
                   builder: (BuildContext context, SearchController controller) {
+                    _searchController = controller;
                     return SearchBar(
                       controller: controller,
                       padding: const WidgetStatePropertyAll<EdgeInsets>(
@@ -53,7 +57,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                       onTap: () {},
                       onChanged: (input) {
                         viewModel.filterPreviews(input);
-                        currentSearchTerm = input;
+                        _currentSearchTerm = input;
                       },
                       leading: const Icon(Icons.search),
                     );
@@ -112,9 +116,10 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
         onPressed: () async {
           await Navigator.pushNamed(context, "/add-album");
 
-          if (context.mounted) {
+          if (context.mounted &&
+              context.read<AddAlbumViewModel>().didAddAlbum()) {
             await viewModel.fetchPreviews();
-            viewModel.filterPreviews(currentSearchTerm);
+            _searchController.clear();
           }
         },
         tooltip: localizations.addAlbumAction,

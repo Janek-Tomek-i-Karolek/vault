@@ -7,6 +7,7 @@ import 'package:vault/utils/result.dart';
 
 class AddAlbumViewModel extends ChangeNotifier {
   bool isLoading = false;
+  bool _addedAlbum = false;
   String? newAlbumName;
   ServerConnection? newAlbumConnection;
 
@@ -53,9 +54,19 @@ class AddAlbumViewModel extends ChangeNotifier {
       newAlbumName!,
     );
 
-    return switch (res) {
-      Ok() => Result.ok(null),
-      Error(:final error) => Result.error(error),
-    };
+    switch (res) {
+      case Ok():
+        _addedAlbum = true;
+        return Result.ok(null);
+      case Error(:final error):
+        _addedAlbum = false;
+        return Result.error(error);
+    }
+  }
+
+  bool didAddAlbum() {
+    bool added = _addedAlbum;
+    _addedAlbum = false;
+    return added;
   }
 }
