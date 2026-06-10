@@ -77,7 +77,6 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale("fr"),
 
         home: AlbumsScreen(),
         routes: {
