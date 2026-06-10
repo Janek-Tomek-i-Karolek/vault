@@ -27,10 +27,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutAction => 'Sign out';
 
   @override
+  String get addServerAction => 'Add Server';
+
+  @override
   String get usernameLabel => 'Username';
 
   @override
   String get emailLabel => 'Email';
+
+  @override
+  String get vaultServerLabel => 'Vault Server';
 
   @override
   String failedConnectionTestMessage(Object error) {
@@ -44,4 +50,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileScreenTitle => 'Profile';
+
+  @override
+  String get vaultsScreenTitle => 'My Vaults';
 }

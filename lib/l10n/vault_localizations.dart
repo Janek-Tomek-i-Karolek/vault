@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Sign out'**
   String get logoutAction;
 
+  /// No description provided for @addServerAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Server'**
+  String get addServerAction;
+
   /// No description provided for @usernameLabel.
   ///
   /// In en, this message translates to:
@@ -145,6 +151,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email'**
   String get emailLabel;
+
+  /// No description provided for @vaultServerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Server'**
+  String get vaultServerLabel;
 
   /// No description provided for @failedConnectionTestMessage.
   ///
@@ -163,6 +175,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileScreenTitle;
+
+  /// No description provided for @vaultsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Vaults'**
+  String get vaultsScreenTitle;
 }
 
 class _AppLocalizationsDelegate

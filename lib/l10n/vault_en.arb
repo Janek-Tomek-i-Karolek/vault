@@ -10,13 +10,16 @@
   "connectAction": "Connect",
   "saveAction": "Save",
   "logoutAction": "Sign out",
+  "addServerAction": "Add Server",
 
   "usernameLabel": "Username",
   "emailLabel": "Email",
+  "vaultServerLabel": "Vault Server",
 
   "failedConnectionTestMessage": "Connection test failed: {error}",
   "failedConnectionSaveMessage": "Failed to save connection: {error}",
 
-  "profileScreenTitle": "Profile"
+  "profileScreenTitle": "Profile",
+  "vaultsScreenTitle": "My Vaults"
 }
 

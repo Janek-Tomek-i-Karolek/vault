@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/servers/viewmodel/servers_viewmodel.dart';
@@ -9,9 +10,10 @@ class ServerListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Vaults'),
+        title: Text(localizations!.vaultsScreenTitle),
         actions: const [ProfileButton()],
       ),
       drawer: SidebarMenu(),
@@ -38,7 +40,7 @@ class ServerListScreen extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.dns),
-                    subtitle: const Text("Vault Server"),
+                    subtitle: Text(localizations.vaultServerLabel),
                     title: Text(server.serverUrl),
 
                     trailing: IconButton(
@@ -73,7 +75,7 @@ class ServerListScreen extends StatelessWidget {
             context.read<ServersViewModel>().refreshServers();
           }
         },
-        tooltip: 'Add Server',
+        tooltip: localizations.addServerAction,
         child: const Icon(Icons.add),
       ),
     );
