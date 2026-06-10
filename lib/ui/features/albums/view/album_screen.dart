@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/l10n/vault_localizations.dart';
-import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_viewer.dart';
 
@@ -104,7 +102,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
                   background: _isCover(album, justEntered)
                       ? Stack(
                           children: [
-                            // 1. The Background Image
                             Positioned.fill(
                               child: Image(
                                 image: _cover!,
@@ -128,7 +125,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
                                     },
                               ),
                             ),
-                            // 2. The Nice Color Overlay (with opacity/gradient)
                             Positioned.fill(
                               child: Container(
                                 decoration: BoxDecoration(
