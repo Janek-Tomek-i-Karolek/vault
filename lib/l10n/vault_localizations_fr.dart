@@ -36,6 +36,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addPhotosAction => 'Ajouter des photos';
 
   @override
+  String get addAlbumAction => 'Add album';
+
+  @override
   String get usernameLabel => 'Nom d\'utilisateur';
 
   @override
@@ -52,6 +55,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get vaultServerLabel => 'Un Serveur Vault';
+
+  @override
+  String get albumNameLabel => 'Album name';
 
   @override
   String get serverUrlLabel => 'L\'URL du serveur';

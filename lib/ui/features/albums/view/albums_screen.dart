@@ -14,6 +14,8 @@ class AlbumsScreen extends StatefulWidget {
 }
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
+  String currentSearchTerm = "";
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +25,6 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Lazy preview loading
     final viewModel = context.read<AlbumsViewModel>();
     final theme = Theme.of(context);
     final AppLocalizations? localizations = AppLocalizations.of(context);
@@ -52,6 +53,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                       onTap: () {},
                       onChanged: (input) {
                         viewModel.filterPreviews(input);
+                        currentSearchTerm = input;
                       },
                       leading: const Icon(Icons.search),
                     );
@@ -105,6 +107,18 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () async {
+          await Navigator.pushNamed(context, "/add-album");
+
+          if (context.mounted) {
+            await viewModel.fetchPreviews();
+            viewModel.filterPreviews(currentSearchTerm);
+          }
+        },
+        tooltip: localizations.addAlbumAction,
+        child: const Icon(Icons.add),
       ),
     );
   }

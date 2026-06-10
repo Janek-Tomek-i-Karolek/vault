@@ -8,4 +8,13 @@ class ServerConnection {
     "x-api-key": apiKey,
     "content-type": "application/json",
   };
+
+  @override
+  bool operator ==(Object other) =>
+      (other is ServerConnection &&
+      other.serverUrl == serverUrl &&
+      other.apiKey == apiKey);
+
+  @override
+  int get hashCode => serverUrl.hashCode ^ apiKey.hashCode;
 }

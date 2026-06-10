@@ -13,6 +13,7 @@
   "logoutAction": "Sign out",
   "addServerAction": "Add Server",
   "addPhotosAction": "Add Photos",
+  "addAlbumAction": "Add album",
 
   "usernameLabel": "Username",
   "emailLabel": "Email",
@@ -23,6 +24,7 @@
 
   "vaultServerLabel": "Vault Server",
 
+  "albumNameLabel": "Album name",
   "serverUrlLabel": "Server URL",
   "apiKeyLabel": "Api Key",
 

@@ -154,6 +154,12 @@ abstract class AppLocalizations {
   /// **'Add Photos'**
   String get addPhotosAction;
 
+  /// No description provided for @addAlbumAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add album'**
+  String get addAlbumAction;
+
   /// No description provided for @usernameLabel.
   ///
   /// In en, this message translates to:
@@ -189,6 +195,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Server'**
   String get vaultServerLabel;
+
+  /// No description provided for @albumNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Album name'**
+  String get albumNameLabel;
 
   /// No description provided for @serverUrlLabel.
   ///
