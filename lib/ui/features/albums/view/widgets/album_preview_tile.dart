@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vault/domain/album/album_preview.dart';
-import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/ui/features/albums/view/album_screen.dart';
 
 class AlbumPreviewTile extends StatelessWidget {
@@ -41,11 +40,16 @@ class AlbumPreviewTile extends StatelessWidget {
                     albumPreview: albumPreview,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment(0, -0.5),
-                        colors: <Color>[Colors.black54, Colors.transparent],
+                        colors: <Color>[
+                          theme.colorScheme.surfaceContainerHighest,
+                          theme.colorScheme.surfaceContainerHighest.withAlpha(
+                            0,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -57,7 +61,7 @@ class AlbumPreviewTile extends StatelessWidget {
                         albumPreview.albumName,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.onSurfaceVariant,
                           fontSize: theme.textTheme.titleLarge!.fontSize,
                         ),
                         maxLines: 2,

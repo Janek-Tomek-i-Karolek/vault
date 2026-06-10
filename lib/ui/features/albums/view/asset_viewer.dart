@@ -89,8 +89,8 @@ class _AssetViewerState extends State<AssetViewer> {
           duration: const Duration(milliseconds: 200),
           child: _topBottomAppBar
               ? AppBar(
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.black38,
-                  foregroundColor: theme.colorScheme.onSurface,
                 )
               : const SizedBox.shrink(),
         ),
@@ -153,7 +153,7 @@ class _AssetViewerState extends State<AssetViewer> {
       onPressed: onPressed,
       tooltip: tooltip,
       backgroundColor: Colors.transparent,
-      foregroundColor: theme.colorScheme.onSurface,
+      foregroundColor: Colors.white,
       splashColor: theme.colorScheme.primary,
       heroTag: "hero-$tooltip",
       child: Icon(icon),

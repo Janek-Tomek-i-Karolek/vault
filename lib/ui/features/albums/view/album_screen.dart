@@ -55,7 +55,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
         title: Text(appBarTitle),
         centerTitle: true,
         actions: const [ProfileButton()],
-        foregroundColor: theme.colorScheme.onSurface,
       ),
 
       body: RefreshIndicator(
