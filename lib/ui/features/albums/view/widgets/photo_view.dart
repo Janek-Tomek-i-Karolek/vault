@@ -263,6 +263,7 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
                     valueListenable: _loadOriginal,
                     builder: (_, loadOriginal, _) {
                       return Center(
+                        // child: _buildImage(loadOriginal, constraints),
                         child: _buildImage(loadOriginal, constraints),
                       );
                     },
@@ -277,41 +278,29 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   }
 
   Image _buildImage(bool original, BoxConstraints constraints) {
-    final double originalWidth = widget.asset.width?.toDouble() ?? 0.0;
-    final double originalHeight = widget.asset.height?.toDouble() ?? 0.0;
+    final originalWidth = widget.asset.width?.toDouble();
+    final originalHeight = widget.asset.height?.toDouble();
 
-    if (originalWidth == 0 || originalHeight == 0) {
-      return Image.network(
-        original ? widget.asset.originalUri : widget.asset.previewUri,
-        headers: widget.asset.headers,
-        fit: BoxFit.contain,
+    double? targetWidth;
+    double? targetHeight;
+
+    // Tutaj jesteśmy happy, inaczej łola boga
+    if (originalHeight != null && originalWidth != null) {
+      final scale = min(
+        constraints.maxWidth / originalWidth,
+        constraints.maxHeight / originalHeight,
       );
-    }
-
-    final double aspectRatio = originalWidth / originalHeight;
-
-    double targetWidth;
-    double targetHeight;
-
-    if (originalHeight >= originalWidth) {
-      targetHeight = constraints.maxHeight.isInfinite
-          ? originalHeight
-          : constraints.maxHeight;
-      targetWidth = targetHeight * aspectRatio;
-    } else {
-      targetWidth = constraints.maxWidth.isInfinite
-          ? originalWidth
-          : constraints.maxWidth;
-      targetHeight = targetWidth / aspectRatio;
+      targetWidth = originalWidth * scale;
+      targetHeight = originalHeight * scale;
     }
 
     return Image.network(
       key: _imageKey,
       original ? widget.asset.originalUri : widget.asset.previewUri,
       headers: widget.asset.headers,
-      fit: BoxFit.contain,
       width: targetWidth,
       height: targetHeight,
+      fit: BoxFit.contain,
       gaplessPlayback: true,
       frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded || frame != null || _wasInitiallyLoaded) {
