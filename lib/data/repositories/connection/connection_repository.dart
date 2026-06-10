@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/utils/result.dart';
 import 'package:http/http.dart';
-import 'package:pair/pair.dart';
 
 abstract interface class ConnectionRepository {
   Future<Result<ServerConnection>> connect({
@@ -20,6 +21,7 @@ abstract interface class ConnectionRepository {
 
 class LocalConnectionRepository implements ConnectionRepository {
   final _storage = const FlutterSecureStorage();
+  static const _connectionsKey = 'server_connections';
 
   @override
   Future<Result<ServerConnection>> connect({
@@ -31,31 +33,45 @@ class LocalConnectionRepository implements ConnectionRepository {
       apiKey: apiKey,
     );
 
-    final testResult = await testConnection(connection: newConnection);
-
-    if (testResult case Error(:final error)) {
-      return Result.error(Exception("Connection to server failed: $error"));
+    switch (await testConnection(connection: newConnection)) {
+      case Error(:final error):
+        return Result.error(Exception("Connection to server failed: $error"));
+      case Ok():
     }
 
-    if (await _saveUrl(serverUrl) case Error(:final error)) {
-      return Result.error(Exception("Failed to save URL: $error"));
-    }
-    if (await _saveApiKey(apiKey) case Error(:final error)) {
-      return Result.error(Exception("Failed to save API Key: $error"));
-    }
+    switch (await _loadConnections()) {
+      case Error(:final error):
+        return Result.error(Exception("Failed to load connections: $error"));
+      case Ok(:final value):
+        final connections = value;
 
-    return Result.ok(newConnection);
+        final index = connections.indexWhere((c) => c.serverUrl == serverUrl);
+        if (index >= 0) {
+          connections[index] = newConnection;
+        } else {
+          connections.add(newConnection);
+        }
+
+        switch (await _saveConnections(connections)) {
+          case Error(:final error):
+            return Result.error(
+              Exception("Failed to save connections: $error"),
+            );
+          case Ok():
+        }
+
+        return Result.ok(newConnection);
+    }
   }
 
   @override
   Future<Result<void>> disconnect({required String serverUrl}) async {
-    try {
-      await _storage.delete(key: 'apiKey');
-      await _storage.delete(key: 'serverUrl');
-
-      return Result.ok(null);
-    } catch (e) {
-      return Result.error(Exception("Disconnection failed: $e"));
+    switch (await _loadConnections()) {
+      case Error(:final error):
+        return Result.error(Exception("Failed to load connections: $error"));
+      case Ok(:final value):
+        final connections = value..removeWhere((c) => c.serverUrl == serverUrl);
+        return _saveConnections(connections);
     }
   }
 
@@ -65,7 +81,7 @@ class LocalConnectionRepository implements ConnectionRepository {
   }) async {
     final uri = Uri.parse("${connection.serverUrl}/api/users/me");
 
-    final Map<String, String> immichApiHeaders = {
+    final immichApiHeaders = {
       "Content-Type": "application/json",
       "x-api-key": connection.apiKey,
     };
@@ -79,7 +95,6 @@ class LocalConnectionRepository implements ConnectionRepository {
           ),
         );
       }
-
       return Result.ok(true);
     } catch (e) {
       return Result.error(Exception("Connection failed: $e"));
@@ -87,126 +102,62 @@ class LocalConnectionRepository implements ConnectionRepository {
   }
 
   @override
-  Future<Result<List<ServerConnection>>> getConnections() async {
-    final credentials = await _getCredentials();
-
-    late final String serverUrl;
-    late final String apiKey;
-
-    switch (credentials) {
-      case Ok():
-        {
-          serverUrl = credentials.value.key;
-          apiKey = credentials.value.value;
-
-          return Result.ok([
-            ServerConnection(serverUrl: serverUrl, apiKey: apiKey),
-          ]);
-        }
-      case Error():
-        {
-          return Result.error(credentials.error);
-        }
-    }
-  }
+  Future<Result<List<ServerConnection>>> getConnections() => _loadConnections();
 
   @override
   Future<Result<ServerConnection>> getConnectionByUrl({
     required String serverUrl,
   }) async {
-    return switch (await _getApiKey()) {
-      Error(:final error) => Result.error(error),
-      Ok(:final value) => Result.ok(
-        ServerConnection(serverUrl: serverUrl, apiKey: value),
-      ),
-    };
+    switch (await _loadConnections()) {
+      case Error(:final error):
+        return Result.error(error);
+      case Ok(:final value):
+        try {
+          final connection = value.firstWhere((c) => c.serverUrl == serverUrl);
+          return Result.ok(connection);
+        } catch (_) {
+          return Result.error(
+            Exception("No connection found for URL: $serverUrl"),
+          );
+        }
+    }
   }
 
   @override
   Future<Result<List<String>>> getServers({required String userId}) async {
-    return switch (await _getUrl()) {
-      Error(:final error) => Result.error(error),
-      Ok(:final value) => Result.ok([value]),
-    };
-  }
-
-  // Helper functions
-  Future<Result<Pair<String, String>>> _getCredentials() async {
-    final Result<String> serverUrlResult = await _getUrl();
-    final Result<String> apiKeyResult = await _getApiKey();
-
-    late final String serverUrl;
-    late final String apiKey;
-
-    switch (serverUrlResult) {
-      case Ok():
-        {
-          serverUrl = serverUrlResult.value;
-        }
-      case Error():
-        {
-          print(serverUrlResult.error);
-          return Result.error(serverUrlResult.error);
-        }
-    }
-
-    switch (apiKeyResult) {
-      case Ok():
-        {
-          apiKey = apiKeyResult.value;
-          return Result.ok(Pair(serverUrl, apiKey));
-        }
-      case Error():
-        {
-          print("apiKey error");
-          return Result.error(apiKeyResult.error);
-        }
+    switch (await _loadConnections()) {
+      case Error(:final error):
+        return Result.error(error);
+      case Ok(:final value):
+        return Result.ok(value.map((c) => c.serverUrl).toList());
     }
   }
 
-  Future<Result<void>> _saveApiKey(String apiKey) async {
+  Future<Result<List<ServerConnection>>> _loadConnections() async {
     try {
-      await _storage.write(key: 'apiKey', value: apiKey);
+      final raw = await _storage.read(key: _connectionsKey);
+      if (raw == null) return Result.ok([]);
+
+      final List<dynamic> decoded = jsonDecode(raw);
+      final connections = decoded
+          .map((e) => ServerConnection.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      return Result.ok(connections);
+    } catch (e) {
+      return Result.error(Exception("Failed to load connections: $e"));
+    }
+  }
+
+  Future<Result<void>> _saveConnections(
+    List<ServerConnection> connections,
+  ) async {
+    try {
+      final encoded = jsonEncode(connections.map((c) => c.toJson()).toList());
+      await _storage.write(key: _connectionsKey, value: encoded);
       return Result.ok(null);
     } catch (e) {
-      return Result.error(Exception("Failed to save api key: $e"));
-    }
-  }
-
-  Future<Result<String>> _getApiKey() async {
-    print(1);
-    try {
-      String? apiKey = await _storage.read(key: 'apiKey');
-      if (apiKey == null) {
-        return Result.error(Exception("Failed to fetch api key: Key is null"));
-      } else {
-        return Result.ok(apiKey);
-      }
-    } catch (e) {
-      return Result.error(Exception("Failed to fetch api key: $e"));
-    }
-  }
-
-  Future<Result<void>> _saveUrl(String url) async {
-    try {
-      await _storage.write(key: 'serverUrl', value: url);
-      return Result.ok(null);
-    } catch (e) {
-      return Result.error(Exception("Failed to save server url: $e"));
-    }
-  }
-
-  Future<Result<String>> _getUrl() async {
-    print(2);
-    try {
-      String? url = await _storage.read(key: 'serverUrl');
-      if (url == null) {
-        return Result.error(Exception("Failed to fetch url: Key is null"));
-      } else {
-        return Result.ok(url);
-      }
-    } catch (e) {
-      return Result.error(Exception("Failed to fetch url: $e"));
+      return Result.error(Exception("Failed to save connections: $e"));
     }
   }
 }
