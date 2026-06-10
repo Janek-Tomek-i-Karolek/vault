@@ -66,6 +66,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apiKeyLabel => 'Api Key';
 
   @override
+  String invalidValuesErrorMessage(num count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
+      locale: localeName,
+    );
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Invalid values',
+      one: 'Invalid value',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get unknownErrorMessage => 'An unknown error occured';
 
   @override
@@ -81,6 +97,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String failedConnectionSaveMessage(Object error) {
     return 'Failed to save connection: $error';
+  }
+
+  @override
+  String failedAddAlbumMessage(Object error) {
+    return 'Failed to add album: $error';
   }
 
   @override

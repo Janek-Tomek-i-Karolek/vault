@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vault/data/repositories/album/album_repository.dart';
 import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/utils/result.dart';
 
 class AddAlbumViewModel extends ChangeNotifier {
@@ -22,9 +24,13 @@ class AddAlbumViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  final AlbumRepository _albumRepository;
   final LocalConnectionRepository _connectionRepository;
-  AddAlbumViewModel({required LocalConnectionRepository connectionRepository})
-    : _connectionRepository = connectionRepository;
+  AddAlbumViewModel({
+    required AlbumRepository albumRepository,
+    required LocalConnectionRepository connectionRepository,
+  }) : _connectionRepository = connectionRepository,
+       _albumRepository = albumRepository;
 
   bool get isAddAlbumFormValid {
     debugPrint(
@@ -35,10 +41,21 @@ class AddAlbumViewModel extends ChangeNotifier {
         newAlbumConnection != null);
   }
 
-  Future<Result<void>> addAlbum() async {
-    debugPrint(
-      "Adding album, name: $newAlbumName, conn: ${newAlbumConnection?.serverUrl}",
+  Future<Result<void>> addAlbum(AppLocalizations localizations) async {
+    if (!isAddAlbumFormValid) {
+      return Result.error(
+        Exception(localizations.invalidValuesErrorMessage(2)),
+      );
+    }
+
+    var res = await _albumRepository.addAlbum(
+      newAlbumConnection!,
+      newAlbumName!,
     );
-    return Future.value(Result.error(Exception("Unimplemented")));
+
+    return switch (res) {
+      Ok() => Result.ok(null),
+      Error(:final error) => Result.error(error),
+    };
   }
 }

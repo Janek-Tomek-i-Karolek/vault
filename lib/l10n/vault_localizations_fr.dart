@@ -66,6 +66,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get apiKeyLabel => 'Clé API';
 
   @override
+  String invalidValuesErrorMessage(num count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
+      locale: localeName,
+    );
+    final String countString = countNumberFormat.format(count);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Invalid values',
+      one: 'Invalid value',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get unknownErrorMessage => 'Une erruer inconnue est survenue';
 
   @override
@@ -81,6 +97,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String failedConnectionSaveMessage(Object error) {
     return 'Échec de l\'enregistrement de la connexion: $error';
+  }
+
+  @override
+  String failedAddAlbumMessage(Object error) {
+    return 'Failed to add album: $error';
   }
 
   @override

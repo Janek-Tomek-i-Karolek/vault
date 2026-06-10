@@ -214,6 +214,12 @@ abstract class AppLocalizations {
   /// **'Api Key'**
   String get apiKeyLabel;
 
+  /// Generic invalid values error message
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Invalid value} other{Invalid values}}'**
+  String invalidValuesErrorMessage(num count);
+
   /// No description provided for @unknownErrorMessage.
   ///
   /// In en, this message translates to:
@@ -237,6 +243,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save connection: {error}'**
   String failedConnectionSaveMessage(Object error);
+
+  /// No description provided for @failedAddAlbumMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add album: {error}'**
+  String failedAddAlbumMessage(Object error);
 
   /// No description provided for @loadingIndicator.
   ///

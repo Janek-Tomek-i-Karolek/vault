@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AddAlbumViewModel(
             connectionRepository: LocalConnectionRepository(),
+            albumRepository: DemoApiAlbumRepository(),
           ),
         ),
         ChangeNotifierProvider(

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:vault/data/model/album/album_response_dto.dart';
 import 'package:vault/data/model/asset/asset_media_response_dto.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
@@ -17,6 +18,25 @@ class DemoApiClient {
     "Content-Type": "application/json",
     "x-api-key": apiKey,
   };
+
+  Future<Result<AlbumResponseDTO>> addAlbum(
+    ServerConnection serverConnection,
+    String albumName,
+  ) async {
+    final uri = Uri.parse("${serverConnection.serverUrl}/api/albums");
+
+    final response = await post(
+      uri,
+      headers: serverConnection.jsonHeaders,
+      body: jsonEncode(<String, String>{'albumName': albumName}),
+    );
+
+    if (response.statusCode != 201) {
+      return Result.error(Exception("Failed to add album"));
+    }
+
+    return Result.ok(AlbumResponseDTO.fromJson(jsonDecode(response.body)));
+  }
 
   Future<Result<List<AlbumResponseDTO>>> getAlbums(
     ServerConnection serverConnection,

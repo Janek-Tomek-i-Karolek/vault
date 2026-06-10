@@ -70,8 +70,6 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
                   text: AppLocalizations.of(context)!.connectAction,
                   onTap: isValid
                       ? () async {
-                          final AppLocalizations? localizations =
-                              AppLocalizations.of(context);
                           final scaffoldMessenger = ScaffoldMessenger.of(
                             context,
                           );
@@ -85,7 +83,7 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
                               SnackBar(
                                 content: Text(
                                   vm.errorMessage ??
-                                      localizations!.unknownErrorMessage,
+                                      localizations.unknownErrorMessage,
                                 ),
                                 backgroundColor: Theme.of(
                                   context,

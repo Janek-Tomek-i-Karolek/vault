@@ -6,6 +6,7 @@ import 'package:vault/ui/core/widgets/confirm_button.dart';
 import 'package:vault/ui/features/albums/viemodel/add_album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/utils/result.dart';
 
 class AddAlbumDialog extends StatefulWidget {
   const AddAlbumDialog({super.key});
@@ -89,11 +90,34 @@ class AddAlbumDialogState extends State<AddAlbumDialog> {
                       return ConfirmButton(
                         text: localizations.addAlbumAction,
                         onTap: isValid
-                            ? () {
-                                var res = vm.addAlbum();
+                            ? () async {
+                                final scaffoldMessenger = ScaffoldMessenger.of(
+                                  context,
+                                );
 
-                                if (context.mounted)
+                                var res = await vm.addAlbum(localizations);
+
+                                if (context.mounted) {
                                   Navigator.of(context).pop();
+                                }
+
+                                switch (res) {
+                                  case Error(:final error):
+                                    scaffoldMessenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          localizations.failedAddAlbumMessage(
+                                            error.toString(),
+                                          ),
+                                        ),
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  case Ok():
+                                }
                               }
                             : null,
                       );

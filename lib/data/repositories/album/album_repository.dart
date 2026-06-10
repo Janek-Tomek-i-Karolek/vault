@@ -9,6 +9,10 @@ abstract class AlbumRepository {
   Future<Result<List<AlbumPreview>>> getAlbumPreviews(
     ServerConnection serverConnection,
   );
+  Future<Result<Album>> addAlbum(
+    ServerConnection serverConnection,
+    String albumName,
+  );
   Future<Result<List<Album>>> getAlbums(ServerConnection serverConnection);
   Future<Result<Album>> getAlbum(ServerConnection serverConnection, String id);
   Future<Result<void>> addAssetsToAlbum(
@@ -21,6 +25,5 @@ abstract class AlbumRepository {
     Album album,
     Asset asset,
   );
-  Future<Result<void>> create(Album album);
   Future<Result<void>> delete(String id);
 }
