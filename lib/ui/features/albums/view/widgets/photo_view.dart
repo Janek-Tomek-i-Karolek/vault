@@ -168,9 +168,7 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     if (!_isZoomInteraction) {
       final imageSize = _imageKey.currentContext!.size;
       if (imageSize != null) {
-        final isHeightFilled = imageSize.height * _scale >= viewPortSize.height;
-        final isWidthFilled = imageSize.width * _scale >= viewPortSize.width;
-        final isFilled = isHeightFilled || isWidthFilled;
+        final isFilled = imageSize.height * _scale >= viewPortSize.height;
         if (isFilled != _lockInMainAxis) {
           _lockInMainAxis = isFilled;
         }
@@ -258,13 +256,13 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
                 child: SizedBox(
                   width: constraints.maxWidth,
                   height: constraints.maxHeight,
-                  child: Center(
-                    child: ValueListenableBuilder(
-                      valueListenable: _loadOriginal,
-                      builder: (context, isOriginal, child) {
-                        return _buildImage(isOriginal);
-                      },
-                    ),
+                  child: ValueListenableBuilder(
+                    valueListenable: _loadOriginal,
+                    builder: (context, isOriginal, child) {
+                      return Center(
+                        child: _buildImage(isOriginal, constraints),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -275,12 +273,42 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     );
   }
 
-  Image _buildImage(bool isOriginal) {
+  Image _buildImage(bool isOriginal, BoxConstraints constraints) {
+    final double originalWidth = widget.asset.width?.toDouble() ?? 0.0;
+    final double originalHeight = widget.asset.height?.toDouble() ?? 0.0;
+
+    if (originalWidth == 0 || originalHeight == 0) {
+      return Image.network(
+        isOriginal ? widget.asset.originalUri : widget.asset.previewUri,
+        headers: widget.asset.headers,
+        fit: BoxFit.contain,
+      );
+    }
+
+    final double aspectRatio = originalWidth / originalHeight;
+
+    double targetWidth;
+    double targetHeight;
+
+    if (originalHeight >= originalWidth) {
+      targetHeight = constraints.maxHeight.isInfinite
+          ? originalHeight
+          : constraints.maxHeight;
+      targetWidth = targetHeight * aspectRatio;
+    } else {
+      targetWidth = constraints.maxWidth.isInfinite
+          ? originalWidth
+          : constraints.maxWidth;
+      targetHeight = targetWidth / aspectRatio;
+    }
+
     return Image.network(
       key: _imageKey,
       isOriginal ? widget.asset.originalUri : widget.asset.previewUri,
       headers: widget.asset.headers,
       fit: BoxFit.contain,
+      width: targetWidth,
+      height: targetHeight,
       gaplessPlayback: true,
     );
   }
