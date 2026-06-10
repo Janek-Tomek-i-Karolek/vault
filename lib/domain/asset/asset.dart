@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_thumbhash/flutter_thumbhash.dart';
 import 'package:vault/data/model/asset/asset_response_dto.dart';
+import 'package:vault/domain/asset/details.dart';
 import 'package:vault/domain/server/server_connection.dart';
 
 class Asset {
@@ -11,6 +12,7 @@ class Asset {
   final int? height;
   final String mimeType;
   final bool isVideo;
+  final Details details;
   final ImageProvider? thumbImageProvider;
   Asset({
     this.width,
@@ -19,6 +21,7 @@ class Asset {
     required this.serverConnection,
     required this.mimeType,
     required this.isVideo,
+    required this.details,
     this.thumbImageProvider,
   });
 
@@ -32,6 +35,7 @@ class Asset {
     isVideo: dto.type == .VIDEO,
     width: dto.width,
     height: dto.height,
+    details: Details.fromDTO(dto.exifInfo, serverConnection),
     thumbImageProvider: dto.thumbhash != null
         ? ThumbHash.fromBase64(dto.thumbhash!).toImage()
         : null,

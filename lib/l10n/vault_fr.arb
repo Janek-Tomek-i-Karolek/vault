@@ -38,6 +38,20 @@
 
   "navBarTitle": "Menu",
   "albumsNavBarEntry": "Albums",
-  "serverListNavBarEntry": "Liste des serveurs"
+  "serverListNavBarEntry": "Liste des serveurs",
+
+  "weekday_1": "lundi",
+  "weekday_2": "mardi",
+  "weekday_3": "mercredi",
+  "weekday_4": "jeudi",
+  "weekday_5": "vendredi",
+  "weekday_6": "samedi",
+  "weekday_7": "dimanche",
+
+  "cameraLabel": "Caméra",
+  "lensLabel": "Objectif",
+  "serverLabel": "Serveur",
+  "resolutionLabel": "Résolution",
+  "sizeLabel": "Taille"
 }
 

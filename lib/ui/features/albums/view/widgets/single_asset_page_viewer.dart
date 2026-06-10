@@ -241,7 +241,7 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
                         opacity: isShowingDetails ? 1.0 : 0.0,
                         duration: Durations.short2,
                         child: AssetDetails(
-                          asset: widget.asset,
+                          details: widget.asset.details,
                           minHeight: viewportHeight - snapTarget,
                         ),
                       ),

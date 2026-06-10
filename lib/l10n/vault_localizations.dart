@@ -279,6 +279,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server List'**
   String get serverListNavBarEntry;
+
+  /// No description provided for @weekday_1.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get weekday_1;
+
+  /// No description provided for @weekday_2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get weekday_2;
+
+  /// No description provided for @weekday_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get weekday_3;
+
+  /// No description provided for @weekday_4.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get weekday_4;
+
+  /// No description provided for @weekday_5.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get weekday_5;
+
+  /// No description provided for @weekday_6.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get weekday_6;
+
+  /// No description provided for @weekday_7.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get weekday_7;
+
+  /// No description provided for @cameraLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get cameraLabel;
+
+  /// No description provided for @lensLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lens'**
+  String get lensLabel;
+
+  /// No description provided for @serverLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Server'**
+  String get serverLabel;
+
+  /// No description provided for @resolutionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution'**
+  String get resolutionLabel;
+
+  /// No description provided for @sizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get sizeLabel;
 }
 
 class _AppLocalizationsDelegate

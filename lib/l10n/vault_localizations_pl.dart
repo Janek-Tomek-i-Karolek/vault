@@ -103,4 +103,40 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get serverListNavBarEntry => 'Lista Serwerów';
+
+  @override
+  String get weekday_1 => 'Poniedziałek';
+
+  @override
+  String get weekday_2 => 'Wtorek';
+
+  @override
+  String get weekday_3 => 'Środa';
+
+  @override
+  String get weekday_4 => 'Czwartek';
+
+  @override
+  String get weekday_5 => 'Piątek';
+
+  @override
+  String get weekday_6 => 'Sobota';
+
+  @override
+  String get weekday_7 => 'Niedziela';
+
+  @override
+  String get cameraLabel => 'Aparat';
+
+  @override
+  String get lensLabel => 'Obiektyw';
+
+  @override
+  String get serverLabel => 'Serwer';
+
+  @override
+  String get resolutionLabel => 'Rozdzielczość';
+
+  @override
+  String get sizeLabel => 'Rozmiar';
 }
