@@ -3,6 +3,12 @@
 
   "register": "S'inscrire",
 
+  "downloadPhoto": "Download Photo",
+  "deletePhoto": "Delete Photo",
+  "sharePhoto": "Share Photo",
+  "yes": "Yes",
+  "no": "No",
+
   "connectAction": "Connecter",
   "saveAction": "Sauvegarder",
   "loginAction": "Se connecter",

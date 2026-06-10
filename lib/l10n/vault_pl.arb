@@ -1,6 +1,11 @@
 {
     "welcome": "Witamy w kolonii!",
     "register": "Zarejestruj",
+    "downloadPhoto": "Pobierz zdjęcie",
+    "deletePhoto": "Usuń zdjęcie",
+    "sharePhoto": "Udostępnij zdjęcie",
+  	"yes": "Tak",
+  	"no": "Nie",
 
     "connectAction": "Połącz",
     "saveAction": "Zapisz",
@@ -10,6 +15,8 @@
     "addServerAction": "Dodaj serwer",
     "addPhotosAction": "Dodaj zdjęcia",
     "addAlbumAction": "Dodaj album",
+
+
 
     "usernameLabel": "Nazwa użytkownika",
     "emailLabel": "E-mail",

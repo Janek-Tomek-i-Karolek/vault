@@ -112,6 +112,36 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get register;
 
+  /// No description provided for @downloadPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Photo'**
+  String get downloadPhoto;
+
+  /// No description provided for @deletePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Photo'**
+  String get deletePhoto;
+
+  /// No description provided for @sharePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Photo'**
+  String get sharePhoto;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
   /// No description provided for @connectAction.
   ///
   /// In en, this message translates to:

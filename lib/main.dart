@@ -79,6 +79,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        locale: const Locale('pl'),
         title: 'vault',
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),

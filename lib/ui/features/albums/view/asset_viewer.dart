@@ -4,6 +4,7 @@ import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/extensions/FastScrollPhysics.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/ui/features/albums/view/widgets/pointer_listener.dart';
@@ -77,6 +78,7 @@ class _AssetViewerState extends State<AssetViewer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -160,81 +162,88 @@ class _AssetViewerState extends State<AssetViewer> {
     );
   }
 
-  Widget _removeButton(BuildContext context, ThemeData theme) =>
-      _floatingButton(
-        theme: theme,
-        icon: Icons.delete_outline,
-        tooltip: 'Remove Photo',
-        onPressed: () async {
-          final bool? shouldDelete = await showDialog<bool>(
-            context: context,
-            builder: (dialogContext) {
-              return AlertDialog(
-                title: const Text("Delete asset?"),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(true),
-                    child: const Text('Yes'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(false),
-                    style: TextButton.styleFrom(foregroundColor: Colors.red),
-                    child: const Text('No'),
-                  ),
-                ],
-              );
-            },
-          );
-          final deleteIndex = _currentIndex;
-          final deleteAsset = widget.assets[deleteIndex];
+  Widget _removeButton(BuildContext context, ThemeData theme) {
+    final localizations = AppLocalizations.of(context)!;
+    return _floatingButton(
+      theme: theme,
+      icon: Icons.delete_outline,
+      tooltip: localizations.deletePhoto,
+      onPressed: () async {
+        final bool? shouldDelete = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) {
+            return AlertDialog(
+              title: Text(localizations.deletePhoto),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(true),
+                  child: Text(localizations.yes),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: Text(localizations.no),
+                ),
+              ],
+            );
+          },
+        );
+        final deleteIndex = _currentIndex;
+        final deleteAsset = widget.assets[deleteIndex];
 
-          if (shouldDelete == true) {
-            final totalAssets = widget.assets.length;
+        if (shouldDelete == true) {
+          final totalAssets = widget.assets.length;
 
-            if (_currentIndex == totalAssets - 1) {
-              await _pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            } else {
-              await _pageController.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-
-            if (context.mounted) {
-              await context.read<AlbumViewModel>().removeAssetFromAlbum(
-                widget.serverConnection,
-                widget.album,
-                deleteAsset,
-              );
-            }
-            setState(() {
-              widget.assets.removeAt(deleteIndex);
-            });
-
-            _pageController.jumpToPage(deleteIndex);
+          if (_currentIndex == totalAssets - 1) {
+            await _pageController.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {
+            await _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
           }
-        },
-      );
 
-  Widget _shareButton(BuildContext context, ThemeData theme) => _floatingButton(
-    theme: theme,
-    icon: Icons.share,
-    tooltip: 'Share Photo',
-    onPressed: () async {
-      print("share pressed");
-    },
-  );
+          if (context.mounted) {
+            await context.read<AlbumViewModel>().removeAssetFromAlbum(
+              widget.serverConnection,
+              widget.album,
+              deleteAsset,
+            );
+          }
+          setState(() {
+            widget.assets.removeAt(deleteIndex);
+          });
 
-  Widget _downloadButton(BuildContext context, ThemeData theme) =>
-      _floatingButton(
-        theme: theme,
-        icon: Icons.download,
-        tooltip: 'Download Photo',
-        onPressed: () async {
-          print("Download pressed");
-        },
-      );
+          _pageController.jumpToPage(deleteIndex);
+        }
+      },
+    );
+  }
+
+  Widget _shareButton(BuildContext context, ThemeData theme) {
+    final localizations = AppLocalizations.of(context)!;
+    return _floatingButton(
+      theme: theme,
+      icon: Icons.share,
+      tooltip: localizations.sharePhoto,
+      onPressed: () async {
+        print("share pressed");
+      },
+    );
+  }
+
+  Widget _downloadButton(BuildContext context, ThemeData theme) {
+    final localizations = AppLocalizations.of(context)!;
+    return _floatingButton(
+      theme: theme,
+      icon: Icons.download,
+      tooltip: localizations.downloadPhoto,
+      onPressed: () async {
+        print("Download pressed");
+      },
+    );
+  }
 }

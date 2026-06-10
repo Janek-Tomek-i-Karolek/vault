@@ -15,6 +15,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get register => 'S\'inscrire';
 
   @override
+  String get downloadPhoto => 'Download Photo';
+
+  @override
+  String get deletePhoto => 'Delete Photo';
+
+  @override
+  String get sharePhoto => 'Share Photo';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
   String get connectAction => 'Connecter';
 
   @override

@@ -5,6 +5,11 @@
   },
 
   "register": "Register",
+  "downloadPhoto": "Download Photo",
+  "deletePhoto": "Delete Photo",
+  "sharePhoto": "Share Photo",
+  "yes": "Yes",
+  "no": "No",
 
   "connectAction": "Connect",
   "saveAction": "Save",

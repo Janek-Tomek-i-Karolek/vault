@@ -15,6 +15,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get register => 'Zarejestruj';
 
   @override
+  String get downloadPhoto => 'Pobierz zdjęcie';
+
+  @override
+  String get deletePhoto => 'Usuń zdjęcie';
+
+  @override
+  String get sharePhoto => 'Udostępnij zdjęcie';
+
+  @override
+  String get yes => 'Tak';
+
+  @override
+  String get no => 'Nie';
+
+  @override
   String get connectAction => 'Połącz';
 
   @override
