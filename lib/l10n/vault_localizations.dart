@@ -154,6 +154,12 @@ abstract class AppLocalizations {
   /// **'Add Photos'**
   String get addPhotosAction;
 
+  /// No description provided for @addAlbumAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add album'**
+  String get addAlbumAction;
+
   /// No description provided for @usernameLabel.
   ///
   /// In en, this message translates to:
@@ -171,6 +177,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password'**
   String get passwordLabel;
+
+  /// No description provided for @albumNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Album name'**
+  String get albumNameLabel;
+
+  /// No description provided for @serverUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Server URL'**
+  String get serverUrlLabel;
+
+  /// No description provided for @apiKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Api Key'**
+  String get apiKeyLabel;
 
   /// No description provided for @alreadyRegisteredQuestion.
   ///
@@ -190,17 +214,11 @@ abstract class AppLocalizations {
   /// **'Vault Server'**
   String get vaultServerLabel;
 
-  /// No description provided for @serverUrlLabel.
+  /// Generic invalid values error message
   ///
   /// In en, this message translates to:
-  /// **'Server URL'**
-  String get serverUrlLabel;
-
-  /// No description provided for @apiKeyLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Api Key'**
-  String get apiKeyLabel;
+  /// **'{count, plural, =1{Invalid value} other{Invalid values}}'**
+  String invalidValuesErrorMessage(num count);
 
   /// No description provided for @unknownErrorMessage.
   ///
@@ -225,6 +243,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save connection: {error}'**
   String failedConnectionSaveMessage(Object error);
+
+  /// No description provided for @failedAddAlbumMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add album: {error}'**
+  String failedAddAlbumMessage(Object error);
 
   /// No description provided for @loadingIndicator.
   ///

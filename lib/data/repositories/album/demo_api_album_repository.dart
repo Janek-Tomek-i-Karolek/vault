@@ -10,12 +10,6 @@ import 'package:vault/utils/result.dart';
 
 class DemoApiAlbumRepository extends AlbumRepository {
   @override
-  Future<Result<void>> create(Album album) {
-    // TODO: implement create
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Result<void>> addAssetsToAlbum(
     ServerConnection serverConnection,
     Album album,
@@ -49,6 +43,24 @@ class DemoApiAlbumRepository extends AlbumRepository {
   Future<Result<void>> delete(String id) {
     // TODO: implement delete
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<Album>> addAlbum(
+    ServerConnection serverConnection,
+    String albumName,
+  ) async {
+    Result<AlbumResponseDTO> albumRes = await DemoApiClient().addAlbum(
+      serverConnection,
+      albumName,
+    );
+
+    return switch (albumRes) {
+      Ok(:final value) => Result.ok(
+        Album.fromDTO(dto: value, serverConnection: serverConnection),
+      ),
+      Error(:final error) => Result.error(error),
+    };
   }
 
   @override

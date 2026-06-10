@@ -7,9 +7,11 @@ import 'package:vault/data/repositories/connection/connection_repository.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
+import 'package:vault/ui/features/albums/viemodel/add_album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/asset_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/add_album_dialog.dart';
 import 'package:vault/ui/features/albums/view/album_screen.dart';
 import 'package:vault/ui/features/albums/view/albums_screen.dart';
 import 'package:vault/ui/features/auth/view/login_screen.dart';
@@ -39,6 +41,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(
+          create: (_) => AddAlbumViewModel(
+            connectionRepository: LocalConnectionRepository(),
+            albumRepository: DemoApiAlbumRepository(),
+          ),
+        ),
         ChangeNotifierProvider(
           create: (_) => ServersViewModel(
             connectionRepository:
@@ -94,6 +102,15 @@ class MyApp extends StatelessWidget {
               barrierColor: Colors.black54,
               pageBuilder: (_, _, _) {
                 return const ConnectionDialog();
+              },
+            );
+          } else if (settings.name == "/add-album") {
+            return PageRouteBuilder(
+              opaque: false,
+              barrierDismissible: true,
+              barrierColor: Colors.black54,
+              pageBuilder: (_, _, _) {
+                return const AddAlbumDialog();
               },
             );
           }

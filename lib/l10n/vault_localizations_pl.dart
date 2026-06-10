@@ -36,6 +36,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get addPhotosAction => 'Dodaj zdjęcia';
 
   @override
+  String get addAlbumAction => 'Dodaj album';
+
+  @override
   String get usernameLabel => 'Nazwa użytkownika';
 
   @override
@@ -43,6 +46,15 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get passwordLabel => 'Hasło';
+
+  @override
+  String get albumNameLabel => 'Nazwa albumu';
+
+  @override
+  String get serverUrlLabel => 'URL Serwera';
+
+  @override
+  String get apiKeyLabel => 'Klucz Api';
 
   @override
   String get alreadyRegisteredQuestion => 'Masz już konto?';
@@ -54,10 +66,20 @@ class AppLocalizationsPl extends AppLocalizations {
   String get vaultServerLabel => 'Serwer Vault';
 
   @override
-  String get serverUrlLabel => 'URL Serwera';
+  String invalidValuesErrorMessage(num count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
+      locale: localeName,
+    );
+    final String countString = countNumberFormat.format(count);
 
-  @override
-  String get apiKeyLabel => 'Klucz Api';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Nieprawidłowe wartości',
+      one: 'Nieprawidłowa wartośc',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get unknownErrorMessage => 'Wystąpił nieoczekiwany błąd';
@@ -75,6 +97,11 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String failedConnectionSaveMessage(Object error) {
     return 'Nie udało się zapisać połączenia: $error';
+  }
+
+  @override
+  String failedAddAlbumMessage(Object error) {
+    return 'Nie udało się dodać albumu: $error';
   }
 
   @override

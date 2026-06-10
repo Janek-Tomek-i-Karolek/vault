@@ -36,6 +36,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPhotosAction => 'Add Photos';
 
   @override
+  String get addAlbumAction => 'Add album';
+
+  @override
   String get usernameLabel => 'Username';
 
   @override
@@ -43,6 +46,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordLabel => 'Password';
+
+  @override
+  String get albumNameLabel => 'Album name';
+
+  @override
+  String get serverUrlLabel => 'Server URL';
+
+  @override
+  String get apiKeyLabel => 'Api Key';
 
   @override
   String get alreadyRegisteredQuestion => 'Already have an account?';
@@ -54,10 +66,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vaultServerLabel => 'Vault Server';
 
   @override
-  String get serverUrlLabel => 'Server URL';
+  String invalidValuesErrorMessage(num count) {
+    final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
+      locale: localeName,
+    );
+    final String countString = countNumberFormat.format(count);
 
-  @override
-  String get apiKeyLabel => 'Api Key';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Invalid values',
+      one: 'Invalid value',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get unknownErrorMessage => 'An unknown error occured';
@@ -75,6 +97,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String failedConnectionSaveMessage(Object error) {
     return 'Failed to save connection: $error';
+  }
+
+  @override
+  String failedAddAlbumMessage(Object error) {
+    return 'Failed to add album: $error';
   }
 
   @override

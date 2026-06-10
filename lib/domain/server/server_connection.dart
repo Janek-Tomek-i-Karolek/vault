@@ -16,4 +16,13 @@ class ServerConnection {
       );
 
   Map<String, dynamic> toJson() => {'serverUrl': serverUrl, 'apiKey': apiKey};
+
+  @override
+  bool operator ==(Object other) =>
+      (other is ServerConnection &&
+      other.serverUrl == serverUrl &&
+      other.apiKey == apiKey);
+
+  @override
+  int get hashCode => serverUrl.hashCode ^ apiKey.hashCode;
 }

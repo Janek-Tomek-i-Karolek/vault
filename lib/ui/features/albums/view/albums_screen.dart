@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
+import 'package:vault/ui/features/albums/viemodel/add_album_viewmodel.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
+import 'package:vault/ui/features/albums/view/add_album_dialog.dart';
 import 'package:vault/ui/features/albums/view/widgets/album_preview_tile.dart';
 
 class AlbumsScreen extends StatefulWidget {
@@ -14,6 +16,9 @@ class AlbumsScreen extends StatefulWidget {
 }
 
 class _AlbumsScreenState extends State<AlbumsScreen> {
+  String _currentSearchTerm = "";
+  SearchController? _searchController;
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +28,6 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Lazy preview loading
     final viewModel = context.read<AlbumsViewModel>();
     final theme = Theme.of(context);
     final AppLocalizations? localizations = AppLocalizations.of(context);
@@ -44,6 +48,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                 height: 50,
                 child: SearchAnchor(
                   builder: (BuildContext context, SearchController controller) {
+                    _searchController = controller;
                     return SearchBar(
                       controller: controller,
                       padding: const WidgetStatePropertyAll<EdgeInsets>(
@@ -52,6 +57,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                       onTap: () {},
                       onChanged: (input) {
                         viewModel.filterPreviews(input);
+                        _currentSearchTerm = input;
                       },
                       leading: const Icon(Icons.search),
                     );
@@ -105,6 +111,19 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () async {
+          await Navigator.pushNamed(context, "/add-album");
+
+          if (context.mounted &&
+              context.read<AddAlbumViewModel>().didAddAlbum()) {
+            await viewModel.fetchPreviews();
+            _searchController?.clear();
+          }
+        },
+        tooltip: localizations.addAlbumAction,
+        child: const Icon(Icons.add),
       ),
     );
   }

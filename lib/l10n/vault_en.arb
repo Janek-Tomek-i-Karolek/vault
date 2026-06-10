@@ -13,23 +13,36 @@
   "logoutAction": "Sign out",
   "addServerAction": "Add Server",
   "addPhotosAction": "Add Photos",
+  "addAlbumAction": "Add album",
 
   "usernameLabel": "Username",
   "emailLabel": "Email",
   "passwordLabel": "Password",
+  "albumNameLabel": "Album name",
+  "serverUrlLabel": "Server URL",
+  "apiKeyLabel": "Api Key",
 
   "alreadyRegisteredQuestion": "Already have an account?",
   "forgotPasswordQuestion": "Forgot password?",
 
   "vaultServerLabel": "Vault Server",
 
-  "serverUrlLabel": "Server URL",
-  "apiKeyLabel": "Api Key",
 
+  "invalidValuesErrorMessage": "{count, plural, =1{Invalid value} other{Invalid values}}",
+  "@invalidValuesErrorMessage": {
+    "description": "Generic invalid values error message",
+    "placeholders": {
+      "count": {
+        "type": "num",
+        "format": "compact"
+      }
+    }
+  },
   "unknownErrorMessage": "An unknown error occured",
   "genericErrorMessage": "An error occured: {error}",
   "failedConnectionTestMessage": "Connection test failed: {error}",
   "failedConnectionSaveMessage": "Failed to save connection: {error}",
+  "failedAddAlbumMessage": "Failed to add album: {error}",
 
   "loadingIndicator": "Loading...",
 
