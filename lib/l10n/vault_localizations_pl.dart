@@ -94,4 +94,13 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get appTitle => 'Vault';
+
+  @override
+  String get navBarTitle => 'Menu';
+
+  @override
+  String get albumsNavBarEntry => 'Albums';
+
+  @override
+  String get serverListNavBarEntry => 'Server List';
 }

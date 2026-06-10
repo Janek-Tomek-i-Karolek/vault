@@ -37,6 +37,10 @@
   "vaultsScreenTitle": "My Vaults",
   "albumScreenTitle": "Album",
   "albumsScreenTitle": "Albums",
-  "appTitle": "Vault"
+  "appTitle": "Vault",
+
+  "navBarTitle": "Menu",
+  "albumsNavBarEntry": "Albums",
+  "serverListNavBarEntry": "Server List"
 }
 

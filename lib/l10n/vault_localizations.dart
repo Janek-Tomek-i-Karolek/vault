@@ -259,6 +259,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault'**
   String get appTitle;
+
+  /// No description provided for @navBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get navBarTitle;
+
+  /// No description provided for @albumsNavBarEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albumsNavBarEntry;
+
+  /// No description provided for @serverListNavBarEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Server List'**
+  String get serverListNavBarEntry;
 }
 
 class _AppLocalizationsDelegate

@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 
 class SidebarMenu extends StatelessWidget {
   const SidebarMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Drawer(
       child: ListView(
         children: [
-          const SizedBox(
+          SizedBox(
             height: 70,
             child: DrawerHeader(
               decoration: BoxDecoration(),
-              child: Text('Menu', style: TextStyle(fontSize: 24)),
+              child: Text(
+                localizations!.navBarTitle,
+                style: TextStyle(fontSize: 24),
+              ),
             ),
           ),
           ListTile(
             leading: const Icon(Icons.photo_album),
-            title: const Text('Albums'),
+            title: Text(localizations.albumsNavBarEntry),
             onTap: () => Navigator.pushNamed(context, '/albums'),
           ),
           ListTile(
             leading: const Icon(Icons.dns),
-            title: const Text('Server List'),
+            title: Text(localizations.serverListNavBarEntry),
             onTap: () => Navigator.pushNamed(context, '/server-list'),
           ),
           // Template for future nav options
