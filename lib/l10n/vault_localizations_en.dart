@@ -15,9 +15,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register => 'Register';
 
   @override
-  String get unknownErrorMessage => 'An unknown error occured';
-
-  @override
   String get connectAction => 'Connect';
 
   @override
@@ -34,6 +31,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addServerAction => 'Add Server';
+
+  @override
+  String get addPhotosAction => 'Add Photos';
 
   @override
   String get usernameLabel => 'Username';
@@ -60,6 +60,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apiKeyLabel => 'Api Key';
 
   @override
+  String get unknownErrorMessage => 'An unknown error occured';
+
+  @override
+  String genericErrorMessage(Object error) {
+    return 'An error occured: $error';
+  }
+
+  @override
   String failedConnectionTestMessage(Object error) {
     return 'Connection test failed: $error';
   }
@@ -70,10 +78,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get loadingIndicator => 'Loading...';
+
+  @override
   String get profileScreenTitle => 'Profile';
 
   @override
   String get vaultsScreenTitle => 'My Vaults';
+
+  @override
+  String get albumScreenTitle => 'Album';
+
+  @override
+  String get albumsScreenTitle => 'Albums';
 
   @override
   String get appTitle => 'Vault';

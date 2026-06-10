@@ -110,12 +110,6 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get register;
 
-  /// No description provided for @unknownErrorMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'An unknown error occured'**
-  String get unknownErrorMessage;
-
   /// No description provided for @connectAction.
   ///
   /// In en, this message translates to:
@@ -151,6 +145,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Server'**
   String get addServerAction;
+
+  /// No description provided for @addPhotosAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get addPhotosAction;
 
   /// No description provided for @usernameLabel.
   ///
@@ -200,6 +200,18 @@ abstract class AppLocalizations {
   /// **'Api Key'**
   String get apiKeyLabel;
 
+  /// No description provided for @unknownErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occured'**
+  String get unknownErrorMessage;
+
+  /// No description provided for @genericErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occured: {error}'**
+  String genericErrorMessage(Object error);
+
   /// No description provided for @failedConnectionTestMessage.
   ///
   /// In en, this message translates to:
@@ -212,6 +224,12 @@ abstract class AppLocalizations {
   /// **'Failed to save connection: {error}'**
   String failedConnectionSaveMessage(Object error);
 
+  /// No description provided for @loadingIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loadingIndicator;
+
   /// No description provided for @profileScreenTitle.
   ///
   /// In en, this message translates to:
@@ -223,6 +241,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Vaults'**
   String get vaultsScreenTitle;
+
+  /// No description provided for @albumScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get albumScreenTitle;
+
+  /// No description provided for @albumsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albumsScreenTitle;
 
   /// No description provided for @appTitle.
   ///
