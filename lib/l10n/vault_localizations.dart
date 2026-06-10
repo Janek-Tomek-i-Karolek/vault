@@ -128,6 +128,18 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveAction;
 
+  /// No description provided for @loginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginAction;
+
+  /// No description provided for @createNewAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new account'**
+  String get createNewAccountAction;
+
   /// No description provided for @logoutAction.
   ///
   /// In en, this message translates to:
@@ -151,6 +163,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email'**
   String get emailLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @alreadyRegisteredQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyRegisteredQuestion;
+
+  /// No description provided for @forgotPasswordQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordQuestion;
 
   /// No description provided for @vaultServerLabel.
   ///
@@ -193,6 +223,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Vaults'**
   String get vaultsScreenTitle;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault'**
+  String get appTitle;
 }
 
 class _AppLocalizationsDelegate

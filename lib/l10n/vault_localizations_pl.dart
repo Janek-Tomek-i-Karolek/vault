@@ -24,6 +24,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get saveAction => 'Save';
 
   @override
+  String get loginAction => 'Login';
+
+  @override
+  String get createNewAccountAction => 'Create new account';
+
+  @override
   String get logoutAction => 'Sign out';
 
   @override
@@ -34,6 +40,15 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get emailLabel => 'Email';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get alreadyRegisteredQuestion => 'Already have an account?';
+
+  @override
+  String get forgotPasswordQuestion => 'Forgot password?';
 
   @override
   String get vaultServerLabel => 'Vault Server';
@@ -59,4 +74,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get vaultsScreenTitle => 'My Vaults';
+
+  @override
+  String get appTitle => 'Vault';
 }
