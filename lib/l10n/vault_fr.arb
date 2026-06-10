@@ -1,0 +1,43 @@
+{
+  "welcome": "Bienvenue",
+
+  "register": "S'inscrire",
+
+  "connectAction": "Connecter",
+  "saveAction": "Sauvegarder",
+  "loginAction": "Se connecter",
+  "createNewAccountAction": "Créer un compte",
+  "logoutAction": "Déconnexion",
+  "addServerAction": "Ajouter un serveur",
+  "addPhotosAction": "Ajouter des photos",
+
+  "usernameLabel": "Nom d'utilisateur",
+  "emailLabel": "E-mail",
+  "passwordLabel": "Mot de passe",
+
+  "alreadyRegisteredQuestion": "Vous avez déjà un compte?",
+  "forgotPasswordQuestion": "Mot de passe oublié?",
+
+  "vaultServerLabel": "Un Serveur Vault",
+
+  "serverUrlLabel": "L'URL du serveur",
+  "apiKeyLabel": "Clé API",
+
+  "unknownErrorMessage": "Une erruer inconnue est survenue",
+  "genericErrorMessage": "Une erreur est survenue: {error}",
+  "failedConnectionTestMessage": "Échec du test de connexion: {error}",
+  "failedConnectionSaveMessage": "Échec de l'enregistrement de la connexion: {error}",
+
+  "loadingIndicator": "Chargement...",
+
+  "profileScreenTitle": "Profil",
+  "vaultsScreenTitle": "Mes Vaults",
+  "albumScreenTitle": "Album",
+  "albumsScreenTitle": "Albums",
+  "appTitle": "Vault",
+
+  "navBarTitle": "Menu",
+  "albumsNavBarEntry": "Albums",
+  "serverListNavBarEntry": "Liste des serveurs"
+}
+
