@@ -50,6 +50,7 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   double _scale = 1.0;
   bool _lockInMainAxis = false;
   bool _isZoomInteraction = false;
+  bool _wasInitiallyLoaded = false;
   Animation<Matrix4>? _animationZoom;
   Offset? _doubleTapLocation;
 
@@ -212,9 +213,11 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // notify listeners about image size
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => widget.onPageBuild ?? (_imageKey.currentContext!.size!),
     );
+    // set Boundary Margin once
     WidgetsBinding.instance.addPostFrameCallback((_) => _setBoundaryMargin());
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -258,9 +261,9 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
                   height: constraints.maxHeight,
                   child: ValueListenableBuilder(
                     valueListenable: _loadOriginal,
-                    builder: (context, isOriginal, child) {
+                    builder: (_, loadOriginal, _) {
                       return Center(
-                        child: _buildImage(isOriginal, constraints),
+                        child: _buildImage(loadOriginal, constraints),
                       );
                     },
                   ),
@@ -273,13 +276,13 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     );
   }
 
-  Image _buildImage(bool isOriginal, BoxConstraints constraints) {
+  Image _buildImage(bool original, BoxConstraints constraints) {
     final double originalWidth = widget.asset.width?.toDouble() ?? 0.0;
     final double originalHeight = widget.asset.height?.toDouble() ?? 0.0;
 
     if (originalWidth == 0 || originalHeight == 0) {
       return Image.network(
-        isOriginal ? widget.asset.originalUri : widget.asset.previewUri,
+        original ? widget.asset.originalUri : widget.asset.previewUri,
         headers: widget.asset.headers,
         fit: BoxFit.contain,
       );
@@ -304,14 +307,19 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
 
     return Image.network(
       key: _imageKey,
-      isOriginal ? widget.asset.originalUri : widget.asset.previewUri,
+      original ? widget.asset.originalUri : widget.asset.previewUri,
       headers: widget.asset.headers,
       fit: BoxFit.contain,
       width: targetWidth,
       height: targetHeight,
       gaplessPlayback: true,
       frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded || frame != null) {
+        if (wasSynchronouslyLoaded || frame != null || _wasInitiallyLoaded) {
+          if (!_wasInitiallyLoaded) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => _wasInitiallyLoaded = true,
+            );
+          }
           return child;
         }
         final thumbhash = Image(
