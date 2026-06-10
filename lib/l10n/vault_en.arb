@@ -14,7 +14,11 @@
 
   "usernameLabel": "Username",
   "emailLabel": "Email",
+
   "vaultServerLabel": "Vault Server",
+
+  "serverUrlLabel": "Server URL",
+  "apiKeyLabel": "Api Key",
 
   "failedConnectionTestMessage": "Connection test failed: {error}",
   "failedConnectionSaveMessage": "Failed to save connection: {error}",

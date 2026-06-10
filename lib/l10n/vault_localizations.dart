@@ -158,6 +158,18 @@ abstract class AppLocalizations {
   /// **'Vault Server'**
   String get vaultServerLabel;
 
+  /// No description provided for @serverUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Server URL'**
+  String get serverUrlLabel;
+
+  /// No description provided for @apiKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Api Key'**
+  String get apiKeyLabel;
+
   /// No description provided for @failedConnectionTestMessage.
   ///
   /// In en, this message translates to:

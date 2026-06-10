@@ -39,6 +39,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get vaultServerLabel => 'Vault Server';
 
   @override
+  String get serverUrlLabel => 'Server URL';
+
+  @override
+  String get apiKeyLabel => 'Api Key';
+
+  @override
   String failedConnectionTestMessage(Object error) {
     return 'Nie udało się połączyć: $error';
   }

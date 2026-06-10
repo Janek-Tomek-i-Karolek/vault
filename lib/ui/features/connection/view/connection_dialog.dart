@@ -27,6 +27,7 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
@@ -41,8 +42,8 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
               controller: _serverUrlController,
               onChanged: (value) =>
                   context.read<ConnectionViewModel>().updateServerUrl(value),
-              decoration: const InputDecoration(
-                label: Text("Server URL"),
+              decoration: InputDecoration(
+                label: Text(localizations!.serverUrlLabel),
                 prefixIcon: Icon(Icons.domain),
               ),
             ),
@@ -53,8 +54,8 @@ class _ConnectionDialogState extends State<ConnectionDialog> {
               controller: _apiKeyController,
               onChanged: (value) =>
                   context.read<ConnectionViewModel>().updateApiKey(value),
-              decoration: const InputDecoration(
-                label: Text("Api Key"),
+              decoration: InputDecoration(
+                label: Text(localizations.apiKeyLabel),
                 prefixIcon: Icon(Icons.key),
               ),
               keyboardType: TextInputType.visiblePassword,

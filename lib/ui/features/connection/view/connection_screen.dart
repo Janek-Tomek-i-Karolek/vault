@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/features/connection/viewmodel/connection_viewmodel.dart';
 import 'package:vault/ui/core/widgets/confirm_button.dart';
 
@@ -24,6 +25,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -40,8 +42,8 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                 onChanged: (value) {
                   context.read<ConnectionViewModel>().updateServerUrl(value);
                 },
-                decoration: const InputDecoration(
-                  label: Text("Server URL"),
+                decoration: InputDecoration(
+                  label: Text(localizations!.serverUrlLabel),
                   prefixIcon: Icon(Icons.domain),
                 ),
               ),
@@ -54,8 +56,8 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                 onChanged: (value) {
                   context.read<ConnectionViewModel>().updateApiKey(value);
                 },
-                decoration: const InputDecoration(
-                  label: Text("Api Key"),
+                decoration: InputDecoration(
+                  label: Text(localizations.apiKeyLabel),
                   prefixIcon: Icon(Icons.key),
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -65,9 +67,11 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                 selector: (_, cvm) => cvm.isConnectionFormValid,
                 builder: (_, isValid, _) {
                   return ConfirmButton(
-                    text: "Connect",
+                    text: localizations.connectAction,
                     onTap: isValid
-                        ? () => context.read<ConnectionViewModel>().connect()
+                        ? () => context.read<ConnectionViewModel>().connect(
+                            localizations,
+                          )
                         : null,
                   );
                 },
