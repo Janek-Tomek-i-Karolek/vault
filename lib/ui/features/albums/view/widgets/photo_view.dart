@@ -43,11 +43,12 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   static const int kZoomDuration = 300;
 
   late final AnimationController _animationControllerZoom;
-  late Size size;
+  late Size viewPortSize;
   late EdgeInsets imageBoundaryMargin;
 
-  final ValueNotifier<bool> _isFull = ValueNotifier<bool>(false);
-  final ValueNotifier<bool> _isOriginal = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _loadOriginal = ValueNotifier<bool>(false);
+  double _scale = 1.0;
+  bool _lockInMainAxis = false;
   bool _isZoomInteraction = false;
   Animation<Matrix4>? _animationZoom;
   Offset? _doubleTapLocation;
@@ -64,7 +65,7 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   ({double d1, double d2}) _calculateDeltas({required Delta axis}) {
     final imageSize = _imageKey.currentContext!.size!;
 
-    final center = Offset(size.width / 2, size.height / 2);
+    final center = Offset(viewPortSize.width / 2, viewPortSize.height / 2);
     late final double d1;
     late final double d2;
 
@@ -76,13 +77,13 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     ) = switch (axis) {
       Delta.height => (
         imageSize.height,
-        size.height,
+        viewPortSize.height,
         center.dy,
         _doubleTapLocation!.dy,
       ),
       Delta.width => (
         imageSize.width,
-        size.width,
+        viewPortSize.width,
         center.dx,
         _doubleTapLocation!.dx,
       ),
@@ -143,39 +144,56 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
       // this means that the user is using two fingers
       // i want to listen to scaling only
       _isZoomInteraction = true;
-      _isFull.value = false;
+      _lockInMainAxis = false;
     }
   }
 
   void _onInteractionEnd(ScaleEndDetails details) {
     _isZoomInteraction = false;
-
-    // update boundary margin aftet reenabling
     _onTransformationChange();
   }
 
   void _onTransformationChange() {
     final scale = _transformationController.value.getMaxScaleOnAxis();
-
-    // notify parent layout
-    widget.onZoom(scale);
-
-    // track resolution threshold
-    _isOriginal.value = scale >= kOriginalScaleThreshold;
+    if (scale != _scale) {
+      // notify parent layout
+      widget.onZoom(scale);
+      setState(() {
+        _scale = scale;
+      });
+    }
+    _loadOriginal.value = _scale >= kOriginalScaleThreshold;
 
     // update boundary margin constraints
     if (!_isZoomInteraction) {
       final imageSize = _imageKey.currentContext!.size;
       if (imageSize != null) {
-        final isFull = imageSize.height * scale >= size.height;
-        if (isFull != _isFull.value) {
-          final yMargin = (size.height - imageSize.height) / 2;
-          imageBoundaryMargin = EdgeInsets.fromLTRB(0, -yMargin, 0, -yMargin);
-          _isFull.value = isFull;
+        final isHeightFilled = imageSize.height * _scale >= viewPortSize.height;
+        final isWidthFilled = imageSize.width * _scale >= viewPortSize.width;
+        final isFilled = isHeightFilled || isWidthFilled;
+        if (isFilled != _lockInMainAxis) {
+          _lockInMainAxis = isFilled;
         }
       }
     }
   }
+
+  void _setBoundaryMargin() {
+    final imageSize = _imageKey.currentContext!.size;
+    if (imageSize != null) {
+      final yMargin = (viewPortSize.height - imageSize.height) / 2;
+      final xMargin = (viewPortSize.width - imageSize.width) / 2;
+      imageBoundaryMargin = EdgeInsets.fromLTRB(
+        -xMargin,
+        -yMargin,
+        -xMargin,
+        -yMargin,
+      );
+    }
+  }
+
+  bool get isZoomGestureDisabled => widget.disableZoomGestures ?? false;
+  bool get _isZoomed => _scale != 1.0;
 
   @override
   void initState() {
@@ -194,70 +212,62 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  bool _disableZoomGestures() {
-    return widget.disableZoomGestures ?? false;
-  }
-
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => widget.onPageBuild ?? (_imageKey.currentContext!.size!),
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setBoundaryMargin());
     return LayoutBuilder(
       builder: (context, constraints) {
-        size = Size(constraints.maxWidth, constraints.maxHeight);
-        return ValueListenableBuilder(
-          valueListenable: _isFull,
-          builder: (context, isFull, child) {
-            return PointersListener(
-              builder: (_, moreThanOnePointer) {
-                return InteractiveViewer(
-                  clipBehavior: Clip.none,
-                  minScale: 1.0,
-                  maxScale: 10,
-                  constrained: false,
-                  scaleEnabled: !_disableZoomGestures(),
-                  panAxis: isFull ? PanAxis.free : PanAxis.horizontal,
-                  boundaryMargin: isFull
-                      ? imageBoundaryMargin
-                      : EdgeInsets.zero,
-                  transformationController: _transformationController,
-                  onInteractionStart: _onInteractionStart,
-                  onInteractionEnd: _onInteractionEnd,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onDoubleTap: _animateZoomInitialize,
-                    onTap: widget.onTap,
-                    onDoubleTapDown: (details) =>
-                        _doubleTapLocation = details.localPosition,
-                    onDoubleTapCancel: () => _doubleTapLocation = null,
-                    onVerticalDragStart: !moreThanOnePointer
-                        ? widget.onDragStart
-                        : null,
-                    onVerticalDragUpdate: !moreThanOnePointer
-                        ? widget.onDragUpdate
-                        : null,
-                    onVerticalDragEnd: !moreThanOnePointer
-                        ? widget.onDragEnd
-                        : null,
-                    onVerticalDragCancel: !moreThanOnePointer
-                        ? widget.onDragCancel
-                        : null,
-                    child: SizedBox(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight,
-                      child: Center(
-                        child: ValueListenableBuilder(
-                          valueListenable: _isOriginal,
-                          builder: (context, isOriginal, child) {
-                            return _buildImage(isOriginal);
-                          },
-                        ),
-                      ),
+        viewPortSize = Size(constraints.maxWidth, constraints.maxHeight);
+        return PointersListener(
+          builder: (_, moreThanOnePointer) {
+            return InteractiveViewer(
+              clipBehavior: Clip.none,
+              minScale: 1.0,
+              maxScale: 10,
+              constrained: false,
+              scaleEnabled: !isZoomGestureDisabled,
+              panAxis: _lockInMainAxis ? PanAxis.free : PanAxis.horizontal,
+              boundaryMargin: _lockInMainAxis
+                  ? imageBoundaryMargin
+                  : EdgeInsets.zero,
+              transformationController: _transformationController,
+              onInteractionStart: _onInteractionStart,
+              onInteractionEnd: _onInteractionEnd,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onDoubleTap: _animateZoomInitialize,
+                onTap: widget.onTap,
+                onDoubleTapDown: (details) =>
+                    _doubleTapLocation = details.localPosition,
+                onDoubleTapCancel: () => _doubleTapLocation = null,
+                onVerticalDragStart: !moreThanOnePointer && !_isZoomed
+                    ? widget.onDragStart
+                    : null,
+                onVerticalDragUpdate: !moreThanOnePointer && !_isZoomed
+                    ? widget.onDragUpdate
+                    : null,
+                onVerticalDragEnd: !moreThanOnePointer && !_isZoomed
+                    ? widget.onDragEnd
+                    : null,
+                onVerticalDragCancel: !moreThanOnePointer && !_isZoomed
+                    ? widget.onDragCancel
+                    : null,
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: Center(
+                    child: ValueListenableBuilder(
+                      valueListenable: _loadOriginal,
+                      builder: (context, isOriginal, child) {
+                        return _buildImage(isOriginal);
+                      },
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             );
           },
         );
