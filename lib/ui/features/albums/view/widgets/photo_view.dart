@@ -310,6 +310,18 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
       width: targetWidth,
       height: targetHeight,
       gaplessPlayback: true,
+      frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded || frame != null) {
+          return child;
+        }
+        final thumbhash = Image(
+          image: widget.asset.thumbImageProvider!,
+          width: targetWidth,
+          height: targetHeight,
+          fit: BoxFit.contain,
+        );
+        return thumbhash;
+      },
     );
   }
 }
