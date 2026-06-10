@@ -30,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -37,11 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Text("vault"), // TODO: Logo
+              Text(localizations!.appTitle), // TODO: Logo
 
               const SizedBox(height: 50),
               Text(
-                AppLocalizations.of(context)!.welcome,
+                localizations.welcome,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthTextField(
                 controller: _usernameController,
                 obscureText: false,
-                hintText: "Username",
+                hintText: localizations.usernameLabel,
                 onChanged: (value) {
                   context.read<AuthViewModel>().updateLogin(value);
                 },
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthTextField(
                 controller: _passwordController,
                 obscureText: true,
-                hintText: "Password",
+                hintText: localizations.passwordLabel,
                 onChanged: (value) {
                   context.read<AuthViewModel>().updatePassword(value);
                 },
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      child: const Text("Forgot password?"),
+                      child: Text(localizations.forgotPasswordQuestion),
                       onTap: () {
                         context.read<AuthViewModel>().forgotPassword();
                       },
@@ -88,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 selector: (_, avm) => avm.isLoginFormValid,
                 builder: (context, isValid, _) {
                   return ConfirmButton(
-                    text: "Login",
+                    text: localizations.loginAction,
                     onTap: isValid
                         ? () async {
                             await context.read<AuthViewModel>().register();
@@ -105,8 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: () =>
                     Navigator.pushReplacementNamed(context, '/register'),
-                child: const Text(
-                  "Create new account",
+                child: Text(
+                  localizations.createNewAccountAction,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),

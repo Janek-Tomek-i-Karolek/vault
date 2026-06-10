@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_viewer.dart';
@@ -38,15 +39,16 @@ class _AlbumScreenState extends State<AlbumScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<AlbumViewModel>();
     final theme = Theme.of(context);
+    final AppLocalizations? localizations = AppLocalizations.of(context);
 
     final String appBarTitle = switch ((
       viewModel.isLoading,
       viewModel.justEntered,
       viewModel.album,
     )) {
-      (true, true, _) => "Loading...",
+      (true, true, _) => localizations!.loadingIndicator,
       (_, _, final album?) => album.name,
-      _ => "Album",
+      _ => localizations!.albumScreenTitle,
     };
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +75,9 @@ class _AlbumScreenState extends State<AlbumScreen> {
           (true, _, _, true) => const Center(
             child: CircularProgressIndicator(),
           ),
-          (_, _, final Exception e, _) => Center(child: Text("Error: $e")),
+          (_, _, final Exception e, _) => Center(
+            child: Text(localizations!.genericErrorMessage(e.toString())),
+          ),
           (_, final album?, _, _) => MasonryGridView.builder(
             itemCount: album.assets.length,
             cacheExtent: ScrollCacheExtent.viewport(3).value,
@@ -100,7 +104,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
               );
             },
           ),
-          _ => const Text("Something went wrong!"),
+          _ => Text(localizations!.unknownErrorMessage),
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -110,7 +114,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
             widget.serverConnection,
           );
         },
-        tooltip: 'Add Photos',
+        tooltip: localizations!.addPhotosAction,
         child: const Icon(Icons.add),
       ),
     );

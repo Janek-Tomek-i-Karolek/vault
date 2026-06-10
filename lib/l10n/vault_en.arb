@@ -5,10 +5,42 @@
   },
 
   "register": "Register",
-  "unknownErrorMessage": "An unknown error occured",
-  "connectAction": "Connect",
 
+  "connectAction": "Connect",
+  "saveAction": "Save",
+  "loginAction": "Login",
+  "createNewAccountAction": "Create new account",
+  "logoutAction": "Sign out",
+  "addServerAction": "Add Server",
+  "addPhotosAction": "Add Photos",
+
+  "usernameLabel": "Username",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+
+  "alreadyRegisteredQuestion": "Already have an account?",
+  "forgotPasswordQuestion": "Forgot password?",
+
+  "vaultServerLabel": "Vault Server",
+
+  "serverUrlLabel": "Server URL",
+  "apiKeyLabel": "Api Key",
+
+  "unknownErrorMessage": "An unknown error occured",
+  "genericErrorMessage": "An error occured: {error}",
   "failedConnectionTestMessage": "Connection test failed: {error}",
-  "failedConnectionSaveMessage": "Failed to save connection: {error}"
+  "failedConnectionSaveMessage": "Failed to save connection: {error}",
+
+  "loadingIndicator": "Loading...",
+
+  "profileScreenTitle": "Profile",
+  "vaultsScreenTitle": "My Vaults",
+  "albumScreenTitle": "Album",
+  "albumsScreenTitle": "Albums",
+  "appTitle": "Vault",
+
+  "navBarTitle": "Menu",
+  "albumsNavBarEntry": "Albums",
+  "serverListNavBarEntry": "Server List"
 }
 

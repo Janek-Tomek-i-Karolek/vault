@@ -32,6 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -39,11 +40,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Text("vault"), // TODO: Trzeba jakieś logo stworzyć
+              Text(
+                localizations!.appTitle,
+              ), // TODO: Trzeba jakieś logo stworzyć
 
               const SizedBox(height: 50),
               Text(
-                AppLocalizations.of(context)!.welcome,
+                localizations.welcome,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
@@ -51,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: emailController,
                 obscureText: false,
-                hintText: "E-mail address",
+                hintText: localizations.emailLabel,
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateEmail(value),
               ),
@@ -60,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: usernameController,
                 obscureText: false,
-                hintText: "Username",
+                hintText: localizations.usernameLabel,
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updateLogin(value),
               ),
@@ -69,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AuthTextField(
                 controller: passwordController,
                 obscureText: true,
-                hintText: "Password",
+                hintText: localizations.passwordLabel,
                 onChanged: (value) =>
                     context.read<AuthViewModel>().updatePassword(value),
               ),
@@ -96,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               InkWell(
                 onTap: () => Navigator.popAndPushNamed(context, '/login'),
                 child: Text(
-                  "Already have an account?",
+                  localizations.alreadyRegisteredQuestion,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

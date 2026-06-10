@@ -15,10 +15,57 @@ class AppLocalizationsPl extends AppLocalizations {
   String get register => 'Zarejestruj';
 
   @override
+  String get connectAction => 'Połącz';
+
+  @override
+  String get saveAction => 'Zapisz';
+
+  @override
+  String get loginAction => 'Zaloguj';
+
+  @override
+  String get createNewAccountAction => 'Utwórz nowe konto';
+
+  @override
+  String get logoutAction => 'Wyloguj';
+
+  @override
+  String get addServerAction => 'Dodaj serwer';
+
+  @override
+  String get addPhotosAction => 'Dodaj zdjęcia';
+
+  @override
+  String get usernameLabel => 'Nazwa użytkownika';
+
+  @override
+  String get emailLabel => 'E-mail';
+
+  @override
+  String get passwordLabel => 'Hasło';
+
+  @override
+  String get alreadyRegisteredQuestion => 'Masz już konto?';
+
+  @override
+  String get forgotPasswordQuestion => 'Zapomniałeś/aś hasła?';
+
+  @override
+  String get vaultServerLabel => 'Serwer Vault';
+
+  @override
+  String get serverUrlLabel => 'URL Serwera';
+
+  @override
+  String get apiKeyLabel => 'Klucz Api';
+
+  @override
   String get unknownErrorMessage => 'Wystąpił nieoczekiwany błąd';
 
   @override
-  String get connectAction => 'Połącz';
+  String genericErrorMessage(Object error) {
+    return 'Wystąpił błąd: $error';
+  }
 
   @override
   String failedConnectionTestMessage(Object error) {
@@ -29,4 +76,31 @@ class AppLocalizationsPl extends AppLocalizations {
   String failedConnectionSaveMessage(Object error) {
     return 'Nie udało się zapisać połączenia: $error';
   }
+
+  @override
+  String get loadingIndicator => 'Ładowanie...';
+
+  @override
+  String get profileScreenTitle => 'Profil';
+
+  @override
+  String get vaultsScreenTitle => 'Moje Vaulty';
+
+  @override
+  String get albumScreenTitle => 'Album';
+
+  @override
+  String get albumsScreenTitle => 'Albumy';
+
+  @override
+  String get appTitle => 'Vault';
+
+  @override
+  String get navBarTitle => 'Menu';
+
+  @override
+  String get albumsNavBarEntry => 'Albumy';
+
+  @override
+  String get serverListNavBarEntry => 'Lista Serwerów';
 }

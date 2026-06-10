@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/albums_viewmodel.dart';
@@ -25,10 +26,11 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
     // TODO: Lazy preview loading
     final viewModel = context.read<AlbumsViewModel>();
     final theme = Theme.of(context);
+    final AppLocalizations? localizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Albums"),
+        title: Text(localizations!.albumsScreenTitle),
         actions: const [ProfileButton()],
         foregroundColor: theme.colorScheme.onSurface,
       ),
@@ -54,10 +56,9 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                       leading: const Icon(Icons.search),
                     );
                   },
-                  suggestionsBuilder:
-                      (BuildContext context, SearchController controller) {
-                        return [Text("hehe"), Text("hehe 2")];
-                      },
+                  suggestionsBuilder: (BuildContext _, SearchController _) {
+                    return [];
+                  },
                 ),
               ),
             ),
@@ -74,7 +75,9 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                       child: const CircularProgressIndicator(),
                     ),
                     (_, _, final Exception e) => Center(
-                      child: Text('Error: $e'),
+                      child: Text(
+                        localizations.genericErrorMessage(e.toString()),
+                      ),
                     ),
                     (_, final albumPreviews?, _) => RefreshIndicator(
                       onRefresh: () async {
@@ -95,7 +98,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                         },
                       ),
                     ),
-                    _ => const Text("Something went wrong!"),
+                    _ => Text(localizations.unknownErrorMessage),
                   };
                 },
               ),

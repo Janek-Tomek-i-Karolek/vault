@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'vault_localizations_en.dart';
+import 'vault_localizations_fr.dart';
 import 'vault_localizations_pl.dart';
 
 // ignore_for_file: type=lint
@@ -95,6 +96,7 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('fr'),
     Locale('pl'),
   ];
 
@@ -110,17 +112,107 @@ abstract class AppLocalizations {
   /// **'Register'**
   String get register;
 
+  /// No description provided for @connectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get connectAction;
+
+  /// No description provided for @saveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveAction;
+
+  /// No description provided for @loginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginAction;
+
+  /// No description provided for @createNewAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new account'**
+  String get createNewAccountAction;
+
+  /// No description provided for @logoutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get logoutAction;
+
+  /// No description provided for @addServerAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Server'**
+  String get addServerAction;
+
+  /// No description provided for @addPhotosAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get addPhotosAction;
+
+  /// No description provided for @usernameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get usernameLabel;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @alreadyRegisteredQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyRegisteredQuestion;
+
+  /// No description provided for @forgotPasswordQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordQuestion;
+
+  /// No description provided for @vaultServerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Server'**
+  String get vaultServerLabel;
+
+  /// No description provided for @serverUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Server URL'**
+  String get serverUrlLabel;
+
+  /// No description provided for @apiKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Api Key'**
+  String get apiKeyLabel;
+
   /// No description provided for @unknownErrorMessage.
   ///
   /// In en, this message translates to:
   /// **'An unknown error occured'**
   String get unknownErrorMessage;
 
-  /// No description provided for @connectAction.
+  /// No description provided for @genericErrorMessage.
   ///
   /// In en, this message translates to:
-  /// **'Connect'**
-  String get connectAction;
+  /// **'An error occured: {error}'**
+  String genericErrorMessage(Object error);
 
   /// No description provided for @failedConnectionTestMessage.
   ///
@@ -133,6 +225,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save connection: {error}'**
   String failedConnectionSaveMessage(Object error);
+
+  /// No description provided for @loadingIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loadingIndicator;
+
+  /// No description provided for @profileScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileScreenTitle;
+
+  /// No description provided for @vaultsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Vaults'**
+  String get vaultsScreenTitle;
+
+  /// No description provided for @albumScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get albumScreenTitle;
+
+  /// No description provided for @albumsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albumsScreenTitle;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault'**
+  String get appTitle;
+
+  /// No description provided for @navBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get navBarTitle;
+
+  /// No description provided for @albumsNavBarEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get albumsNavBarEntry;
+
+  /// No description provided for @serverListNavBarEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Server List'**
+  String get serverListNavBarEntry;
 }
 
 class _AppLocalizationsDelegate
@@ -146,7 +292,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'pl'].contains(locale.languageCode);
+      <String>['en', 'fr', 'pl'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -157,6 +303,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en':
       return AppLocalizationsEn();
+    case 'fr':
+      return AppLocalizationsFr();
     case 'pl':
       return AppLocalizationsPl();
   }

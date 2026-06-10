@@ -1,9 +1,41 @@
 {
     "welcome": "Witamy w kolonii!",
     "register": "Zarejestruj",
-    "unknownErrorMessage": "Wystąpił nieoczekiwany błąd",
-    "connectAction": "Połącz",
 
+    "connectAction": "Połącz",
+    "saveAction": "Zapisz",
+    "loginAction": "Zaloguj",
+    "createNewAccountAction": "Utwórz nowe konto",
+    "logoutAction": "Wyloguj",
+    "addServerAction": "Dodaj serwer",
+    "addPhotosAction": "Dodaj zdjęcia",
+
+    "usernameLabel": "Nazwa użytkownika",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Hasło",
+
+    "alreadyRegisteredQuestion": "Masz już konto?",
+    "forgotPasswordQuestion": "Zapomniałeś/aś hasła?",
+
+    "vaultServerLabel": "Serwer Vault",
+
+    "serverUrlLabel": "URL Serwera",
+    "apiKeyLabel": "Klucz Api",
+
+    "unknownErrorMessage": "Wystąpił nieoczekiwany błąd",
+    "genericErrorMessage": "Wystąpił błąd: {error}",
     "failedConnectionTestMessage": "Nie udało się połączyć: {error}",
-    "failedConnectionSaveMessage": "Nie udało się zapisać połączenia: {error}"
+    "failedConnectionSaveMessage": "Nie udało się zapisać połączenia: {error}",
+
+    "loadingIndicator": "Ładowanie...",
+
+    "profileScreenTitle": "Profil",
+    "vaultsScreenTitle": "Moje Vaulty",
+    "albumScreenTitle": "Album",
+    "albumsScreenTitle": "Albumy",
+    "appTitle": "Vault",
+
+    "navBarTitle": "Menu",
+    "albumsNavBarEntry": "Albumy",
+    "serverListNavBarEntry": "Lista Serwerów"
 }
