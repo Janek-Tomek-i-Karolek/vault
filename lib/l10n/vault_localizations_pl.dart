@@ -18,53 +18,53 @@ class AppLocalizationsPl extends AppLocalizations {
   String get connectAction => 'Połącz';
 
   @override
-  String get saveAction => 'Save';
+  String get saveAction => 'Zapisz';
 
   @override
-  String get loginAction => 'Login';
+  String get loginAction => 'Zaloguj';
 
   @override
-  String get createNewAccountAction => 'Create new account';
+  String get createNewAccountAction => 'Utwórz nowe konto';
 
   @override
-  String get logoutAction => 'Sign out';
+  String get logoutAction => 'Wyloguj';
 
   @override
-  String get addServerAction => 'Add Server';
+  String get addServerAction => 'Dodaj serwer';
 
   @override
-  String get addPhotosAction => 'Add Photos';
+  String get addPhotosAction => 'Dodaj zdjęcia';
 
   @override
-  String get usernameLabel => 'Username';
+  String get usernameLabel => 'Nazwa użytkownika';
 
   @override
-  String get emailLabel => 'Email';
+  String get emailLabel => 'E-mail';
 
   @override
-  String get passwordLabel => 'Password';
+  String get passwordLabel => 'Hasło';
 
   @override
-  String get alreadyRegisteredQuestion => 'Already have an account?';
+  String get alreadyRegisteredQuestion => 'Masz już konto?';
 
   @override
-  String get forgotPasswordQuestion => 'Forgot password?';
+  String get forgotPasswordQuestion => 'Zapomniałeś/aś hasła?';
 
   @override
-  String get vaultServerLabel => 'Vault Server';
+  String get vaultServerLabel => 'Serwer Vault';
 
   @override
-  String get serverUrlLabel => 'Server URL';
+  String get serverUrlLabel => 'URL Serwera';
 
   @override
-  String get apiKeyLabel => 'Api Key';
+  String get apiKeyLabel => 'Klucz Api';
 
   @override
   String get unknownErrorMessage => 'Wystąpił nieoczekiwany błąd';
 
   @override
   String genericErrorMessage(Object error) {
-    return 'An error occured: $error';
+    return 'Wystąpił błąd: $error';
   }
 
   @override
@@ -78,19 +78,19 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get loadingIndicator => 'Loading...';
+  String get loadingIndicator => 'Ładowanie...';
 
   @override
-  String get profileScreenTitle => 'Profile';
+  String get profileScreenTitle => 'Profil';
 
   @override
-  String get vaultsScreenTitle => 'My Vaults';
+  String get vaultsScreenTitle => 'Moje Vaulty';
 
   @override
   String get albumScreenTitle => 'Album';
 
   @override
-  String get albumsScreenTitle => 'Albums';
+  String get albumsScreenTitle => 'Albumy';
 
   @override
   String get appTitle => 'Vault';
@@ -99,8 +99,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String get navBarTitle => 'Menu';
 
   @override
-  String get albumsNavBarEntry => 'Albums';
+  String get albumsNavBarEntry => 'Albumy';
 
   @override
-  String get serverListNavBarEntry => 'Server List';
+  String get serverListNavBarEntry => 'Lista Serwerów';
 }
