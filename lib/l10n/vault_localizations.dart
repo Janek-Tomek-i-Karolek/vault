@@ -122,6 +122,30 @@ abstract class AppLocalizations {
   /// **'Connect'**
   String get connectAction;
 
+  /// No description provided for @saveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveAction;
+
+  /// No description provided for @logoutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get logoutAction;
+
+  /// No description provided for @usernameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get usernameLabel;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
   /// No description provided for @failedConnectionTestMessage.
   ///
   /// In en, this message translates to:
@@ -133,6 +157,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save connection: {error}'**
   String failedConnectionSaveMessage(Object error);
+
+  /// No description provided for @profileScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileScreenTitle;
 }
 
 class _AppLocalizationsDelegate

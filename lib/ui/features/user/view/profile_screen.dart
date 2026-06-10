@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vault/l10n/vault_localizations.dart';
 import 'package:vault/ui/core/nav/sidebar_menu.dart';
 import 'package:vault/domain/user/user.dart';
 
@@ -33,11 +34,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations? localizations = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Profile"),
-        actions: [TextButton(onPressed: () {}, child: const Text("Save"))],
+        title: Text(localizations!.profileScreenTitle),
+        actions: [
+          TextButton(onPressed: () {}, child: Text(localizations.saveAction)),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -57,8 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Username
               TextField(
                 controller: _usernameController,
-                decoration: const InputDecoration(
-                  label: Text("Username"),
+                decoration: InputDecoration(
+                  label: Text(localizations.usernameLabel),
                   prefixIcon: Icon(Icons.person_outline),
                 ),
               ),
@@ -68,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Email
               TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  label: Text("Email"),
+                decoration: InputDecoration(
+                  label: Text(localizations.emailLabel),
                   prefixIcon: Icon(Icons.mail_outline),
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -77,7 +81,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const Spacer(),
 
-              OutlinedButton(onPressed: () {}, child: const Text("Sign Out")),
+              OutlinedButton(
+                onPressed: () {},
+                child: Text(localizations.logoutAction),
+              ),
             ],
           ),
         ),

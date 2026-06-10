@@ -21,6 +21,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connectAction => 'Connect';
 
   @override
+  String get saveAction => 'Save';
+
+  @override
+  String get logoutAction => 'Sign out';
+
+  @override
+  String get usernameLabel => 'Username';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
   String failedConnectionTestMessage(Object error) {
     return 'Connection test failed: $error';
   }
@@ -29,4 +41,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String failedConnectionSaveMessage(Object error) {
     return 'Failed to save connection: $error';
   }
+
+  @override
+  String get profileScreenTitle => 'Profile';
 }

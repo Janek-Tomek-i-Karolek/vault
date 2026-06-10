@@ -21,6 +21,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get connectAction => 'Połącz';
 
   @override
+  String get saveAction => 'Save';
+
+  @override
+  String get logoutAction => 'Sign out';
+
+  @override
+  String get usernameLabel => 'Username';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
   String failedConnectionTestMessage(Object error) {
     return 'Nie udało się połączyć: $error';
   }
@@ -29,4 +41,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String failedConnectionSaveMessage(Object error) {
     return 'Nie udało się zapisać połączenia: $error';
   }
+
+  @override
+  String get profileScreenTitle => 'Profile';
 }

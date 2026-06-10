@@ -6,9 +6,17 @@
 
   "register": "Register",
   "unknownErrorMessage": "An unknown error occured",
+
   "connectAction": "Connect",
+  "saveAction": "Save",
+  "logoutAction": "Sign out",
+
+  "usernameLabel": "Username",
+  "emailLabel": "Email",
 
   "failedConnectionTestMessage": "Connection test failed: {error}",
-  "failedConnectionSaveMessage": "Failed to save connection: {error}"
+  "failedConnectionSaveMessage": "Failed to save connection: {error}",
+
+  "profileScreenTitle": "Profile"
 }
 
