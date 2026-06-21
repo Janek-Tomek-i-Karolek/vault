@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:vault/domain/album/album.dart';
 import 'package:vault/domain/asset/asset.dart';
 import 'package:vault/domain/server/server_connection.dart';
 import 'package:vault/l10n/vault_localizations.dart';
-import 'package:vault/ui/core/widgets/profile_button.dart';
 import 'package:vault/ui/features/albums/viemodel/album_viewmodel.dart';
 import 'package:vault/ui/features/albums/view/asset_viewer.dart';
 
@@ -24,6 +23,9 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
+  ImageProvider? _cover;
+  ImageProvider? _coverThumbhash;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,25 @@ class _AlbumScreenState extends State<AlbumScreen> {
         widget.albumId,
       );
     });
+  }
+
+  bool _isCover(Album album, bool justEntered) {
+    if (justEntered) {
+      _cover = null;
+    }
+    if (_cover != null) {
+      return true;
+    }
+    if (album.thumbnailId != null) {
+      for (var asset in album.assets) {
+        if (asset.id == album.thumbnailId) {
+          _cover = NetworkImage(asset.previewUri, headers: asset.headers);
+          _coverThumbhash = asset.thumbImageProvider;
+          break;
+        }
+      }
+    }
+    return _cover != null;
   }
 
   @override
@@ -51,12 +72,6 @@ class _AlbumScreenState extends State<AlbumScreen> {
       _ => localizations!.albumScreenTitle,
     };
     return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitle),
-        centerTitle: true,
-        actions: const [ProfileButton()],
-      ),
-
       body: RefreshIndicator(
         onRefresh: () async {
           await context.read<AlbumViewModel>().loadAlbum(
@@ -77,32 +92,95 @@ class _AlbumScreenState extends State<AlbumScreen> {
           (_, _, final Exception e, _) => Center(
             child: Text(localizations!.genericErrorMessage(e.toString())),
           ),
-          (_, final album?, _, _) => MasonryGridView.builder(
-            itemCount: album.assets.length,
-            cacheExtent: ScrollCacheExtent.viewport(3).value,
-            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            itemBuilder: (context, index) {
-              final asset = album.assets[index];
-              return Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: AssetTile(
-                  asset: asset,
-                  onAssetSelected: (asset) => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AssetViewer(
-                        serverConnection: widget.serverConnection,
-                        album: album,
-                        assets: album.assets,
-                        startIndex: index,
+          (_, final album?, _, final justEntered) => CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                expandedHeight: 400.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(appBarTitle),
+                  background: _isCover(album, justEntered)
+                      ? Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Image(
+                                image: _cover!,
+                                fit: BoxFit.cover,
+                                frameBuilder:
+                                    (
+                                      context,
+                                      child,
+                                      int? frame,
+                                      bool wasSynchronouslyLoaded,
+                                    ) {
+                                      if (wasSynchronouslyLoaded ||
+                                          frame != null) {
+                                        return child;
+                                      }
+                                      final widget = Image(
+                                        image: _coverThumbhash!,
+                                        fit: BoxFit.cover,
+                                      );
+                                      return widget;
+                                    },
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      theme.colorScheme.surfaceContainerHighest
+                                          .withOpacity(0.2),
+                                      theme.colorScheme.surfaceContainerHighest
+                                          .withOpacity(0.6),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const FlutterLogo(),
+                ),
+              ),
+              SliverMasonryGrid(
+                gridDelegate:
+                    const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final asset = album.assets[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: AssetTile(
+                      asset: asset,
+                      onAssetSelected: (asset) => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AssetViewer(
+                            serverConnection: widget.serverConnection,
+                            album: album,
+                            assets: album.assets,
+                            startIndex: index,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
+                  );
+                }, childCount: album.assets.length),
+              ),
+            ],
           ),
+
+          // MasonryGridView.builder(
+          //     itemCount: album.assets.length,
+          //     cacheExtent: ScrollCacheExtent.viewport(3).value,
+          //     gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 2,
+          //     ),
+          //   ),
           _ => Text(localizations!.unknownErrorMessage),
         },
       ),

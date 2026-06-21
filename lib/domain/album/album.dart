@@ -8,12 +8,14 @@ class Album {
   final String name;
   final List<Asset> assets;
   final ServerConnection serverConnection;
+  final String? thumbnailId;
 
   Album({
     required this.id,
     required this.name,
     required this.assets,
     required this.serverConnection,
+    required this.thumbnailId,
   });
 
   static Album fromDTO({
@@ -27,5 +29,6 @@ class Album {
         Asset.fromDTO(assetDto, serverConnection),
     ],
     serverConnection: serverConnection,
+    thumbnailId: dto.albumThumbnailAssetId,
   );
 }

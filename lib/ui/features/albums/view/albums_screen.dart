@@ -112,7 +112,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.small(
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.pushNamed(context, "/add-album");
 

@@ -34,7 +34,7 @@ class AlbumViewModel extends ChangeNotifier {
     String albumId,
   ) async {
     _isLoading = true;
-    _justEntered = _album != null && _album!.id != albumId;
+    _justEntered = _album == null || (_album != null && _album!.id != albumId);
     notifyListeners();
     try {
       final albumResult = await _albumRepository.getAlbum(
@@ -53,7 +53,6 @@ class AlbumViewModel extends ChangeNotifier {
       _error = e;
     } finally {
       _isLoading = false;
-      _justEntered = false;
       notifyListeners();
     }
   }
