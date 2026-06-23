@@ -20,10 +20,10 @@ class AlbumsViewModel extends ChangeNotifier {
   bool isLoading = false;
 
   final AlbumRepository _albumRepository;
-  final LocalConnectionRepository _connectionRepository;
+  final ConnectionRepository _connectionRepository;
   AlbumsViewModel({
     required AlbumRepository albumRepository,
-    required LocalConnectionRepository connectionRepository,
+    required ConnectionRepository connectionRepository,
   }) : _albumRepository = albumRepository,
        _connectionRepository = connectionRepository;
 
