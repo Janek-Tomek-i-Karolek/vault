@@ -60,7 +60,7 @@ class Asset {
     bool original = false,
     double? width,
     double? height,
-    bool? loadThumbHash = true,
+    bool skipThumbhash = true,
   }) {
     return Image.network(
       key: key,
@@ -71,12 +71,7 @@ class Asset {
       fit: BoxFit.contain,
       gaplessPlayback: true,
       frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded || frame != null || _wasInitiallyLoaded) {
-          if (!_wasInitiallyLoaded) {
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) => _wasInitiallyLoaded = true,
-            );
-          }
+        if (wasSynchronouslyLoaded || frame != null || skipThumbhash) {
           return child;
         }
         final thumbhash = Image(
