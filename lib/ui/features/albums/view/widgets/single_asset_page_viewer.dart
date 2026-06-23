@@ -228,6 +228,7 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
                 child: _buildPhotoView(disableZoomGestures: isShowingDetails),
               ),
               IgnorePointer(
+                key: Key("DetailsIgnorePointer"),
                 ignoring: !isShowingDetails,
                 child: Column(
                   children: [
@@ -238,6 +239,7 @@ class _SingleAssetPageViewerState extends State<SingleAssetPageViewer> {
                       onVerticalDragEnd: _endDrag,
                       onVerticalDragCancel: _onDragCancel,
                       child: AnimatedOpacity(
+                        key: Key("DetailsAnimatedOpacity"),
                         opacity: isShowingDetails ? 1.0 : 0.0,
                         duration: Durations.short2,
                         child: AssetDetails(

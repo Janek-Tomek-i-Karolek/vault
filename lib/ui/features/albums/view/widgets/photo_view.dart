@@ -10,7 +10,7 @@ class PhotoView extends StatefulWidget {
   const PhotoView({
     super.key,
     required this.asset,
-    required this.onZoom,
+    this.onZoom,
     this.onTap,
     this.onDragStart,
     this.onDragEnd,
