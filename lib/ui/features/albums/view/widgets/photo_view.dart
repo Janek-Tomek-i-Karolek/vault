@@ -20,7 +20,7 @@ class PhotoView extends StatefulWidget {
     this.disableZoomGestures,
   });
   final Asset asset;
-  final Function(double) onZoom;
+  final Function(double)? onZoom;
   final Function()? onTap;
   final Function(DragStartDetails details)? onDragStart;
   final Function(DragEndDetails details)? onDragEnd;
@@ -158,7 +158,7 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
     final scale = _transformationController.value.getMaxScaleOnAxis();
     if (scale != _scale) {
       // notify parent layout
-      widget.onZoom(scale);
+      widget.onZoom ?? (scale);
       setState(() {
         _scale = scale;
       });
@@ -214,9 +214,11 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // notify listeners about image size
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => widget.onPageBuild ?? (_imageKey.currentContext!.size!),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onPageBuild ?? (_imageKey.currentContext!.size!);
+      _wasInitiallyLoaded = true;
+    });
+
     // set Boundary Margin once
     WidgetsBinding.instance.addPostFrameCallback((_) => _setBoundaryMargin());
     return LayoutBuilder(
@@ -263,7 +265,6 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
                     valueListenable: _loadOriginal,
                     builder: (_, loadOriginal, _) {
                       return Center(
-                        // child: _buildImage(loadOriginal, constraints),
                         child: _buildImage(loadOriginal, constraints),
                       );
                     },
@@ -294,31 +295,12 @@ class _PhotoViewState extends State<PhotoView> with TickerProviderStateMixin {
       targetHeight = originalHeight * scale;
     }
 
-    return Image.network(
+    return widget.asset.buildImage(
       key: _imageKey,
-      original ? widget.asset.originalUri : widget.asset.previewUri,
-      headers: widget.asset.headers,
+      original: original,
       width: targetWidth,
       height: targetHeight,
-      fit: BoxFit.contain,
-      gaplessPlayback: true,
-      frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded || frame != null || _wasInitiallyLoaded) {
-          if (!_wasInitiallyLoaded) {
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) => _wasInitiallyLoaded = true,
-            );
-          }
-          return child;
-        }
-        final thumbhash = Image(
-          image: widget.asset.thumbImageProvider!,
-          width: targetWidth,
-          height: targetHeight,
-          fit: BoxFit.contain,
-        );
-        return thumbhash;
-      },
+      skipThumbhash: _wasInitiallyLoaded,
     );
   }
 }

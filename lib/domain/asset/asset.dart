@@ -54,4 +54,39 @@ class Asset {
       "content-type": "application/json",
     };
   }
+
+  Image buildImage({
+    Key? key,
+    bool original = false,
+    double? width,
+    double? height,
+    bool? loadThumbHash = true,
+  }) {
+    return Image.network(
+      key: key,
+      original ? originalUri : previewUri,
+      headers: headers,
+      width: width,
+      height: height,
+      fit: BoxFit.contain,
+      gaplessPlayback: true,
+      frameBuilder: (context, child, int? frame, bool wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded || frame != null || _wasInitiallyLoaded) {
+          if (!_wasInitiallyLoaded) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => _wasInitiallyLoaded = true,
+            );
+          }
+          return child;
+        }
+        final thumbhash = Image(
+          image: thumbImageProvider!,
+          width: width,
+          height: height,
+          fit: BoxFit.contain,
+        );
+        return thumbhash;
+      },
+    );
+  }
 }
