@@ -76,3 +76,42 @@ tłoczą niepotrzebnie pamięci
 
 **Z rysunku 3**, możemy wywnioskować, że największą ilość pamięci zabiera kod do
 samego UI
+
+## Testy Jednostkowe
+
+Przeprowadzone zostały testy jednostkowe dla serwisu komunikacji z API Immicha.
+Głównym celem testów jest sprawdzenie czy serwis w prawidłowy sposób
+przygotowuje żądania i odbiera odpowiedzi.
+
+### Dodanie albumu powinno zwracać Result.ok na statusie odpowiedzi HTTP 201
+
+Co jest sprawdzane:
+
+- wynik powinien zwracać `AlbumResponseDTO` ze statusem wyniku Ok.
+- klient API (zamockowany) powinien otrzymać dokładnie 1 zapytanie typu `POST`
+
+_Test zakończony sukcesem_
+
+### Usunięcie albumu powinno zwracać Result.error na statusie odpowiedzi HTTP innym niż 201
+
+Co jest sprawdzane:
+
+- wynik powinien zwracać typ `error` dla statusu odpowiedzi HTTP 500.
+
+_Test zakończony sukcesem_
+
+### Pobranie albumów powinno zwracać listę albumów na statusie odpowiedzi HTTP 200
+
+Co jest sprawdzane:
+
+- wynik powinien zwracać listę `AlbumResponseDTO` ze statusem wyniku Ok.
+- klient API (zamockowany) powinien otrzymać dokładnie 1 zapytanie typu `GET`
+
+_Test zakończony sukcesem_
+
+### Podsumowanie
+
+Wszystkie testy jednostkowe zakończyły się sukcesem, przetestowano metody `GET`
+oraz `POST`, które poprawnie są wysyłane oraz odbierane przez serwis do
+komunikacji z API Immicha. Oznacza to, że jeżeli sam serwer API będzię
+_healthy_, to serwis obsłuży powyższe żądania i odpowiedzi prawidłowo.
