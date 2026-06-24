@@ -115,3 +115,39 @@ Wszystkie testy jednostkowe zakończyły się sukcesem, przetestowano metody `GE
 oraz `POST`, które poprawnie są wysyłane oraz odbierane przez serwis do
 komunikacji z API Immicha. Oznacza to, że jeżeli sam serwer API będzię
 _healthy_, to serwis obsłuży powyższe żądania i odpowiedzi prawidłowo.
+
+## Złote testy
+
+Za pomocą testów znanych jako złote testy (ang. *golden tests*) został
+przetestowany jeden z głównych ekranów aplikacji: ekran albumów. Testy polegają
+na zrobieniu kontrolowanego zrzutu ekranu aplikacji (tzw. złotego pliku), z
+którym następnie porównywany jest piksel po pikselu wygląd ekranu przy
+uruchomieniu testu.
+
+### Test ekranu albumów
+
+Głównym celem testu jest sprawdzanie, czy ekran albumów wygląda tak jak powinien
+(zgodnie ze złotym plikiem) przy uruchomieniu testu. Aby zapewnić stabilne
+środowisko testowe wykorzystana została wydmuszka klas umożliwiajacych
+komunikację z API Immicha.
+
+#### Tryb jasny
+
+Co jest sprawdzane:
+
+- wygląd ekranu albumów w trybie jasnym aplikacji
+
+_Test zakończony sukcesem_
+
+#### Tryb ciemny
+
+Co jest sprawdzane:
+
+- wygląd ekranu albumów w trybie ciemnym aplikacji
+
+_Test zakończony sukcesem_
+
+### Podusmowanie
+
+Wszystkie złote testy zakończyły się sukcesem. Zapewnią one stabilność wyglądu
+ekranu albumów w *potencjalnych* przyszłych wydaniach aplikacji.
